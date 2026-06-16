@@ -1,0 +1,30 @@
+.xref:index.adoc[Overview]
+* Server Releases
+** xref:ocis_releases.adoc[Infinite Scale Releases]
+** xref:ocis_release_notes.adoc[Infinite Scale Release Notes]
+** xref:server_releases.adoc[ownCloud Server Releases]
+** xref:server_release_notes.adoc[ownCloud Server Release Notes]
+* xref:client_releases.adoc[App Releases]
+** xref:desktop_release_notes.adoc[Desktop App Release Notes]
+** xref:ios_release_notes.adoc[iOS App Release Notes]
+** xref:android_release_notes.adoc[Android App Release Notes]
+* xref:how_to_contribute.adoc[How to Contribute]
+
+// note, atm we cant include an existing component navigation via e.g.,
+// include::{latest-server-version}@server:ROOT:nav$partials/nav-server.adoc
+// for details about how to set up the nav link properly the see:
+// https://antora.zulipchat.com/#narrow/stream/282400-users/topic/Include.20partial.20with.20ROOT.20module.20errors 
+// BUT: the content gets presented, the links do not work - therefore not used
+// a solution needs to be considered if the current layout should be changed
+// see: https://antora.zulipchat.com/#narrow/stream/282400-users/topic/Multi.20Component.20Navigation
+
+.Server
+* xref:{latest-ocis-version}@ocis:ROOT:index.adoc[Infinite Scale]
+* xref:{latest-server-version}@server:ROOT:index.adoc[ownCloud Server]
+
+.Apps and User Interfaces
+* xref:webui:ROOT:index.adoc[Web Infinite Scale]
+* xref:{latest-server-version}@server:classic_ui:index.adoc[Web ownCloud Server]
+* xref:{latest-desktop-version}@desktop:ROOT:index.adoc[Desktop App]
+* xref:{latest-android-version}@android:ROOT:index.adoc[Mobile App for Android]
+* xref:{latest-ios-version}@ios-app:ROOT:index.adoc[Mobile App for iOS]

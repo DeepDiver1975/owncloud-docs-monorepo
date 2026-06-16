@@ -1,0 +1,189 @@
+= Manually Move the Data Directory
+:toc: right
+:description: Use these instructions if you intend to move your ownCloud's data directory from its current location to another without using a symbolic link.
+
+:mysql-string-replace-function-url: http://www.mysqltutorial.org/mysql-string-replace-function.aspx
+
+== Introduction
+
+{description}
+
+Though using symbolic links to relocate the data directory can be beneficial, it can be necessary to hard relocate it.
+If a hard relocation is required, not only the physical location but also the database has to be updated. 
+
+This guide assumes that:
+
+* The current folder is: `/var/www/owncloud/data`
+* The new folder is: `/mnt/owncloud/data`
+* You’re using Apache as your webserver
+* ownCloud's database name is `owncloud`
+
+Please change the paths above to reflect your environment.
+
+== Summary
+
+The following steps are necessary to move the data directory.
+
+. Stop the web server
+. Enable maintenance mode
+. Sync your Data directory
+. Adjust ownCloud's configuration
+. Check permissions
+. Disable maintenance mode
+. Start the web server
+
+Look at each section below for a detailed description.
+
+== Stop the Web Server
+
+Stopping the web server makes sure there are no active connections to your server.
+
+[source,bash]
+----
+sudo service apache2 stop
+----
+
+== Enable Maintenance Mode
+
+It is necessary to enable maintenance mode to avoid running cron jobs.
+To enable maintenance mode, run the following command.
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} maintenance:mode --on
+----
+
+== Sync your Data Directory
+
+[source,bash]
+----
+sudo rsync -avz /var/www/owncloud/data /mnt/owncloud
+----
+
+Make sure that `.ocdata` and `.htaccess` were synced to the new directory.
+
+[source,bash]
+----
+ls -a | grep -i "^\.[A-Z]"
+----
+
+== Adjust ownCloud's configuration
+
+=== Adjust oc_storages table
+
+Connect to your database and enter following commands:
+
+[source,sql]
+----
+use owncloud;
+----
+
+=== Update the oc_storages Table
+
+Run the SQL below:
+
+[source,sql]
+----
+UPDATE oc_storages 
+  SET id='local::/mnt/owncloud/data/'
+  WHERE id='local::/var/www/owncloud/data/';
+----
+
+=== Update the oc_accounts Table
+
+You next need to update the `home` column in the `oc_accounts` table.
+This column contains the absolute path for user folders, e.g., `/mnt/owncloud/data/my_user`.
+
+If a user does not have the path already set, you have to identify the users `id` and set the path with the following command, user by user.
+This example assumes the user name is `my_user` and their id is `1`. Note that id's are incremental, meaning the account you created first will have id `1` and so on.
+
+Run the SQL below:
+
+[source,sql]
+----
+UPDATE oc_accounts SET home='/mnt/owncloud/data/my_user'
+  WHERE id=1;
+----
+
+For all users who already have a path like `/var/www/owncloud/data/` in your database, you can use the `REPLACE` command:
+
+[source,sql]
+----
+UPDATE oc_accounts 
+  SET home = REPLACE(
+    home,
+    '/var/www/owncloud/data/',
+    '/mnt/owncloud/data/'
+  );
+----
+
+For more information follow the complete MySQL {mysql-string-replace-function-url}[REPLACE] command syntax.
+
+CAUTION: Please don’t copy and paste this example verbatim — nor any of the others. They are examples only.
+
+=== Update the oc_jobs table
+
+The next area to check is the `oc_jobs` table. 
+The logrotate process may have hard-coded a non-standard (or old) value for the data path. 
+To check it, run the SQL below and see if any results are returned:
+
+[source,sql]
+----
+SELECT * FROM oc_jobs
+  WHERE class = 'OC\Log\Rotate';
+----
+
+If results are returned, run the SQL below to update them, changing the id value as appropriate.
+
+[source,sql]
+----
+UPDATE oc_jobs 
+  SET argument = REPLACE(
+    argument,
+    '\\/var\\/www\\/owncloud\\/data\\/',
+    '\\/mnt\\/owncloud/data\\/'
+  )
+  WHERE id = <id of the incorrect record>;
+----
+
+CAUTION: The old data path will be written with `\/`.
+Therefore you must add one, additional, backslash, like this: `\\/`.
+
+== Fix the config.php Settings
+
+To fix the config.php settings:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} config:system:set --value /mnt/owncloud/data datadirectory
+----
+
+=== Adjust config.php
+
+. Change the `datadirectory` key in your `config.php` to the new path.
+  To do so, start an editor of your choice and open `/var/www/owncloud/config/config.php`
+
+. Change the value of the key from `'datadirectory' => '/var/www/owncloud/data',` to `'datadirectory' => '/mnt/owncloud/data',`.
+
+== Disable Maintenance Mode
+
+To disable maintenance mode of your instance run the following command:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} maintenance:mode --off
+----
+
+== Start the Web Server
+
+[source,bash]
+----
+sudo service apache2 start
+----
+
+== Scan the Files
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} files:scan --all
+----

@@ -1,0 +1,152 @@
+= Using the Virtual Filesystem
+:toc: right
+:description: The Desktop App provides the use of a virtual file system (VFS) when synchronizing data for Windows clients.
+
+:wikipedia-url: https://en.wikipedia.org/wiki/Virtual_file_system
+:placeholder-files-url: https://docs.microsoft.com/en-us/windows/win32/cfapi/build-a-cloud-file-sync-engine
+:onedrive-restrictions-url: https://support.microsoft.com/en-us/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa?ui=en-US&rs=en-US&ad=US#filenamepathlengths
+:storage-sense-url: https://support.microsoft.com/en-us/windows/manage-drive-space-with-storage-sense-654f6ada-7bfc-45e5-966b-e24aded96ad5
+
+include::partial$conditional_naming.adoc[]
+
+== Introduction
+
+{description} This has the great advantage that all files and folders are visible to the Desktop App, but the files are not downloaded until the user requests it. Here are some of the main advantages:
+
+* Full access to files and folders without the need for downloads.
+* Selectively synchronize folders and files based on user needs.
+* Optimize space with the Desktop App.
+
+IMPORTANT: The virtual filesystem is only available for Windows clients.
+
+The following quote gives a brief overview of what a virtual file system is:
+
+[quote, '{wikipedia-url}[Wikipedia,window=_blank]']
+____
+A virtual file system (VFS) or virtual filesystem switch is an abstract layer on top of a more concrete file system. The purpose of a VFS is to allow client applications to access different types of concrete file systems in a uniform way. A VFS can, for example, be used to access local and network storage devices transparently without the client application noticing the difference. It can be used to bridge the differences in Windows, classic macOS and Unix filesystems, so that applications can access files on local file systems of those types without having to know what type of file system they are accessing.
+____
+
+== Microsoft VFS Implementation
+
+=== Background
+
+[quote, '{placeholder-files-url}[Microsoft,window=_blank]']
+____
+A sync engine is a service that syncs files, typically between a remote host and a local client. Sync engines on Windows often present those files to the user through the Windows file system and File Explorer.
+____
+
+[#vfs-states]
+Files can exist in the following states::
++
+--
+* *Full pinned file:* +
+The file has been explicitly _hydrated_ by the user via File Explorer and is guaranteed to be available offline.
+
+* *Full file:* +
+The file is implicitly _hydrated_ and could be _dehydrated_ by the system if space is needed.
+
+* *Placeholder file:* +
+An empty representation of the file and is only available if the sync service is available.
+
+* *Syncing file:* +
+The file is planned for or currently in the process of synchrinozation..
+
+The following picture shows how the file statuses: _full pinned_, _full_, _placeholder_ and _syncing_ are displayed in File Explorer:
+
+image:vfs/vfs-ms-cloud-file-states-file-explorer.png[File States]
+--
+
+=== Limitations and Restrictions
+
+==== Limitations
+
+A virtual file system needs a root folder where all synchronization items will be stored. The following locations are *not* allowed as a synchronization root:
+
+* The root of a disk like `D:\`
+* A non-NTFS Filesystem
+* Mounted network shares ^*^
+* Symbolic links or junction points
+* Assigned drives
+
++*+ ... Only a full scan is performed by the desktop application, which happens at regular but long intervals. Shared locations should not be used due to other possible negative side effects.
+
+==== Restrictions
+
+Similar to OneDrive, since it also uses Microsoft's virtual file system, there are some additional restrictions that should be considered, such as _maximum file size_, _invalid file or folder names_, and so on. See the {onedrive-restrictions-url}[Restrictions and limitations in OneDrive and SharePoint, window=_blank] and xref:filenames.adoc[Filename Considerations] documentation for more information.
+
+== Desktop App's VFS Implementation
+
+Note that when using Windows and VFS, the Desktop App *must* have full control over the sync folder and its subfolders where the data is stored. If this is not the case, you will most likely get access denied errors when syncing VFS data. For more details, see the xref:troubleshooting.adoc#error-updating-metadata-access-denied[Troubleshooting] guide for more details.
+
+=== Manage VFS from Windows Explorer
+
+You can manage *individual* files or *entire folders* in the Explorer window by menu:right-click[] on them. This opens a drop-down menu of actions that can be performed on a specific file or folder. The following example shows this for files, but it can be applied to folders as well.
+
+==== Create a Local Copy
+
+To save space on the local file system, synchronized files are placeholders until you open them or manually select them to have a local copy. To create a local copy of a placeholder file manually, see the following procedure:
+ 
+. Select the folder containing the file that is a _Placehholder_ of which you want to have a local copy.
+. Select the context menu for the file by doing a btn:[right click].
+. To create a _Full Pinned_ file (have a local copy of it), use the action btn:[Always keep on this device].
+. The state of the file will change to synchronizing, the icon in the btn:[Status] column changes to _Synchronizing_.
+. When the local copy has been created, the icon in the btn:[Status] column changes to _Full Pinned_.
+
++
+ifeval::["{targetbuild}" == "oc"]
+image:vfs/oc-vfs-always-keep-on-this-device.png[Always keep on this Device, width=100]
+image:vfs/oc-vfs-always-keep-on-this-device-syncing.png[Always keep on this Device Syncing, width=100]
+image:vfs/oc-vfs-always-keep-on-this-device-synced.png[Always keep on this Device Synced, width=100]
+endif::[]
+
++
+ifeval::["{targetbuild}" == "kw"]
+image:vfs/kw-windows-syncroot-with-contents.png[Select File to be Full Pinned, width=100]
+image:vfs/kw-vfs-always-keep-on-this-device.png[Always keep on this Device, width=100]
+image:vfs/kw-vfs-always-keep-on-this-device-syncing.png[Always keep on this Device Syncing, width=100]
+image:vfs/kw-vfs-always-keep-on-this-device-synced.png[Always keep on this Device Synced, width=100]
+endif::[]
+
+{empty}
+
+==== Free up Space
+
+This is the opposite of creating a local copy. The file exists as a full copy in the file system, you can free space by making it a placeholder. To do so, see the following procedure:
+
+. Select the folder containing the file that is a local copy of which you want to have a _placeholder_.
+. Select the context menu for the file by doing a btn:[right click].
+. To create a _Placehholder_ file, use the action btn:[Free up space].
+. When the placeholder has been created, the icon in the btn:[Status] column changes to _Placehholder_.
+
++
+ifeval::["{targetbuild}" == "oc"]
+image:vfs/oc-vfs-free-up-space.png[Free Up Space, width=100]
+image:vfs/oc-vfs-free-up-space-successful.png[Free up Space Successful, width=100]
+endif::[]
+
++
+ifeval::["{targetbuild}" == "kw"]
+image:vfs/kw-vfs-free-up-space.png[Free Up Space, width=100]
+image:vfs/kw-vfs-free-up-space-successful.png[Free up Space Successful, width=100]
+endif::[]
+
+{empty}
+
+== Manage Drive Space With Storage Sense
+
+Microsoft provides a mechanism called {storage-sense-url}[Storage Sense, window=_blank] that can automatically free up disk space for applications that use VFS. This is done by converting files that were set to be xref:vfs-states[locally available] back to cloud-based content that is xref:vfs-states[placeholder files] on the local drive, which takes up no space.
+
+. Enable or disable Storage Sense via Windows menu:Settings[System > Storage > Configure Storage Sense or run it now]:
+. Configure the general behavior or each VFS relationship individually via the following section:
+
++
+ifeval::["{targetbuild}" == "oc"]
+image:vfs/oc-vfs-storage-sense-settings.png[Access storage configuration, width=200]
+image:vfs/oc-vfs-storage-sense-configure.png[Setup Storage Sense, width=100]
+endif::[]
+
++
+ifeval::["{targetbuild}" == "kw"]
+image:vfs/kw-vfs-storage-sense-settings.png[Access storage configuration, width=200]
+image:vfs/kw-vfs-storage-sense-configure.png[Setup Storage Sense, width=100]
+endif::[]

@@ -1,0 +1,9 @@
+name: webui
+title: ownCloud Web User Interfaces
+version: ~
+start_page: ROOT:index.adoc
+nav:
+- modules/ROOT/partials/nav.adoc
+
+asciidoc:
+  attributes:

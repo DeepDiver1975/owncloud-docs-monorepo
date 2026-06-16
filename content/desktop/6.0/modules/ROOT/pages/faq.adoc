@@ -1,0 +1,210 @@
+= Desktop App Frequently Asked Questions (FAQ)
+:toc: right
+:description: Here you can find some of the most frequently asked questions about the Desktop app.
+
+:wordpress1-url: http://petersteier.wordpress.com/2011/10/22/windows-indexer-changes-modification-dates-of-eml-files/
+:using-sysctl-url: https://www.cyberciti.biz/faq/reload-sysctl-conf-on-linux-using-sysctl/
+
+include::partial$conditional_naming.adoc[]
+
+== Introduction
+
+{description}
+
+== Clarification of Terms Used
+
+* *Polling* +
+Polling is defined as the task where the Desktop App polls the server for changes, among other things. If the server responds with a change that has happened on the backend, the client will start synchronizing the changes after polling has finished.
+
+* *Synchronization* +
+Synchronization is defined as the task where all changes are synchronized, regardless of whether they occurred in the Desktop App or on the server side. Synchronization does not depend on previous polling, while polling can result in synchronization.
+
+* *Local Discovery* +
+Local discovery is defined as the task where the Desktop App looks for changes on the local file system. A local discovery can be enforced internally to check for changes that were missed, for example, when the Desktop App was shut down while changes were in progress on the local filesystem. Any changes detected on the local file system will trigger a sync after the local discovery is complete.
+
+== Usage
+
+ifeval::["{targetbuild}" == "oc"]
+=== How to Interpret Quotas
+
+When a quota has been defined, you can see additional info in your sync relationship about the quota values. If no quota has been set, these values are not shown for the particular sync relationship:
+
+[width=100%,cols="^.50%,^.50%",options="header"]
+|===
+a| ownCloud Server +
+Quotas shown for the sync relationship
+a| Infinite Scale +
+No quotas shown for the personal space or received shares, but for project spaces
+a| image::faq/sync-quota-oc10.png[Quotas in ownCloud Server,width=350]
+a| image::faq/sync-quota-spaces.png[Quotas in Infinite Scale,width=350]
+|===
+
+See the following table to interpret the numbers shown correctly:
+
+[width="100%",cols="50%,50%",options=header]
+|===
+^| First Number (1)
+^| Second Number (2)
+
+a|
+[,subs="quotes"]
+----
+  *Data used in my quota*
+
++ data used in external storages (a)
+  (ownCloud Server only)
+
++ data used in other users' shares (a)
+  (ownCloud Server only)
+
+= *Total used in my quota*
+----
+
+a|
+[,subs="quotes"]
+----
+  *Available quota*
+
++ data used in external storages (a)
+  (ownCloud Server only)
+
++ data used in other users' shares (a)
+  (ownCloud Server only)
+
+= *Total available in my quota*
+----
+|===
+
+.Note to reference (a) in the table
+ownCloud Server provides external storages and remote shares as folders. These folders do not count against the quota. To mitigate this situation in the Desktop app, the sizes of these folders are added to the quotas shown by the Desktop app automatically to avoid showing incorrect available space. In total, the quota values level out and no wrong differences are shown, though the absolute quota values may look higher than they are in reality - the absolute difference is correct. This difference shows if files to sync could be uploaded to the server successfully.
+
+Note that with Infinite Scale, each space has its own sync relationship and therefore quota values show as they are defined for each.
+endif::[]
+
+=== Directory Modification Time
+
+NOTE: The Desktop App does not keep the mtime (modification time) of directories, although it does update the mtimes of files.
+
+=== Continuously Upload Files to the Server Even When no Changes are Made
+
+It is possible for another program to change the modification date/time (mtime) of a file, either intentionally or unintentionally, even though no content has been changed. This can be done silently without the user noticing. Such an event triggers a file to be resynchronized.
+
+Examples of other programs changing the mtime are backup tools or in rare cases the Windows indexing service. The Desktop App cannot do anything about this.
+
+If you have files with an `.eml` extension (Windows Mail, Windows Live Mail), the Microsoft indexer automatically and continuously changes the mtime of the files. To solve this problem, you can:
+
+* Remove the extension from the indexer (menu:Indexing Options[Advanced > File Types])
+* Uninstall Windows Mail, Windows Live Mail. Note that when reinstalling, the issue reappears again. See {wordpress1-url}[Windows indexer changes modification dates of .eml files] for more information.
+* Remove at your own risk the corresponding key for .eml files in the registry at: +
+`\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\`
+`CurrentVersion\PropertySystem\PropertyHandlers`
+
+=== Sync Stops When Trying to Sync Deeper Than 100 Subdirectories
+
+The Desktop App has been intentionally limited to sync no deeper than 100 subdirectories. The hard limit exists to protect against cyclic bugs like symbolic link loops. If a deeply nested directory is excluded from sync, it will be listed with other ignored files and directories in the menu:Activity[Not Synced] pane.
+
+ifeval::["{targetbuild}" == "oc"]
+=== My Sync Folder Displays a Different Quota Than the Web Interface
+
+When other users share data with you, it's downloaded to the sync folder and counted as space used by the Desktop App, although it doesn't affect your quota for storage usage. There are more factors taken into account when calculating the quota status.
+endif::[]
+
+=== The Desktop App Shows Different File Sizes Than My Mobile App
+
+File size values differ depending on the client you are using. Some operating systems like iOS and macOS use the decimal system (power of 10) where 1kB or 1 kilobyte consists of 1000 bytes, while Linux, Android and Windows use the binary system (power of 2) where 1KB consists of 1024 bytes and is called a kibibyte. So no need to worry if you see different file sizes in your desktop client than on your mobile devices or web interface.
+
+=== Synchronisation Delay When Using a Network Drive
+
+Due to technical limitations, the Desktop App cannot detect local changes if the local sync folder is located on a mounted network volume. Only full local discovery, which by default runs every hour if not changed, will detect changes and trigger the upload. If desired, a smaller local discovery value can be configured to sync local changes more frequently. For more details see the xref:advanced_usage/configuration_file.adoc#section-owncloud[Configuration File] documentation.
+
+== Major Configuration Changes
+
+=== Relocating a Local Sync Folder
+
+The Desktop App does not provide a way to change the location of the sync folder directly. However, there is a way to do it without fully resyncing. Do this for each synchronization connection that you want to move to a new local destination:
+
+. First, select the synchronization connection and remove it. +
+For details how to do so see xref:using.adoc#remove-sync-relationships[Remove Sync Relationships].
+
+. Then, move the folder to the target location. +
+The example moves `My Folder` from `{ini_name}` -> `{ini_name} New`. +
+Note in the screenshot of the original location, that the `Status` field is empty because there is no active synchronization setup which is a mandatory requirement for this process.
++
+--
+ifeval::["{targetbuild}" == "kw"]
+image:faq/kw-windows-sync-folder-location.png[Source Folder,width=100]
+image:multi-location/kw-arrow-right.png[width=50]
+image:faq/kw-windows-sync-folder-location-new.png[Target Folder,width=100]
+endif::[]
+--
+
+. Finally, add a new connection that syncs *the same synchronization connection* to the desired new directory. To select a destination folder, using the example above, you have to take: +
+`{ini_name} New` *and NOT* `{ini_name} New\My Folder`!
++
+--
+IMPORTANT: During the process of moving folders, do not change any data locally or on the server. This will cause synchronization conflicts that must be resolved manually.
+
+For details on how to add a new synchronization relationship, see xref:using.adoc#add-sync-relationships[Add Sync Relationships].
+
+When the new sync relationship is added, the first sync will detect the previous sync state and data, preventing a full re-sync. Any upcoming changes will be synchronized as usual.
+--
+
+== Error Messages
+
+=== Warning Message for Unsupported Versions
+
+Keeping software up to date is crucial for file integrity and security – if software is outdated, there can be unfixed bugs. That’s why you should always upgrade your software when there is a new version.
+
+If the versions of the Desktop App and the backend are no longer compatible, you may receive a warning message in the Desktop App. Contact your support for assistance or upgrade the Desktop App.
+
+IMPORTANT: Never download the Desktop App from unknown or uncertified resources.
+
+=== Multiple Accounts Share the Same Folder
+
+The Desktop App can handle multiple accounts. If you set up a new sync connection for a particular account but try to use a folder that is already configured to sync for another account and contains a sync journal, you will receive an error message and have to select a different folder during setup.
+
+NOTE: You cannot share the same sync folder with multiple accounts.
+
+=== Folder is Used in a Folder Sync Connection
+
+If you setup a new synchronization connection for an account but try to use a folder that is already configured for synchronization for this account and contains a sync journal, you will get an error message that you need to pick another folder. 
+
+NOTE: You cannot share the same sync folder for multiple sync connections.
+
+=== The Folder is Used by a Different Client
+
+The Desktop App detected that the folder you are using to sync is part of a subtree that is managed by another sync app, such as OneDrive. You might also have tried to use a sync root for a new sync connection that is in a subtree of an existing sync connection.
+
+NOTE: The Desktop App must use the configured synchronization folder exclusively.
+
+=== Warning About Changes in Synchronized Folders not Being Tracked Reliably
+
+On Linux or macOS, if the synchronized folder contains a large number of subfolders, the operating system may not allow enough `inotify` watches to monitor changes in all of them.
+
+In this case, the Desktop App will not be able to immediately start the synchronization process when a file in one of the unmonitored folders changes. Instead, the Desktop App will display a warning and manually check the folders for changes at regular intervals of two hours by default.
+
+This problem can be mitigated by setting the `fs.inotify.max_user_watches` to a higher value such as `524288` (2^19^) permanently in the `/etc/sysctl.conf` configuration file. Read the {using-sysctl-url}[How to reload sysctl.conf variables in Linux, window=_blank] guide for more details.
+
+Linux::
++
+--
+[source,bash]
+----
+sudo sysctl -w fs.inotify.max_user_watches=524288
+sudo sysctl -p
+----
+--
+
+macOS::
++
+--
+[source,bash]
+----
+sudo sysctl -w kern.maxfiles=524288
+sudo sysctl -p
+----
+--
+
+== Messages in the 'Not Synced' Tab
+
+When the Desktop App synchronizes, it clears the message list in the menu:Activity[Not Synced] pane before each synchronization starts and prints the result of the current synchronization to the tab during processing. After a full sync, incremental syncs are performed and only content that was not previously synced is processed. Therefore, any listed messages that have been resolved will no longer appear.

@@ -1,0 +1,136 @@
+= System Requirements
+:toc: right
+:toclevels: 1
+:ppa-guide-url: https://itsfoss.com/ppa-guide/
+:desktop-system-requirements-url: https://doc.owncloud.com/desktop/installing.html#system-requirements
+:ios-system-requirements-url: https://doc.owncloud.com/ios-app/ios_faq.html
+:android-system-requirements-url: https://doc.owncloud.com/android/faq.html
+
+:description: Read this documentation for a recommended or supported environment for your ownCloud Server. This documentation applies to both a new installation or upgrade of an existing installation.
+
+== Introduction
+
+{description}
+
+== General Note
+
+There is an important note about a xref:installation/manual_installation/manual_installation_prerequisites.adoc#openssl-version[prerequisite of openSSL]. We highly recommend checking this prerequisite as it needs to be checked regardless of the Operating System chosen.
+
+== Officially Recommended Environment
+
+For _best performance_, _stability_, _support_ and _full functionality_, we officially recommend and support:
+
+[width="60%"cols="30%,60%a",options="header"]
+|===
+| Platform
+| Options
+
+| Operating System
+| Ubuntu 20.04 LTS
+
+| Database
+| xref:#database-requirements[MariaDB] 10.11 ^1^
+
+| Redis
+| >= 6
+
+| Web server
+| Apache 2.4 with xref:installation/manual_installation/manual_installation.adoc#configure-the-web-server[`prefork and mod_php`]
+
+| PHP Runtime
+| {recommended-php-version}
+|===
+
+(1) MariaDB 10.6 and later is *only supported* with ownCloud release 10.9 and upwards. See the xref:installation/manual_installation/manual_installation.adoc#install-a-database[Install a Database] guide and xref:maintenance/upgrading/database_upgrade.adoc[Database Upgrade] guide.
+
+== Officially Supported Environments
+
+For _best performance_, _stability_, _support_, and _full functionality_ we officially support:
+
+=== Server
+
+[width="90%"cols=".^ 30%,90%a",options="header"]
+|===
+| Platform
+| Options
+
+| Operating System (64bit)
+| * Debian 10
+* Red Hat Enterprise Linux 7, 8 and 9 +
+including all 100% compatible derivatives (please note Red Hat Enterprise Linux 9 support is Enterprise only. Contact ownCloud support for more information)
+* SUSE Linux Enterprise Server 12 with SP4/5 and 15
+* Ubuntu 20.04 and 22.04
+* openSUSE Leap 15.2
+
+| Database
+| * xref:#database-requirements[MySQL] 8+ or xref:#database-requirements[MariaDB] 10.2 through 10.11 ^1^ (*Recommended*)
+* Oracle 11 and 12 can be run in Oracle 19c with compatibility mode (*Enterprise only*)
+* PostgreSQL 9, 10, 11, 12, 13 or 14
+* SQLite (*Not for production*)
+
+| Redis
+| * >= 6
+
+|Web server
+|* Apache 2.4 with xref:installation/manual_installation/manual_installation.adoc#configure-the-web-server[`prefork` and `mod_php`]
+
+| PHP Runtime
+|* {supported-php-versions}
+|===
+
+(1) MariaDB 10.6 and later is *only supported* with ownCloud release 10.9 and upwards. See the xref:installation/manual_installation/manual_installation.adoc#install-a-database[Install a Database] guide and xref:maintenance/upgrading/database_upgrade.adoc[Database Upgrade] guide.
+
+[NOTE]
+====
+For Linux distributions, we support, if technically feasible, the latest two versions per platform and the previous LTS Version.
+====
+
+=== Hypervisors
+
+* Hyper-V
+* VMware ESX - ownCloud must run without overcommitment of cores or RAM for larger installations (1000+ users).
+* Xen
+* KVM
+
+=== Web Browser
+
+* Edge (current version on Windows 10)
+* IE11 or newer (except Compatibility Mode)
+* Firefox 60 ESR+
+* Chrome 66+
+* Safari 10+
+
+=== Desktop Sync Client
+
+We always recommend to use the newest sync client with the latest server release.
+
+You can find {desktop-system-requirements-url}[detailed system requirements] in the documentation for the Desktop Synchronization Client.
+
+=== Mobile Apps
+
+We always recommend to use the newest mobile apps with the latest server release.
+
+You can find detailed system requirements in the documentation for the mobile apps.
+
+* {ios-system-requirements-url}[iOS system requirements]
+* {android-system-requirements-url}[Android system requirements]
+
+[TIP]
+====
+You can find out more in the https://owncloud.com/changelog[changelog].
+====
+
+== Database Requirements
+
+The following database settings are currently required if you’re running ownCloud together with a MySQL or MariaDB database:
+
+* Disabled or `BINLOG_FORMAT = MIXED` or `BINLOG_FORMAT = ROW` configured Binary Logging (See: xref:configuration/database/linux_database_configuration.adoc#mysql-mariadb[MySQL / MariaDB with Binary Logging Enabled])
+* InnoDB storage engine (The MyISAM storage engine is *not supported*, see:
+xref:configuration/database/linux_database_configuration.adoc#mysql-mariadb[MySQL / MariaDB storage engine])
+* `READ COMMITTED` transaction isolation level (See:
+xref:configuration/database/linux_database_configuration.adoc#set-read-committed-as-the-transaction-isolation-level[MySQL / MariaDB `READ COMMITTED` transaction isolation level])
+
+== Memory Requirements
+
+Memory requirements for running an ownCloud server are greatly variable, depending on the numbers of users and files, and volume of server activity. ownCloud officially requires a minimum of 128MB RAM.
+But, we recommend a minimum of 512MB.

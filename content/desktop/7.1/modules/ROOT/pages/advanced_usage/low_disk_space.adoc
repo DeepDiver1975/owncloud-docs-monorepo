@@ -1,0 +1,23 @@
+= Low Disk Space
+:toc: right
+:description: When disk space is low, the Desktop App will be unable to synchronize all files.
+
+== Introduction
+
+{description} This section describes its behavior in a low disk space situation as well as the adjustable xref:advanced_usage/environment_variables.adoc[environment variables] that influence it.
+
+== Cases
+
+[width="100%",cols="100%,80%",options="header"]
+|===
+| Issue 
+| Adjustable Environment Variable 
+
+| Synchronization of a folder aborts entirely if the remaining disk space falls below 50 MB.
+| `OWNCLOUD_CRITICAL_FREE_SPACE_BYTES`
+
+| Downloads that would reduce the free disk space below 250 MB will be skipped or aborted.
+The download will be retried regularly and other synchronization is unaffected.
+| `OWNCLOUD_FREE_SPACE_BYTES`
+
+|===

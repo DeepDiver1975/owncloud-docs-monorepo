@@ -1,0 +1,14 @@
+name: ios-app
+title: Mobile App for iOS
+version: '12.6'
+start_page: ROOT:index.adoc
+nav:
+- modules/ROOT/partials/nav.adoc
+
+asciidoc:
+  attributes:
+    mdm-base-url: 'https://raw.githubusercontent.com/owncloud/ios-app/'
+    mdm-file-url: '/doc/configuration.adoc'
+    mdm-tag-name: 'master'
+    latest-ios-app-version: {page-component-version}   # do not change, this is the value of the version key
+    previous-ios-app-version: {page-component-version} # do not change, this is the value of the version key

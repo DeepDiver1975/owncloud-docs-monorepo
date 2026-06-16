@@ -1,0 +1,118 @@
+= Troubleshooting
+:toc: right
+:toclevels: 3
+:description: If you experience problems while using the iOS app, you can use this guide to hopefully find a solution.
+:page-aliases: ios_troubleshooting.adoc, troubleshooting.adoc
+
+:keywords: troubleshooting, logging, debugging, mitmproxy, charles for iOS, ownCloud, iOS, iPhone, iPad
+:description: This guide takes you step by step through how to troubleshoot issues with ownCloud's iOS App for iPhone and iPad. In particular, it shows how to configure logging.
+:apache-logging-url: http://httpd.apache.org/docs/current/logs.html
+:create-screen-recording-url: https://support.apple.com/en-us/HT207935
+:owncloud-logging-url: https://doc.owncloud.com/server/latest/admin_manual/configuration/server/logging_configuration.html
+:owncloud-log-tracing-url: https://doc.owncloud.com/server/latest/admin_manual/configuration/server/request_tracing.html
+
+== Introduction
+
+{description}
+
+== Logging
+
+=== Locating App Logs and iOS App Crash Logs
+
+There are two kinds of logs recorded in different locations:
+
+.The Log Created by the iOS App
+See xref:capturing-app-debug-logs[Capturing App Debug Logs] for how to enable app logs. On the same screen where you enable logging, you can access the log files. Touch menu:Share log file[] which opens a new screen with all the log files created. To export the selected logs, tap the share button on the top right-hand side of the screen.
+
+.The iOS Crash Log
+If the iOS app isn't responding or is crashing, iOS saves a crash log on the device. You can find the crash log on your device under menu:Settings[Privacy > Analytics > Analytics Data]. The log entries are sorted alphabetically with the app name, the date and a computer-readable timestamp. Tap the log of choice to open the crash log and export it with the share button on the top right-hand side of the screen.
+
+=== Capturing App Debug Logs
+
+Effectively debugging software requires as much relevant information as possible. Log output can help with tracking down problems and, if you report a bug, log output can help to resolve an issue more quickly. To assist the ownCloud support personnel, please try to provide as many relevant logs as possible. You can do this by enabling and fully configuring the iOS app’s logging functionality via:
+
+* Enabling logging with menu:Settings[Logging > Enable Logging]
+* Setting the log level to "_Debug_" or "_Info_"
+* Enable:
+** Log HTTP requests and responses
+** Standard error output
+** Log file
+
+Once these have been enabled:
+
+* Click btn:[Browse] at the end of the same settings page
+* Click btn:[Delete all] in the following settings page
+* Perform the steps to reproduce the error
+* Go back to the Logging settings click btn:[Browse] and click btn:[Share log file] (the rectangle with the arrow next to the log file)
+
+[caption=]
+.All iOS App logging settings enabled and set
+[width=80%,cols="^.^35%,^.^5%,^.^35%",frame=none,grid=none]
+|===
+a| image::appendices/troubleshooting/ios-app-settings-logging.png[ios-app-settings-logging, width=250]
+a| *->*
+a| image::appendices/troubleshooting/ios-app-settings-logging1.png[ios-app-settings-logging, width=250]
+|===
+
+[caption=]
+.Button to clear the logs
+[width=37%,cols="^.^35%",frame=none,grid=none]
+|===
+a| image:appendices/troubleshooting/ios-app-settings-logging2.png[ios-app-settings-logging, width=250]
+|===
+
+
+==== Log HTTP Requests and Responses
+
+If HTTP logging is enabled, log files will contain additional entries:
+
+[source,plaintext]
+----
+2023-09-01 17:18:35.107000+0200 ownCloud[8828:307914] [dbug] | [HTTP, Request, …] Sending request:
+2023-09-01 17:18:35.332000+0200 ownCloud[8828:307914] [dbug] | [HTTP, Response, …] Received response:
+----
+
+{empty} +
+
+[cols="25%,75%",options="header"]
+|===
+| Log Content
+| Description
+
+| `2023-09-01 17:18:35.107000+0200`
+| Timestamp with timezone.
+
+| `ownCloud`
+| ownCloud app or FileProvider process.
+
+| `[HTTP, Request, …]`
+| Log item category label.
+
+| `RequestID:58453BEE-EEB5-44FB-9E1D-5230EE56AF38`
+| `X-REQUEST-ID` to find corresponding requests and responses and to find related entries in `owncloud.log` or Apache logs.
+|===
+
+=== ownCloud's Log File
+
+ownCloud server maintains an {owncloud-logging-url}[ownCloud-specific log file]. You can view the file using either the web interface or you can open it directly from the file system in your ownCloud server's data directory.
+
+You can check if it is enabled through the Log configuration panel, which is available under
+menu:Settings[General (Admin)]. On that page, you can adjust the log level.
+We recommend that you set it to a verbose level such as either `debug` or `info`.
+
+.Configuring logging in ownCloud server.
+image::appendices/troubleshooting/owncloud-log-configuration.png[Configuring logging in ownCloud server., width=350]
+
+=== Web Server Log Files
+
+It can be helpful to view your web server's error log file to isolate any ownCloud-related problems.
+
+The ownCloud iOS app sends the `X-REQUEST-ID` header with every request. You'll find the
+`X-REQUEST-ID` in the `owncloud.log`, and you can configure your webserver to add the
+`X-REQUEST-ID` to the logs. Here you can find more information at
+{owncloud-log-tracing-url}[Request Tracing]
+
+== Recording the Screen
+
+In iOS 11 or later, you can create a screen recording to better illustrate an error.
+If you are not familiar with creating one, {create-screen-recording-url}[follow these instructions].

@@ -1,0 +1,14 @@
+= Enable index.php-less URLs
+:toc: right
+
+== Introduction
+
+Note that with the Docker Image provided by ownCloud, `index.php` less URLs are enabled by default.
+
+The relevant environment variables are:
+
+[source,.env]
+----
+OWNCLOUD_OVERWRITE_CLI_URL='https://example.com'
+OWNCLOUD_HTACCESS_REWRITE_BASE='/'
+----

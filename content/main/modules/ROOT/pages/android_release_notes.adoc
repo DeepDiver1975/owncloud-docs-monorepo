@@ -1,0 +1,237 @@
+= Android App Release Notes
+:toc: macro
+:toclevels: 2
+:toc-title: Releases
+:description: Dear Android App user, find below the changes and known issues in the Andriod App that need your attention.
+
+:android-releases-url: https://github.com/owncloud/android/releases/tag/
+
+{description}
+
+{empty} +
+
+toc::[]
+
+== Android App 4.6.0
+
+[discrete]
+=== General
+
+This release contains bugfixes, changes and enhancements. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.6.0[GitHub, window=_blank].
+
+[discrete]
+=== Summary of Notable Implementations
+
+For a full list of changes and the details see the changelog linked above.
+
+[discrete]
+==== Issues Fixed
+
+* Changes in the automatic uploads algorithm to prevent duplications.
+* Infinite edges in Android 15.
+* Change space icon in file details view for personal space.
+* Other bug fixes and technical improvements.
+
+[discrete]
+==== Enhancements
+
+* Starting with this version, the Android ownCloud app is compatible with the Kiteworks PDN version 9.1.1 and higher.
+* Shares Space in Android native file explorer.
+* Accessibility analysis reports during development.
+
+== Android App 4.5.0
+
+[discrete]
+=== General
+
+This release contains bugfixes, changes and enhancements. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.5.0[GitHub, window=_blank].
+
+[discrete]
+=== Issues Fixed
+
+* Replaced the phrase auto-uploads with automatic uploads.
+* Fixed navigation in Automatic Uploads folder picker.
+* Fixed folder size after move operation.
+* Other bug fixes and technical improvements.
+
+[discrete]
+=== Enhancements
+
+* Improvements in storage occupation display. +
+Quotas are updated in more file operations such as `copy`, `move`, `delete`, `upload`, etc that change the user's disk usage. In addition, the storage usage of each account has been added to the Manage Accounts dialog.
+
+* Infinite Scale Users Light. +
+From now on, the application supports Infinite Scale Users Light (those who don't have personal space). All the functionalities have been adapted to allow this type of user to use the application correctly, taking into account all their limitations.
+
+* Added text labels on bottom bar. +
+Text labels have been added to all the items that appear in the bottom navigation bar to provide enough and clear information about the available sections that we have.
+
+* Feedback when (un)setting av. offline in all previews. +
+Added feedback with some messages in the snackbars when the user sets or un-sets a file as available offline in the file preview. The status is now easily identifiable.
+
+* Logging in the ownCloud Android App. +
+Enabling logs and sending them to us is the best way to help us improve the app and provide the best user experience.
+
+** By default, logging is disabled. +
+To activate them, you have to go to menu:Settings[Logging > Enable logging]. From the moment they are on, logs will keep track of every event occurring in the app. These DON’T include user’s sensitive information, so they can be used safely.
+
+** Once logging is enabled and some actions have been performed within the application, log files will be created. To view them, go to menu:Settings[Logging > Log Files]. There you can easily share them by tapping the share icon.
+
+* Sending feedback to ownCloud developers. +
+If you find a bug or want to make any suggestions, please participate in one of these channels:
+
+** Open a new issue on https://github.com/owncloud/android/issues[GitHub].
+** Open a new topic on https://central.owncloud.org[Central].
+
+== Android App 4.4.0
+
+[discrete]
+=== General
+
+This release contains bugfixes, changes and enhancements. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.4.0[GitHub, window=_blank].
+
+[discrete]
+=== Issues Fixed
+
+* Rely on resharing capability: https://github.com/owncloud/android/issues/4397[#4397]
+* Shares in non-root are updated correctly: https://github.com/owncloud/android/issues/4432[#4432]
+* List filtering not working after rotating device: https://github.com/owncloud/android/issues/4441[#4441]
+* The color of some elements is set up correctly: https://github.com/owncloud/android/issues/4442[#4442]
+* Audio player does not work: https://github.com/owncloud/android/issues/4474[#4474]
+
+[discrete]
+=== Enhancements
+
+* Improved "Remove from original folder" option in auto-upload: https://github.com/owncloud/android/issues/4357[#4357]
+* Improved accessibility of information and relationships: https://github.com/owncloud/android/issues/4362[#4362]
+* Changed the color of some elements to improve accessibility: https://github.com/owncloud/android/issues/4364[#4364]
+* Improved SearchView accessibility: https://github.com/owncloud/android/issues/4365[#4365]
+* Roles added to some elements to improve accessibility: https://github.com/owncloud/android/issues/4373[#4373]
+* Hardware keyboard support: https://github.com/owncloud/android/issues/4438[#4438]
+* Hardware keyboard support for passcode view: https://github.com/owncloud/android/issues/4447[#4447]
+* TalkBack announces the view label correctly: https://github.com/owncloud/android/issues/4458[#4458]
+
+== Android App 4.3.0
+
+[discrete]
+=== General
+
+This release contains bugfixes, changes and enhancements. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.3.0[GitHub, window=_blank].
+
+* *Important new items:*
+** New Dialog for Manage Accounts
+** Support for URL shortcut files
+** New setting to remove automatically downloaded files
+** New setting to remove manually local storage
+** Automatic discovery
+** Password generator
+
+* *Other improvements:*
+** Feedback section changed
+** Device's clear button re-enabled
+** Filtering in spaces list
+** Performance in av. offline
+** Warning for http connections
+** Bugfixing, accessibility and tiny UI improvements
+
+[discrete]
+=== Issues Fixed
+
+* Removed unnecessary requests when the app is installed from scratch: https://github.com/owncloud/android/issues/4213[#4213]
+* "Clear data" button enabled in the app settings in device settings: https://github.com/owncloud/android/issues/4309[#4309]
+* Video streaming in spaces: https://github.com/owncloud/android/issues/4328[#4328]
+* Retried successful uploads are cleaned up from the temporary folder: https://github.com/owncloud/android/issues/4335[#4335]
+* Resolve incorrect truncation of long display names in Manage Accounts: https://github.com/owncloud/android/issues/4351[#4351]
+* Av. offline files are not removed when "Local only" option is clicked: https://github.com/owncloud/android/issues/4353[#4353]
+* Unwanted DELETE operations when synchronization in single file fails: https://github.com/owncloud/android/issues/6638[#6638]
+
+[discrete]
+=== Changes
+
+* Upgrade minimum SDK version to Android 7.0 (v24): https://github.com/owncloud/android/issues/4230[#4230]
+* Automatic discovery of the account in login: https://github.com/owncloud/android/issues/4301[#4301]
+
+[discrete]
+=== Enhancements
+
+* Add search functionality to spaces list: https://github.com/owncloud/android/issues/3865[#3865]
+* Get personal space quota from GraphAPI: https://github.com/owncloud/android/issues/3874[#3874]
+* Correct "Local only" option in remove dialog: https://github.com/owncloud/android/issues/3936[#3936]
+* Show app provider icon from endpoint: https://github.com/owncloud/android/issues/4105[#4105]
+* Improvements in Manage Accounts view: https://github.com/owncloud/android/issues/4148[#4148]
+* New setting for manual removal of local storage: https://github.com/owncloud/android/issues/4174[#4174]
+* New setting for automatic removal of local files: https://github.com/owncloud/android/issues/4175[#4175]
+* Avoid unnecessary requests when an av. offline folder is refreshed: https://github.com/owncloud/android/issues/4197[#4197]
+* Add a warning in http connections: https://github.com/owncloud/android/issues/4284[#4284]
+* Make dialog more Android-alike: https://github.com/owncloud/android/issues/4303[#4303]
+* Password generator for public links in oCIS: https://github.com/owncloud/android/issues/4308[#4308]
+* New UI for "Manage accounts" view: https://github.com/owncloud/android/issues/4312[#4312]
+* Improvements in remove dialog: https://github.com/owncloud/android/issues/4342[#4342]
+* Content description in UI elements to improve accessibility: https://github.com/owncloud/android/issues/4360[#4360]
+* Added contentDescription attribute in the previewed image: https://github.com/owncloud/android/issues/4360[#4360]
+* Support for URL shortcut files: https://github.com/owncloud/android/issues/4413[#4413]
+* Changes in the Feedback section: https://github.com/owncloud/android/issues/6594[#6594]
+
+== Android App 4.2.1
+
+[discrete]
+=== General
+
+This is a bugfix release only. Update as soon as possible.
+
+* Fixed some crashes in 4.2.0: https://github.com/owncloud/android/issues/4318[#4318]
+
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}/v4.2.1[GitHub, window=_blank].
+
+== Android App 4.2.0
+
+[discrete]
+=== General
+
+This release contains enhancements, bugfixes and security improvements. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.2.0[GitHub, window=_blank].
+
+[discrete]
+=== Security Improvements
+
+* Improve biometric authentication security: https://github.com/owncloud/android/issues/4180[#4180]
+
+[discrete]
+=== Notable Enhancements
+
+* New MDM functionalities, see: https://github.com/owncloud/android/issues/4249[#4249] and https://github.com/owncloud/android/issues/4288[#4288]
+* Thumbnail improvements in grid view: https://github.com/owncloud/android/issues/4145[#4145]
+* Auto upload in oCIS accounts allows upload to any space: https://github.com/owncloud/android/issues/4117[#4117]
+* "Share to" in oCIS accounts allows upload to any space: https://github.com/owncloud/android/issues/4088[#4088]
+
+== Android App 4.1.1
+
+[discrete]
+=== General
+
+This is a bugfix release only. Update as soon as possible.
+
+* Some Null Pointer Exceptions avoided: https://github.com/owncloud/android/issues/4158[#4158]
+* Thumbnails correctly shown for every user: https://github.com/owncloud/android/pull/4189[#4189]
+
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.1.1[GitHub, window=_blank].
+
+== Android App 4.1.0
+
+[discrete]
+=== General
+
+This release contains enhancements and bugfixes. +
+Refer to the full change log for a list of bug fixes and changes at {android-releases-url}v4.1.0[GitHub, window=_blank].
+
+[discrete]
+=== Notable Enhancements
+
+* Show "More" button for every file list item: https://github.com/owncloud/android/issues/2885[#2885]
+* Added "Open in web" options to main file list: https://github.com/owncloud/android/issues/3860[#3860]
+* Force security if not protected: https://github.com/owncloud/android/issues/4061[#4061]
+* Prevent http traffic with branding options: https://github.com/owncloud/android/issues/4066[#4066]

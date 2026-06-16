@@ -1,0 +1,245 @@
+= Manual ownCloud Upgrade
+:toc: right
+:toclevels: 2
+:description: This document describes how to manually upgrade your Dockerized ownCloud installation.
+
+== Introduction
+
+{description} These examples need to be adapted according your needs and your environment.
+
+NOTE: This guide assumes that you have basic knowledge about Unix terminology, commands and concepts. In case you are not familiar with these, ownCloud highly recommends that you create a playground first to try the steps and/or get in touch with ownCloud support to avoid breaking your system or losing data.
+
+NOTE: To run any occ commands, you must first change to the directory containing the Compose YAML file.
+
+NOTE: Accessing the webroot of ownCloud needs extra compose configuration that is not covered here.
+
+== General Preparation
+
+There are several steps necessary before you can start with upgrading your ownCloud instance.
+
+=== Enable Maintenance Mode
+
+Put your server in xref:maintenance/enable_maintenance.adoc[maintenance mode] and *disable* xref:configuration/server/background_jobs_configuration.adoc#cron-jobs[Cron jobs]. Doing so prevents new logins, locks the sessions of logged-in users, and displays a status screen so that users know what is happening.
+
+TIP: In a clustered environment, check that all nodes are in maintenance mode.
+
+=== Prevent Browser Access
+
+In a production environment, there is a proxy in front of your ownCloud container which is internally running Apache. To prevent browser-based access to the embedded Apache web server via the proxy, you must take the necessary measures on the proxy.
+
+=== Backup the Database
+
+First, backup ownCloud and the server database as described in section xref:maintenance/backup_and_restore/backup.adoc[Backing up ownCloud]. This is independent of the next upgrade steps but important in case something goes wrong.
+
+=== Review Third-Party Apps
+
+Review any installed third-party apps for compatibility with the new ownCloud release. Ensure that they are all disabled before beginning the upgrade.
+Third party apps are all apps that are not distributed by {oc-marketplace-url}/publishers/owncloud[ownCloud] or not listed in xref:installation/apps_supported.adoc[Supported Apps in ownCloud].
+
+. Disable Apps via Command Line
++
+This command lists all apps by <app-id> and app version:
++
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} app:list
+----
++
+This command disables the app with the given <app-id>:
++
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} app:disable <app-id>
+----
+
+. Disable via Browser +
+Go to menu:Settings[Admin > Apps] and disable all third-party apps.
+
+=== Backup Manual Changes in `.htaccess`
+
+If you have made changes in `.htaccess` located at the webroot of ownCloud, you must backup these changes. Only backup the changes made but not the complete file as this file will be recreated on upgrades and may contain different settings provided by ownCloud. Manual changes in `.htaccess` can be necessary when you e.g. xref:configuration/integration/ms-teams.adoc[Integrate ownCloud into Microsoft Teams] or fixing WebDav connection errors as xref:troubleshooting/general_troubleshooting.adoc#error-0x80070043-the-network-name-cannot-be-found-while-adding-a-network-drive[The network name cannot be found] on Windows.
+
+=== Backup Manual Changes in `.user.ini`
+
+If you have made changes in `.user.ini` located at the webroot of ownCloud, you must backup these changes.
+
+=== Market and Marketplace App Upgrades
+
+The ownCloud image ships with all the apps provided by ownCloud. Any apps that have been installed manually and are not part of the image need to be treated separately. If an update is available, these apps will need to be manually updated once the upgrade is finished.
+
+=== Permissions
+
+ownCloud handles permissions and ownership, except when you add data manually, such as when you copy apps to the `<mount-point>/apps` folder or have added a configuration to the `<mount-point>/config` folder. Replace `<mount-point>` and `<your-config-file>` in the following code examples accordingly.
+
+apps folder::
++
+--
+* For the ownership use `www-data:root`
++
+[source,bash]
+----
+sudo chown -R www-data:root /<mount-point>/apps
+----
+
+* For all files use `0644`
++
+[source,bash]
+----
+sudo find -L /<mount-point>/apps -type f -print0 | sudo xargs -0 chmod 644
+----
+
+* For all directories use `0751`
++
+[source,bash]
+----
+sudo find -L /<mount-point>/apps -type d -print0 | sudo xargs -0 chmod 751
+----
+--
+
+config folder::
++
+--
+* For the ownership use `www-data:root`
++
+[source,bash]
+----
+sudo chown -R www-data:root /<mount-point>/config
+----
+
+* For your added config file(s) use `0644`
++
+[source,bash]
+----
+sudo chmod 644 /<mount-point>/config/<your-config-file>
+----
+--
+
+== Finalize the Upgrade
+
+=== Down the Container
+
+Bring the container down by issuing the following command:
+
+[source,docker]
+----
+docker compose down --remove-orphans
+----
+
+=== Get the Latest Release
+
+To get the latest release of ownCloud, update the image version defined in the `.env` file located where the compose file is.
+
+=== Start the Upgrade
+
+Start your docker instance. This will now use the new ownCloud image:
+
+[source,docker]
+----
+docker compose up -d
+----
+
+With the apps disabled and ownCloud in maintenance mode, start the xref:configuration/server/occ_command.adoc#command-line-upgrade[upgrade process] from the command line.
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} upgrade
+----
+
+The upgrade operation can take anywhere from a few minutes to a few hours, depending on the size of your installation. When it is finished you will see either a success message or an error message that indicates why the process did not complete successfully.
+
+== Reapply Manual Changes
+
+Reapply any manual changes made to `.htaccess` files and the `.user.ini` file located in the owncloud webroot.
+
+The following example command eases to find the differences of two files, which is helpful for reapplying manually added changes to `.htaccess` and `.user.ini`. Replace that paths, directories and files accordingly.
+
+[source,bash]
+----
+diff -y -W 70 --suppress-common-lines owncloud/.user.ini owncloud_2026-02-15-09.18.48/.user.ini
+----
+
+[source,plaintext]
+----
+post_max_size=513M                |     post_max_size=1G
+----
+
+=== Strong Permissions
+
+* Check that `chmod` with `0640` for `.htaccess` and `.user.ini` files has been applied, if you have made changes to the files.
+
+=== Disable Maintenance Mode
+
+Assuming your upgrade succeeded, disable maintenance mode using the occ command.
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} maintenance:mode --off
+----
+
+=== Re-Enable Browser Access
+
+With all that done, re-enable access of the proxy web server to your ownCloud instance.
+
+=== Check the Upgrade
+
+With maintenance mode disabled and the proxy web server giving access to the ownCloud instance, log in via the web interface and perform the following steps:
+
+. Check that the version number reflects the new installation. +
+It can be reviewed at the bottom of menu:Settings[Admin > General].
+. Check that your other settings are correct.
+. Go to the menu:Settings[Admin > Apps] page and review the core apps to make sure the right ones are enabled.
+. After the upgrade is complete, re-enable any third-party apps that are compatible with the new release. Use `occ app:enable <app-id>` or go to menu:Settings[Admin > Apps > "Show disabled apps"] and enable all compatible third-party apps.
+
+WARNING: Install or enable unsupported apps at your own risk.
+
+== Rollback
+
+If you need to rollback your upgrade, see the xref:maintenance/backup_and_restore/restore.adoc[Restoring ownCloud] documentation.
+
+== Troubleshooting
+
+When upgrading ownCloud and you are running MySQL or MariaDB with binary logging enabled, your upgrade may fail with these errors in your MySQL/MariaDB log:
+
+----
+An unhandled exception has been thrown:
+exception 'PDOException' with the message 'SQLSTATE[HY000]: General error: 1665
+Cannot execute statement: impossible to write to binary log since
+BINLOG_FORMAT = STATEMENT and at least one table uses a storage engine limited to
+row-based logging. InnoDB is limited to row-logging when transaction isolation level
+is READ COMMITTED or READ UNCOMMITTED.'
+----
+
+Please refer to xref:configuration/database/linux_database_configuration.adoc#mysql-mariadb[MySQL / MariaDB ] on how to correctly configure your environment.
+
+In the unlikely case that files do not show up in the web-ui after the upgrade, use the xref:configuration/server/occ_command.adoc#the-filesscan-command[files:scan command] to make them visible again.
+Here is an example of how to do so:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} files:scan --all
+----
+
+See the {oc-help-url}[Docs & Guides page] for further resources for both home and enterprise users.
+
+Sometimes, ownCloud can get _stuck in an upgrade_.
+This is usually due to the process taking too long and running into a PHP time-out.
+Stop the upgrade process this way:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} maintenance:mode --off
+----
+
+Then start the manual process:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} upgrade
+----
+
+If this does not work properly, try the repair function:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} maintenance:repair
+----

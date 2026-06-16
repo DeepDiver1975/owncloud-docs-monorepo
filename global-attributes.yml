@@ -1,0 +1,70 @@
+#   global attributes loaded via extension
+    # asciidoctor prefix for section IDs
+    idprefix: ''
+    idseparator: '-'
+    # Antora User Interface Macros (btn, menu)
+    experimental: true
+    # Antora pagination (prev page, next page)
+    page-pagination: true
+    # when using kroki images, download them instead referencing to kroki
+    kroki-fetch-diagram: true
+    # Custom attribute page-component-build-list
+    # Only embed named opengraph images in docs-ui via src/partials/head-meta-opengraph.hbs sourced from docs/overlay
+    page-component-build-list: 'docs, docs-main, ocis, server, webui, desktop, android, ios-app, branding'
+#   common
+    docs-base-url: 'https://doc.owncloud.com'
+    oc-complete-base-url: 'https://download.owncloud.com/server/stable'
+    oc-contact-url: 'https://owncloud.com/contact/'
+    oc-help-url: 'https://owncloud.com/docs-guides/'
+    oc-marketplace-url: 'https://marketplace.owncloud.com'
+    oc-central-url: 'https://central.owncloud.org'
+    oc-support-url: 'https://owncloud.com/support'
+#
+# note that all attributes ending with '@' are used for versioned docs. the content can be
+# overwritten by the build process from the corresponding antory.yml file if populated - do not change
+#
+#   docs
+    latest-docs-version: 'next'
+    previous-docs-version: 'next'
+#   server
+    latest-server-version: '10.16'
+    latest-server-download-version: '10.16.2'
+    previous-server-version: '10.15'
+    current-server-version: '10.16'
+    oc-changelog-url: 'https://owncloud.com/changelog/server/'
+    oc-install-package-url: 'https://download.owncloud.com/server/stable/?sort=time&order=asc'
+    oc-examples-server-url: 'https://owncloud.install.com/owncloud'
+    oc-examples-server-ip: '127.0.0.1'
+    oc-examples-username: 'username'
+    oc-examples-password: 'password'
+    oc-complete-name: 'owncloud-complete-latest'
+    occ-command-example-prefix: 'sudo -u www-data ./occ'
+    occ-command-example-prefix-docker: 'docker compose exec owncloud occ'
+    php-net-url: 'https://www.php.net'
+    php-supported-versions-url: 'https://www.php.net/supported-versions.php'
+    http-status-codes-base-url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status'
+    std-port-http: '8080'
+    std-port-memcache: '11211'
+    std-port-mysql: '3306'
+    std-port-redis: '6379'
+#   ocis
+    # branch versions, also used to assemble branch names in ocis
+    latest-ocis-version: '8.0' #
+    previous-ocis-version: '7.3'
+    # Versions mainly for printing like in docs-main release info and in docs-ocis to define the latest production version.
+    # Versions in the ocis docs need to be defined in the branch specific docs-ocis/antora.yaml file.
+    # To do so, change the values in the branch of docs-ocis/antora.yml like service_xxx and compose_xxx.
+    ocis-actual-version: '8.0.0'
+    ocis-former-version: '7.3.2'
+    ocis-compiled: '2026-02-09 00:00:00 +0000 UTC'
+    ocis-downloadpage-url: 'https://download.owncloud.com/ocis/ocis'
+#   webui (versionless component in the monorepo; no @version qualifier)
+#   desktop
+    latest-desktop-version: '6.0'
+    previous-desktop-version: '5.3'
+#   ios-app (latest-only import)
+    latest-ios-version: '12.6'
+    previous-ios-version: '12.6'
+#   android (latest-only import)
+    latest-android-version: '4.7'
+    previous-android-version: '4.7'

@@ -1,0 +1,21 @@
+= Infinite Scale Server Releases
+:toc: right
+:toclevels: 1
+:page-aliases: next@docs::ocis_releases.adoc, next@docs_main::ocis_releases.adoc
+
+:description: ownCloud provides in-depth documentation for Infinite Scale. Functionalities added or decommissioned dependent on a particular version are referenced in the documentation directly.
+
+== Introduction
+
+{description}
+
+== Infinite Scale Server Releases
+
+=== Actual Stable Release (version {ocis-actual-version})
+
+* xref:ocis:admin:index.adoc[Infinite Scale Documentation]
+
+=== Former Stable Release (version {ocis-former-version})
+
+// note that we can replace ROOT with admin after 8.1 has been released
+* xref:{previous-ocis-version}@ocis:ROOT:index.adoc[Infinite Scale Documentation]
