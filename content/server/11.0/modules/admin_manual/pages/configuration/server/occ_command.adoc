@@ -1,0 +1,284 @@
+= Using the occ Command
+:toc: macro
+:toclevels: 2
+:description: ownCloud's 'occ' command (ownCloud console) is ownCloud's command-line interface.
+
+{description} You can perform many common server operations with `occ`, such as installing and upgrading ownCloud, managing users and groups, encryption, passwords, app settings, and more.
+
+//The following is a trick to create a distance between the upper text and the table of contents. Using {empty} produces a clean empty line. Else the "Table of Contents" would stick right below the last text. See: https://discuss.asciidoctor.org/Getting-blank-lines-in-AsciiDoc-td47.html
+ 
+{empty}
+
+toc::[]
+
+== Running occ Commands
+
+In order to run any `occ` command, the ownCloud container must be up and running. Two different methods exist for initiating occ commands.
+
+NOTE: For any of these methods, you must be in the directory where the compose file is located to access the running container.
+
+NOTE: Any occ examples use the host method to access occ.
+
+=== Using occ via the Host
+
+Use the command `docker compose exec owncloud` and replace `<command>` with the command you want to execute. Please note that this is the preferred method, particularly when using scripting.
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} <command>
+----
+
+=== Using occ via the Containers Shell
+
+Issue the following command to open a bash shell inside the container:
+
+[source,bash]
+----
+docker compose exec owncloud /bin/bash
+----
+
+Once on the containers shell, run `occ` commands directly and replace `<command>` with the command you want to execute:
+
+[source,bash]
+----
+occ <command>
+----
+
+Type `exit` or press kbd:[CTRL D] to leave the containers shell.
+
+=== occ Command Structure
+
+The `occ` command has _options_, _commands_, and _arguments_.
+
+. Options are optional.
+. Commands are required.
+. Arguments can be required _or_ optional.
+
+The generic syntax is:
+
+[source,bash]
+----
+occ [options] command [arguments]
+----
+
+=== Example Commands
+
+Running `occ` with no options lists all commands and options, like this example on Ubuntu:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker}
+ownCloud version 11.0.0
+
+Usage:
+ command [options] [arguments]
+
+Options:
+ -h, --help            Display this help message
+ -q, --quiet           Do not output any message
+ -V, --version         Display this application version
+     --ansi            Force ANSI output
+     --no-ansi         Disable ANSI output
+ -n, --no-interaction  Do not ask any interactive question
+     --no-warnings     Skip global warnings, show command output only
+ -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output,
+                       2 for more verbose output and 3 for debug
+
+Available commands:
+ check                 Check dependencies of the server environment
+ help                  Displays help for a command
+ list                  Lists commands
+ status                Show some status information
+ upgrade               Run upgrade routines after installation of
+                       a new release. The release has to be installed before
+...
+----
+
+This is the same as `{occ-command-example-prefix-docker} list`. 
+Run it with the `-h` option for syntax help:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} -h
+----
+
+Display your ownCloud version:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} -V
+  ownCloud version 11.0.0
+----
+
+Query your ownCloud server status:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} status
+  - installed: true
+  - version: 11.0.0.0
+  - versionstring: 11.0.0
+  - edition: Community
+----
+
+The `status` command from above has an option to define the output format.
+
+The default is plain text, but it can also be `json`:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} status --output=json
+{"installed":true,"version":"11.0.0.0","versionstring":"11.0.0","edition":""}
+----
+
+or `json_pretty`:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} status --output=json_pretty
+{
+   "installed": true,
+   "version": "11.0.0.0",
+   "versionstring": "11.0.0",
+   "edition": "Community"
+}
+----
+
+This output option is available on all list and list-like commands, which include `status`, `check`, `app:list`, `config:list`, `encryption:status` and `encryption:list-modules`.
+
+Get detailed information on individual commands with the `help` command, like in this example for the `maintenance:mode` command:
+
+[source,docker,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} help maintenance:mode --help
+Usage:
+ maintenance:mode [options]
+
+Options
+     --on              Enable maintenance mode
+     --off             Disable maintenance mode
+     --output[=OUTPUT] Output format (plain, json or json_pretty, default is plain) [default: "plain"]
+ -h, --help            Display this help message
+ -q, --quiet           Do not output any message
+ -V, --version         Display this application version
+     --ansi            Force ANSI output
+     --no-ansi         Disable ANSI output
+ -n, --no-interaction  Do not ask any interactive question
+     --no-warnings     Skip global warnings, show command output only
+ -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output,
+                       2 for more verbose output and 3 for debug
+----
+
+== Core Commands
+
+This command reference covers the ownCloud core commands, which are always available.
+
+include::./occ_commands/core_commands/_app_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_background_jobs_selector.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_config_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_config_reports_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_command_line_upgrade_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_dav_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_database_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_encryption_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_federation_sync_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_federation_trusted_servers.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_file_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_files_external_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_group_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_integrity_check_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_localisation_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_logging_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_managing_background_jobs.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_maintenance_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_migration_steps_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_mimetype_update_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_notifications_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_previews_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_incoming_shares_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_security_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_sharing_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_system_command.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_trashbin_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_2fa_core_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_user_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/core_commands/_versions_commands.adoc[leveloffset=+2]
+
+== Apps Commands
+
+This command reference covers the ownCloud maintained apps commands, which are only available if the respective app is installed and enabled.
+
+include::./occ_commands/app_commands/_activity_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_antivirus_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_admin_audit_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_brute_force_protection_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_calendar_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_contacts_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_custom_groups.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_data_exporter_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_files_lifecycle.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_full_text_search_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_ldap_integration_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_market_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_metrics_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_migrate_to_kitworks_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_migrate_to_ocis_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_password_policy_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_ransomware_protection_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_richdocuments.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_oauth2_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_s3objectstore_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_saml_sso_shibboleth_integration_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_2fa_app_commands.adoc[leveloffset=+2]
+
+include::./occ_commands/app_commands/_wnd_commands.adoc[leveloffset=+2]

@@ -1,0 +1,47 @@
+= Dependency Notes
+:toc:right
+:page-aliases: configuration/server/security/jquery_warnings.adoc
+
+:description: The following list of dependencies may be reported as vulnerable but either have been fixed in the ownCloud codebase or do not apply.
+
+== Introduction
+
+{description}
+
+If you are aware of any issues that have not yet been patched or which are not included in this list, please notify us at mailto:security@owncloud.com[].
+
+== Fixed Issues
+
+* jQuery
+
+** CVE-2020-11022 and CVE-2020-11023 +
+https://github.com/owncloud/core/pull/37596[patched in 10.5.0]
+
+** CVE-2015-9251 +
+https://github.com/owncloud/core/pull/31972[patched in 10.0.9 RC3]
+
+** CVE-2019-11358 +
+https://github.com/owncloud/core/pull/38841[patched in 10.8.0]
+
+** CVE-2016-7103 +
+https://github.com/owncloud/core/pull/39545[patched in 10.9.0]
+
+* jQuery-ui
+
+** CVE-2021-41182, CVE-2021-41183 and CVE-2021-41184 +
+https://github.com/owncloud/core/pull/39451[patched in 10.9.0]
+
+** CVE-2022-31160 +
+Component "checkboxradio" is not used by ownCloud
+
+* Select2
+** CVE-2016-10744 +
+Component "select2" cannot be exploited
+
+* PDF
+** CVE-2024-4367 +
+When app `files_pdfviewer` is enabled with xref:configuration/server/config_apps_sample_php_parameters.adoc#enable-scripting-in-pdf-files[disabled scripting], CVE-2024-4367 can not be exploited
+
+* Bootstrap
+** CVE-2024-6485 and CVE-2024-6484 +
+There is no vulnerability because affected components are not used by ownCloud

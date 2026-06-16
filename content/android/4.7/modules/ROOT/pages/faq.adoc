@@ -1,0 +1,55 @@
+= Android Frequently Asked Questions (FAQ)
+:toc: right
+:description: Here you can find some of the most frequently asked questions about the ownCloud Android app.
+
+:oauth2-app-url: https://marketplace.owncloud.com/apps/oauth2
+:android-legacy-central-url: https://central.owncloud.org/t/local-copy-could-not-be-renamed-try-a-different-name/16715/2
+:android-app-tx-url: https://www.transifex.com/owncloud-org/owncloud/android/
+:android-app-beta-url: https://owncloud.com/beta-testing/#android
+
+== Introduction
+
+{description}
+
+== Usage
+
+=== Minimum ownCloud Server Version
+
+ownCloud Android app 2.15 has minimum requirement of ownCloud server 10.0 or later.
+
+ownCloud Android app 2.9 has minimum requirement ownCloud server 9.0 or later.
+
+Check {android-legacy-central-url}[this post in the community forum] how to install older versions.
+
+=== Minimum Android Version
+
+ownCloud Android app 2.15 and higher has a minimum requirement of Android 5.0 or later. Check {android-legacy-central-url}[this post in the community forum] how to install older versions.
+
+=== Login With TOTP and Other 2FA
+
+ownCloud server must have {oauth2-app-url}[the OAuth2 app] installed, configured, and enabled to use Two-Factor Authentication.
+Please contact your ownCloud administrator for more details.
+
+== Feature Requests
+
+=== Detect and Upload Changes From Local File System
+
+Local changes get recognized and uploaded when you add files inside the app, or a 3rd party app sends a file to the ownCloud app, or a 3rd party app adds/edits files via the document provider.
+
+=== Prevent Direct Access to Local Sync Directory
+
+Starting with app version 2.19, ownCloud has made the transition to switch to Scoped Storage. 3rd party apps can access files only via the document provider mechanism. See xref:connecting.adoc#physical-location-of-user-files[Physical Location of User Files] for more details.
+
+=== Store Local Sync Directory on SD Card
+
+This feature is not on the roadmap of the ownCloud Android app.
+
+=== Missing Translations or Translation Bugs
+
+You can help translate in your language or fix a bug.
+
+We use Transifex for translations. Please {android-app-tx-url}[register here] for an account and join the global community.
+
+=== Testing New Features
+
+Use {android-app-beta-url}[this link] to join the beta program on Android.

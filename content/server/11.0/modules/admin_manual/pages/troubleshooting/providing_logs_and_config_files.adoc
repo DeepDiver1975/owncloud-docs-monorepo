@@ -1,0 +1,72 @@
+= Retrieve Log Files and Configuration Settings
+:toc: right
+:page-aliases: configuration/server/logging/providing_logs_and_config_files.adoc
+
+:description: Generating configreports and preparing log files are essential to support identifying the cause of a problem. Here are instructions for how to collect them.
+
+== Introduction
+
+{description}
+
+When you report a problem to {oc-support-url}[ownCloud Support] or our {oc-central-url}/latest[Forum (ownCloud Central)] you will be asked to provide certain log files or configurations for our engineers or other supporting staff. This information is necessary in better understanding your issue, your specific configuration, and for further support.
+
+== Generate a Config Report
+
+You can use the webUI or the command line to generate a config report. The webUI includes the web server environment, while the command line generated one doesn't as it can't access it. Therefore, if possible, always generate it through the webUI. The configreport app is always part of bundled apps, but it may need to be enabled before it can be used.
+
+Check if it is disabled:
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} app:list --disabled configreport
+----
+
+Enable it if it was formerly disabled:
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} app:enable configreport
+----
+
+=== Generate via webUI
+
+To generate a config report using the webUI, navigate to: +
+menu:Settings[Admin > General > "Generate Config report" > "Download ownCloud config report"].
+
+=== Generate via Command Line
+
+To generate a config report from the command line, run the following command from the root directory of your ownCloud installation:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} configreport:generate > config_report.txt
+----
+
+== ownCloud Server Log File
+
+=== Generate via webUI
+
+You can use the webUI to download your ownCloud Server log file. To do so, navigate to: + 
+menu:Settings[Admin > General > Log > "Download logfile"].
+
+=== Generate via Command Line
+
+If the log file is too big, you will need to transfer it from the command line. By default it is named `owncloud.log` and located at the Docker Volume `<mount-point>/files`.
+
+Note that you may need to compress the logfile before uploading.
+
+When not using the default location for the logfile, it can be specified via your _additional_ xref:installation/configuration_notes.adoc#using-a-configuration-file[configuration file]:
+
+[source,php]
+----
+'logfile' => '<your-path>/owncloud.log',
+----
+
+NOTE: You must create a Docker Volume to make the configured path available.
+
+== LDAP Config
+
+If LDAP is used, viewing the LDAP configuration is important when checking for errors between your ownCloud instance and your LDAP server. To get the output file, execute this command:
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix-docker} ldap:show-config > ldap_config.txt
+----

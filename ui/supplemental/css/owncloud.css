@@ -1,0 +1,61 @@
+/*
+ * ownCloud supplemental branding on top of the stock Antora default UI.
+ * Kept intentionally small: brand palette + logo sizing + Pagefind modal theme.
+ */
+
+:root {
+  /* ownCloud brand palette */
+  --oc-navy: #041e42;       /* primary brand navy (navbar, footer, headings) */
+  --oc-navy-deep: #052550;  /* darker navy for hover/focus surfaces */
+  --oc-teal: #06e3bd;       /* signature mint/teal accent */
+  --oc-orange: #e56f35;     /* secondary accent */
+  --oc-amber: #f4b223;      /* secondary accent / highlights */
+  --oc-link: #4e85c8;       /* corporate link blue */
+  --oc-link-hover: #364b68; /* corporate link blue, hover */
+
+  /* map the brand palette onto the stock default UI custom properties */
+  --color-brand: var(--oc-navy);
+  --navbar-background: var(--oc-navy);
+  --link-color: var(--oc-link);
+  --link-color-hover: var(--oc-link-hover);
+
+  /* Pagefind Component UI theming — the modal/trigger web components reset
+     inherited styles (all: initial) and read only their own --pf-* custom
+     properties, so brand overrides must live on :root.
+     See https://pagefind.app/docs/components/ for the full variable list. */
+  --pf-font: var(--body-font-family, inherit);
+  --pf-text: #19191c;
+  --pf-background: #fff;
+  --pf-border: #dbdbdb;
+  --pf-border-focus: var(--oc-link);
+  --pf-border-radius: 0.15rem;
+  --pf-hover: #f0f0f0;
+  --pf-mark: var(--oc-teal);
+}
+
+/* ownCloud navbar is brand navy */
+.navbar {
+  background-color: var(--oc-navy);
+}
+
+.navbar-logo-img {
+  height: 1.75rem;
+  max-height: none;
+}
+
+.navbar .navbar-item,
+.navbar .navbar-link {
+  color: #fff;
+}
+
+.navbar .navbar-item:hover,
+.navbar .navbar-link:hover {
+  background-color: var(--oc-navy-deep);
+  color: #fff;
+}
+
+/* let the Pagefind trigger sit comfortably in the navbar */
+.navbar-item.search {
+  display: flex;
+  align-items: center;
+}

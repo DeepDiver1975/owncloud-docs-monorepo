@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+{{> head defaultPageTitle='Untitled'}}
+  </head>
+  {{!-- Keep Pagefind from indexing non-canonical page copies. Every page is
+        published once per component version (e.g. server/10.15, server/latest,
+        server/11.0); without this they all land in search as duplicate hits.
+        Antora points each page's canonical URL at the latest version, so a page
+        whose canonicalUrl does not end with its own url is an older/prerelease
+        duplicate and is excluded. Pages with no canonicalUrl (e.g. preview
+        builds with no site.url) stay indexed. --}}
+  <body class="article{{#with (or page.attributes.role page.role)}} {{{this}}}{{/with}}"{{#if page.canonicalUrl}}{{#unless (endsWith page.canonicalUrl page.url)}} data-pagefind-ignore{{/unless}}{{/if}}>
+{{> header}}
+{{> body}}
+{{> footer}}
+  </body>
+</html>

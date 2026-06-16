@@ -1,0 +1,65 @@
+= Supported Apps in ownCloud
+:toc: right
+:toclevels: 1
+:page-aliases: installation/apps/mediaviewer/index.adoc
+
+== AGPL Apps
+
+Please note that apps without a link are now fully integrated into the core system and self-explanatory.
+
+* {oc-marketplace-url}/apps/activity[Activity]
+* {oc-marketplace-url}/apps/files_antivirus[Anti-Virus]
+* {oc-marketplace-url}/apps/systemtags_management[Collaborative Tags]
+* Comments
+* xref:configuration/files/encryption/encryption_configuration.adoc[Encryption]
+* xref:configuration/server/external_sites.adoc[External Sites]
+* xref:configuration/files/external_storage/index.adoc[External Storage]
+* xref:configuration/files/federated_cloud_sharing_configuration.adoc[Federated File Sharing] +
+Allows file sharing across ownCloud instances
+* Federation +
+Allows username auto-complete across ownCloud instances
+* Files +
+Cannot be disabled
+* xref:installation/apps/mediaviewer/index.adoc[Files Media Viewer]
++
+[NOTE]
+====
+* Before Files Media Viewer 1.0.4, the _Gallery_ and _Files VideoPlayer_ apps need to be **uninstalled before installing** the Media Viewer app.
+* Starting with Files Media Viewer 1.0.4, the _Gallery_ and _Files VideoPlayer_ apps need to be **disabled before using** the Files Media Viewer app.
+* Also see the: xref:configuration/files/previews_configuration.adoc[Previews Configuration] documentation for the Files Media Viewer App for more information.
+====
+
+* {oc-marketplace-url}/apps/pdf[Files PDF Viewer]
+* xref:configuration/files/file_sharing_configuration.adoc[Files Sharing]
+* {oc-marketplace-url}/apps/files_texteditor[Files TextEditor]
+* xref:configuration/files/trashbin_options.adoc[Files Trashbin]
+* xref:configuration/files/file_versioning.adoc[Files Versions]
+* First Run Wizard
+* {oc-marketplace-url}/apps/search_elastic[Full Text Search]
+* xref:configuration/user/guests_app.adoc[Guests]
+* {oc-marketplace-url}/apps/impersonate[Impersonate]
+* {oc-marketplace-url}/apps/announcementcenter[Notifications]
+* {oc-marketplace-url}/apps/openidconnect[OpenID Connect]
+* xref:configuration/files/external_storage/webdav.adoc[ownCloud WebDAV Endpoint] +
+Handles old and new webdav endpoints
+* xref:configuration/user/user_provisioning_api.adoc[Provisioning API]
+* Update Notifications
+* xref:configuration/user/user_auth_ftp_smb_imap.adoc[User External]
+* {oc-marketplace-url}/apps/user_ldap[User LDAP]
+
+== Enterprise-Only Apps
+
+* {oc-marketplace-url}/apps/admin_audit[Auditing]
+* {oc-marketplace-url}/apps/files_classifier[Document Classification]
+* {oc-marketplace-url}/apps/files_ldap_home[LDAP Home Connector]
+* {oc-marketplace-url}/apps/firewall[File Firewall]
+* {oc-marketplace-url}/apps/objectstore[Object Storage Support]
+* {oc-marketplace-url}/apps/password_policy[Password Policy]
+* {oc-marketplace-url}/apps/ransomware_protection[Ransomware Protection]
+* {oc-marketplace-url}/apps/sharepoint[External Storage: SharePoint]
+* {oc-marketplace-url}/apps/systemtags_management[Collaborative Tags Management]
+* {oc-marketplace-url}/apps/user_shibboleth[SAML/Shibboleth User Backend]
+* {oc-marketplace-url}/apps/windows_network_drive[Windows Network Drives (requires External Storage)]
+* {oc-marketplace-url}/apps/wopi[Microsoft Office Online]
+* {oc-marketplace-url}/apps/workflow[Workflows]
+* {oc-marketplace-url}/themes/theme-enterprise[ownCloud X Enterprise Theme]

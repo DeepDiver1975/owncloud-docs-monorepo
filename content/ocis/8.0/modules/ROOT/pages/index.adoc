@@ -1,0 +1,24 @@
+= The Infinite Scale Documentation
+:toc: right
+:toclevels: 2
+:description: Welcome to the Infinite Scale documentation. Infinite Scale is a data platform providing tools to integrate, organize, share and govern data and metadata.
+
+include::admin:partial$multi-location/compose-version.adoc[]
+
+== Introduction
+
+{description}
+
+This documentation provides xref:admin:index.adoc[admin] and xref:developer:index.adoc[developer] related information.
+
+== Release Life Cycle
+
+Starting with version 6 of Infinite Scale, releases are now split into `production` and `rolling`. See the https://owncloud.dev/ocis/release_roadmap/[Developer Docs Release Life Cycle] page for more details and impacts.
+
+You can find more details on changes made in each release published in the https://doc.owncloud.com/ocis_release_notes.html[Infinite Scale Server Release Notes].
+
+IMPORTANT: Rolling releases are published in a cycle of 3 weeks. Due to this relative short cycle, you will find the actual development and the current published rolling release documentation *not* separated. They are both part of the `next` segment in the URL. Compared to production releases where the respective release number is used, the actual rolling release number published can be found e.g. in each service description in section "Environment Variables".
+
+== End-User License Agreement (EULA)
+
+ownCloud provides an EULA to clarify, among various topics, who can use this software and which conditions apply to the groups of users defined. See the actual {compose_raw_url}{compose_version}/assets/End-User-License-Agreement-for-ownCloud-Infinite-Scale.pdf[EULA] for details.

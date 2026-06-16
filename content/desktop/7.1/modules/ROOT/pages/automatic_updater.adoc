@@ -1,0 +1,30 @@
+= Automatic Updating of the Desktop App
+:toc: right
+:description: The Automatic Updater ensures that you always have the latest features and bug fixes for your Desktop App.
+
+include::partial$conditional_naming.adoc[]
+
+== Introduction
+
+{description} The Automatic Updater only works on Windows computers. macOS Linux users must use the same process they used to install the Desktop App. However, the updater will check for updates and notify you when a new version is available.
+
+== Basic Workflow
+
+The following sections describe how to use the Automatic Updater on different operating systems.
+
+Depending on the operating system (OS), either a download and installation process begins, or a notification window pops up when a new release is available, prompting you to take further action.
+
+=== Windows
+
+If an update is available and has been downloaded successfully, the {ini_name} Desktop App will start a silent update before its next launch and then restart itself. If the silent update fails, the {ini_name} Desktop App offers a manual download.
+
+NOTE: Administrative privileges are required to perform the update.
+
+=== macOS
+
+If a new update is available, the {ini_name} Desktop App initializes a *pop-up dialog* to alert you of the update and requests that you update to the latest version. This is the default process for macOS applications.
+
+=== Linux
+
+If a new update is available, the {ini_name} Desktop App initializes a *pop-up dialog* to alert you of the update and requests that you update to the latest version. Update the {ini_name} Desktop App according to the installation method used.
+

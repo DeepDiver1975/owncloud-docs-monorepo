@@ -1,0 +1,62 @@
+= ownCloud Web for Admins
+:toc: right
+:toc-levels: 1
+:description: Logged in to Infinite Scale with privileged rights like an admin user, you can perform administration tasks. These include user and group management and creating spaces.
+
+////
+IMPORTANT: the build of this file is referenced by the web UI via code. It MUST be available under:
+https://doc.owncloud.com/webui/next/owncloud_web/web_for_admins.html
+If this file gets relocated or renamed, a page alias must be added to make it available under the above link again!
+////
+
+== Introduction
+
+{description}
+
+== User and Group Management
+
+Click on the application switcher icon in the upper left corner and change the selection from `Files` to `User management`. Here you can add users, edit existing user data and manage groups.
+
+image::web-for-admins/user-management.png[Application Switcher,width=250]
+
+=== User Management
+
+To create a new user, select `Users` in the left sidebar, then click on btn:[+ New user].
+
+image::web-for-admins/create-user.png[Create User,width=400]
+
+Enter the required values for user name, first and last name, as well as email address and password, then click btn:[Create].
+
+The new user will show up in the overview and can be edited by clicking on the pencil icon to the right.
+
+image::web-for-admins/edit-user-details.png[Edit User Details,width=400]
+
+The user needs a role and a quota for his personal space assigned. Currently the following roles are predefined:
+
+image::web-for-admins/selectable-user-roles.png[Selectable User Roles,width=250]
+image::web-for-admins/quota-settings.png[Selectable Quota Values,width=250]
+
+=== Group Management
+
+Depending on the size of your organization, you may want to organize users in groups by teams or any other classification. To Create a new group, select `Groups` in the left sidebar, then click on btn:[+ New group]. In the pop-up window enter a name for the new group and click btn:[Create].
+
+image::web-for-admins/create-group.png[Create Group,width=400]
+
+The new group now shows up in the overview page.
+
+// Document how to add users to groups, once that's available.
+
+== Creating a Space
+
+Spaces can be created by clicking btn:[+ New Space] if the `Create Space` permission has been granted. If the permission has not been granted, the button is not present. When creating a space, the creator is automatically in the `Manager` role for this space. This role can be delegated to one or more users. Creators can remove themselves from this role if desired. See the xref:web_for_users.adoc#sharing-roles-and-permissions[Sharing Roles and Permissions] documentation for details.
+
+image::web-for-admins/create-space.png[Create Space,width=400]
+
+////
+
+== App Integration
+
+Applications like Microsoft Word run in a "frame" displayed on Infinite Scale, meaning they are actually running on the host server in this example at Microsoft, not on Infinite Scale. Alternatively you can install the respective apps from the ownCloud marketplace.
+
+////
+

@@ -1,0 +1,130 @@
+////
+The attribute 'service_name' will be handed over by the calling page.
+
+The included deprecation file just has an attribute necessary for rendering deprecations.
+This is necessary as attributes that are defined INSIDE a tabset will not get recognized, attributes like show-deprecation need to be defined OUTSIDE the tabset definition.
+
+The included xxx_deprecation.adoc file contains the attribute identical value compared to the xxx.adoc file, to be used outside of tabsets.
+
+Important: The xxx_deprecation.adoc does not exist for extended or global envvars. It may change for global envvars! When rendering an included content in a table, any attribute set in the included file is dropped and can't be queried. Therefore we read upfront xxx_deprecation.adoc where only the deprecation state is set. Having this extra, we set 'show-deprecation' outside the tab but with the same value which is taken for building.
+////
+
+
+// SPECIAL ENVVARS: print hardcoded list
+
+tag::special_envvars[]
+
+// compute the correct tab text
+include::partial$multi-location/tab-text.adoc[]
+
+// this directive is usually not necessary and its need likely an antora bug. because there is no text after the include
+// and the tabs, we need to simulate this with empty. using it we prevent a warning that the attribute is missing...
+{empty}
+
+[tabs]
+====
+{tab_text}::
++
+--
+[caption=]
+.Environment variables to define services when starting the container
+[width="100%",cols="30%,70%",options="header"]
+|===
+| Name
+| Description
+
+| `OCIS_RUN_SERVICES`
+| A comma-separated list of service names. Will start only the listed services.
+
+| `OCIS_EXCLUDE_RUN_SERVICES`
+| A comma-separated list of service names. Will start all default services except of the ones listed. Has no effect when `OCIS_RUN_SERVICES` is set.
+
+| `OCIS_ADD_RUN_SERVICES`
+| A comma-separated list of service names. Will add the listed services to the default configuration. Has no effect when `OCIS_RUN_SERVICES` is set. Note that one can add services not started by the default list and exclude services from the default list by using both envvars at the same time.
+
+| `OCIS_RUNTIME_PORT`
+| The port where the runtime will start. Defaults to 9250. Only necessary when multiple runtimes are started in parallel. Each runtime must have its own port exclusively.
+
+| `OCIS_RUNTIME_HOST`
+| The hostname the runtime will listen to. Defaults to `localhost`.
+|===
+
+Note to get the current list of services started by default, you need to run `ocis server` without restriction which services to start and run afterwards `ocis list`.
+--
+====
+
+end::special_envvars[]
+
+
+
+// TEXT VERSION 1: print envvars and yaml, used in services
+
+tag::envvars-yaml[]
+
+// compute the correct tab text
+include::partial$multi-location/tab-text.adoc[]
+
+=== Environment Variables
+
+The `{service_name}` service is configured via the following environment variables. Read the xref:deployment/services/envvar-types-description.adoc[Environment Variable Types] documentation for important details. Column `IV` shows with which release the environment variable has been introduced.
+
+// load the deprecation activation file. this will overwrite the above.
+include::{ocis_services_raw_url}{service_url_component}{ocis_services_final_path}adoc/{service_name}_deprecation.adoc[]
+
+[tabs]
+====
+{tab_text}::
++
+--
+// if deprecation activation is true, it will also show the deprecation content.
+include::{ocis_services_raw_url}{service_url_component}{ocis_services_final_path}adoc/{service_name}_configvars.adoc[]
+--
+====
+
+=== YAML Example
+
+* Note the file shown below must be renamed and placed in the correct folder according to the xref:deployment/general/general-info.adoc#configuration-file-naming[Configuration File Naming] conventions to be effective.
+* See the xref:deployment/services/env-var-note.adoc[Notes for Environment Variables] if you want to use environment variables in the yaml file.
+
+[tabs]
+====
+{tab_text}::
++
+--
+[source,yaml]
+----
+include::{ocis_services_raw_url}{service_url_component}{ocis_services_final_path}{service_name}-config-example.yaml[]
+----
+--
+====
+
+end::envvars-yaml[]
+
+
+
+// TEXT VERSION 2 only print envvars
+
+tag::envvars-only[]
+
+// default to not show deprecations
+:show-deprecation: false
+
+// compute the correct tab text
+include::partial$multi-location/tab-text.adoc[]
+
+The `{service_name}` variables are defined in the following way. Read the xref:deployment/services/envvar-types-description.adoc[Environment Variable Types] documentation for important details. Column `IV` shows with which release the environment variable has been introduced.
+
+// do not load any deprecation activations. use the default set via ':show-deprecation: false' above
+// this prevents showing any deprecations which is necessary for global envvars which currently do not have
+// any deprecations configured.
+
+[tabs]
+====
+{tab_text}::
++
+--
+include::{ocis_services_raw_url}{service_url_component}{ocis_services_final_path}adoc/{service_name}_configvars.adoc[]
+--
+====
+
+end::envvars-only[]

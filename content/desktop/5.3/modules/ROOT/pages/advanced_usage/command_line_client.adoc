@@ -1,0 +1,135 @@
+= The Command Line Client
+:toc: right
+:description: The ownCloud Client packages contain a command line client, owncloudcmd, that can be used to synchronize ownCloud files to client machines from the command line.
+
+== Introduction
+
+{description}
+
+== Command Description
+
+`owncloudcmd` performs a single _sync run_ and then exits the synchronization process. In this manner, `owncloudcmd` processes the differences between client and server directories and propagates the files to bring both repositories to the same state. Contrary to the GUI-based client, `owncloudcmd` does not repeat synchronizations on its own. It also does not monitor for file system changes.
+
+To invoke `owncloudcmd`, you must provide the local and the remote repository URL using the following command. Note that for Windows, you must be in the directory where ownCloud is installed while on Linux, you can use the command from anywhere. To show its location in Linux, type `whereis owncloudcmd`.
+
+[source,console]
+----
+owncloudcmd [options] [arguments]
+----
+
+Regarding the arguments, all of them must be used in the following order and the placeholders replaced with real data: 
+
+[source,plaintext]
+----
+source_dir server_url remote_folder
+----
+
+[width="100%",cols="35%,65%",options="header"]
+|===
+| Arguments
+| Description
+
+| `source_dir`
+| This is the local directory.
+
+| `server_url`
+| This is the server URL.
+
+| `remote_folder`
+| The remote folder on the server.
+|===
+
+The following options are supported by `owncloudcmd`:
+
+[width="100%",cols="35%,65%",options="header"]
+|===
+| Option
+| Description
+
+| `-s, --silent`
+| Don't be so verbose.
+
+| `--httpproxy ++<http://server:port>++`
+| Specify a HTTP proxy to use.
+
+| `--trust`
+| Trust the SSL certification
+
+| `--exclude <file>`
+| Path to an exclude list [file]
+
+| `--unsyncedfolders <file>` 
+| File containing the list of unsynced remote folders (selective sync)
+
+| `--server <url>`
+| Use [url] as the location of the server. Infinite Scale only (server location and spaces URL can differ)
+
+| `-u, --user <name>`
+| Use [name] as the login name
+
+| `-p, --password <password>` 
+| Use [pass] as password
+
+| `--non-interactive`
+| Do not block execution with interaction
+
+| `--max-sync-retries <n>`
+| Retries maximum n times (default to 3)
+
+| `--uplimit <n>`
+| Limit the upload speed of files to n KB/s
+
+| `--downlimit <n>`
+| Limit the download speed of files to n KB/s
+
+| `--sync-hidden-files`
+| Enables synchronization of hidden files
+
+| `--logdebug`
+| More verbose logging
+
+| `-h, --help`
+| Displays help on commandline options.
+
+| `--help-all`
+| Displays help including Qt specific options.
+
+| `-v, --version`
+| Displays version information.
+|===
+
+== Credential Handling
+
+`owncloudcmd` requires the user to specify the username and password using the standard URL pattern. The example is based on Linux and uses ownCloud Server as backend:
+
+[source,bash]
+----
+owncloudcmd /home/user/my_sync_folder \
+            https://carla:secret@server/owncloud/remote.php/dav/files/carla/ \
+            /
+----
+
+To synchronize the ownCloud directory `Music` to the local directory `media/music`, through a proxy listening on port `8080`, and on a gateway machine using IP address `192.168.178.1`, the command line would be:
+
+[source,console]
+----
+owncloudcmd --httpproxy http://192.168.178.1:8080 \
+              $HOME/media/music \
+              https://server/owncloud/remote.php/dav/files/carla/ \
+              /Music.
+----
+
+`owncloudcmd` will prompt for the username and password, unless they have been specified on the command line or `-n` has been passed.
+
+== Exclude List
+
+`owncloudcmd` requires access to an exclude list file. It must either be installed along with `owncloudcmd` and thus be available in a system location, be placed next to the binary as `sync-exclude.lst` or be explicitly specified with the `--exclude` switch.
+
+== Command Line Client When Using AppImages
+
+When using an xref:installing.adoc#appimage[AppImage] installation with Linux, there is no `owncloudcmd` command you can start but the name of the AppImage. To use the command line client of the AppImage, just use the name of the AppImage and append the `--cmd` option plus all other parameters as listed in the xref:#command-description[Command Description]. Replace `[...]` with the version you are using or take the name of the AppImage if you have named it otherwise. Example:
+
+[source,bash]
+----
+./ownCloud-[...]-x86_64.AppImage --cmd --help
+----

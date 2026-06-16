@@ -1,0 +1,319 @@
+= Desktop App Release Notes
+:toc: macro
+:toclevels: 2
+:toc-title: Releases
+:description: Dear Desktop App user, find below the changes and known issues in the Desktop App that need your attention.
+:page-aliases: 5.2@desktop:ROOT:appendices/release_notes.adoc
+// IMPORTANT: this page alias must be removed at the moment 5.2 is no longer active!!
+
+:desktop-releases-url: https://github.com/owncloud/client/releases/tag/
+
+{description}
+
+{empty} +
+
+toc::[]
+
+== Desktop App 6.0.3
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 6.0.3! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v6.0.3[GitHub, window=_blank].
+
+[discrete]
+=== Notable Changes
+
+* Change: Third party upgrades in distributed binaries: https://github.com/owncloud/client/pull/12364[#12364]
+* Security: Fixing medium security vulnerability in password input handling: https://github.com/owncloud/client/pull/12430[#12430]
+
+== Desktop App 6.0.2
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 6.0.2! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v6.0.2[GitHub, window=_blank].
+
+[discrete]
+=== Notable Fixes
+
+* Security: Fixing high security vulnerability in MacOS client: https://github.com/owncloud/client/pull/12379[#12379]
+
+== Desktop App 6.0.1
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 6.0.1! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v6.0.1[GitHub, window=_blank].
+
+[discrete]
+=== Notable Changes
+
+* Bugfix: Reverting UTF-8 normalisation change: https://github.com/owncloud/client/pull/12304[#12304]
+* Bugfix: Fix VFS checkbox in folder wizard: https://github.com/owncloud/client/pull/12305[#12305]
+* Change: Move to trash-bin is enabled now by default: https://github.com/owncloud/client/pull/12338[#12338]
+
+[#6-0-1-known-issues]
+=== Known Issues
+
+The following is a list of known issues identified in the Desktop App that will be fixed in a subsequent patch release:
+
+* Desktop Apps built for the particular Ubuntu 20.04 and Debian 11 releases are currently available but not functional. All other releases are unaffected and function properly.
+
+=== Solved Known Issues
+
+The xref:6-0-0-known-issues[know issue] introduced in version the Desktop App 6.0.0 has been resolved. If you have installed Desktop App 6.0.0, we recommend updating immediately. If you have not yet installed Desktop App 6.0.0, skip it and install version 6.0.1 to avoid potential issues.
+
+== Desktop App 6.0.0
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 6.0.0! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v6.0.0[GitHub, window=_blank].
+
+[discrete]
+=== Notable Changes
+
+IMPORTANT: This release is the last one that supports ownCloud 10.
+
+* Relevant when using the Infinite Scale backend:
+** Prevent using the same default sync folder for multiple accounts when using Spaces.
+** Files with the extension `.space` and `.psec` are now excluded by default from synchronization.
+** A new update channel has been added which is accessible via the Settings page.
+
+* Relevant when using macOS:
+** Only APFS is supported on macOS, which preserves Unicode normalization.
+** The minimum supported macOS version is now 13.0 (Ventura).
+
+* Relevant when using Windows:
+** When using Windows, a pop-up window will appear when a new version is found and the Desktop App requires a restart. This information was previously displayed as a systray message.
+
+* Some options have been removed from the command line.
+* A new setting has been added via the Settings page that moves files to the trash bin instead of deleting them.
+* The `.vfs` suffix is deprecated and will be removed in a future version.
+* The selective sync feature has now its own dialog box and is accessible via the context menu of the sync folder.
+* When a captive portal is identified, synchronization will pause because requests will fail due to an SSL certificate mismatch error. Synchronization will restart automatically when you log in via the portal and the captive portal disappears.
+* For platforms that support metered connection detection, there is now an option on the Settings page that can be used to pause folder synchronization when the network connection switches to metered. Force-syncing can still be done when synchronization is paused.
+* Several UI fixes and improvements have been implemented.
+* The translations have been updated.
+
+[#6-0-0-known-issues]
+=== Known Issues
+
+The following is a list of known issues identified in the Desktop App that will be fixed in a subsequent patch release:
+
+* **Affects sync relationshipts to ownCloud 10 only**: +
+After upgrading to version 6.0.0 of the Desktop App, files containing special characters, such as umlauts (ä, ö, and ü), will be deleted by the app.
+** If you are using ownCloud 10 and have special characters in your file names:
+*** Wait to install until version 6.0.1 of the Desktop App is released.
+*** If you have already upgraded and are affected: +
+Revert to the previous version of the Desktop App and restore the missing files from the user's Trash Bin in the ownCloud GUI.
+
+== Desktop App 5.3.2
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 5.3.2! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.3.2[GitHub, window=_blank].
+
+[discrete]
+=== Notable Bugfixes
+
+* Security: Fixing high security vulnerability in Windows Installer
+* Bugfix: OAuth: Prevent logout when refreshing token
+* Bugfix: Crash when checking the sync file status
+
+== Desktop App 5.3.1
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 5.3.1! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.3.1[GitHub, window=_blank].
+
+[discrete]
+=== Notable Bugfixes
+
+* Ensure the Windows shell extension is linked statically
+
+== Desktop App 5.3.0
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 5.3.0! +
+We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.3.0[GitHub, window=_blank].
+
+[discrete]
+=== Enhanced Functionality
+
+* Add support to provide a list of ports for the OAuth process
+* Support `Active Directory Federation Service` as identity provider
+
+[discrete]
+=== Notable Bugfixes
+
+ownCloud Desktop App 5.3.0 also delivers several important technical improvements such as:
+
+* Fix early-use crash in the folder watcher on Linux
+* Client stuck in `reconnecting`
+* Ensure folders are scheduled only once
+
+[discrete]
+=== Notable Changes
+
+* Revert local folder name back to pre 3.0 behavior
+
+== Desktop App 5.2.1
+
+[discrete]
+=== General
+
+The ownCloud Desktop App is now available in version 5.2.1! +
+If you have an enterprise subscription, this is the first 5.x release available for branding. We strongly recommend updating the Desktop App to the latest available version so that you can access and experience a range of new features and security fixes. Users with an Enterprise subscription are entitled to receive dedicated support.
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.2.1[GitHub, window=_blank].
+
+[discrete]
+=== Enhanced Functionality
+
+* Store proxy password securely
+* Windows VFS: Prevent rename to ignored file name
+* Change how all files deleted is handled
+* Enable crash reporter in commandline client
+* Log http request when it is sent
+* Display a progress spinner during the initial setup
+* Reduce how often file changes are handled
+* Persist filter settings for Not Synced tab
+* Make "Show files versions..." context menu action available
+* Allow selective sync of spaces in folder wizard
+* Help user fix problems on the last setup wizard page
+* `--cmd` argument added to the GUI client
+* Improved reliability for persisting settings
+
+[discrete]
+=== Notable Bugfixes
+
+ownCloud Desktop App 5.2.1 also delivers several important technical improvements such as:
+
+* Client stuck in reconnecting
+* Fix url resolution for app provider
+* Fix crash on unhandled status code on rename check
+* Fix crash when keychain job takes longer than expected
+* Crash when accepting a notification
+* Fix crash on start-up when starting shell integration
+* Properly schedule the sync after an account was added
+* Don't start credentials save jobs during shutdown
+* Avoid duplicate notifications when selective sync is enabled
+* VFS Placeholders can now be replaced with folders
+* Authentication dialog no longer appears again and again
+* Possible deadlock during log setup
+* Do not create default sync root when loading accounts
+* Update capabilites and other info after connect
+* Account activity and crash after an account was removed
+* Crash during application shutdown
+* Hide hidden folders again in the selective sync view
+* Fix check if a file is a placeholder
+* Hydration state of file after a directory was replaced with a file
+* Only syncronize after the server settings were refreshed
+* Consitently use the same icon for folders
+* Branding of folder status overlay
+* Creation of folder on the server
+* Selective sync when other than the remote root is synced
+
+[discrete]
+=== Newly Supported platforms
+
+* macOS 14 Sonoma
+* Fedora 39
+* openSUSE Leap 15.5
+* Ubuntu 23.10
+
+[discrete]
+=== Deprecated Platforms
+
+* Windows 8
+* Windows 10, version 1709
+* macOS 10.13 High Sierra
+* macOS 10.14 Mojave
+
+[discrete]
+=== Deprecation Announcements
+
+Looking further, the following versions may no longer be supported in future releases:
+
+* macOS 10.15 Catalina
+* Fedora 37
+
+[discrete]
+=== Removed Support
+
+The following Linux versions are no longer supported:
+
+* Fedora 36
+* Ubuntu 22.10
+
+[discrete]
+=== Branding
+
+If you're entitled to create branded versions of the ownCloud Desktop App, visit https://customer.owncloud.com[customer.owncloud.com] to start the branding process for 5.2.1, Updater Server 1.1.0. Customers hosting their own client-updater-server need to upgrade to version 1.1.0. It is included in the full branding subscription. It is shared in the new release 1.1.0 in the customer portal at https://customer.owncloud.com[customer.owncloud.com].
+
+== Desktop App 5.2.0
+
+[discrete]
+=== General
+
+This is a bugfix release only. Update as soon as possible.
+
+* Fix url resolution for app provider: https://github.com/owncloud/client/pull/11296[#11296]
+* Fix crash on unhandled status code on rename check: https://github.com/owncloud/client/pull/11379[#11379]
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.2.0[GitHub, window=_blank].
+
+== Desktop App 5.1.2
+
+[discrete]
+=== General
+
+This is a bugfix release only. Update as soon as possible.
+
+* Fix crash when keychain job takes longer than expected: https://github.com/owncloud/client/pull/11361[#11361]
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}/v5.1.2[GitHub, window=_blank].
+
+== Desktop App 5.0.0
+
+[discrete]
+=== General
+
+Refer to the full change log for a list of bug fixes and changes at {desktop-releases-url}v5.0.0[GitHub, window=_blank].
+
+[discrete]
+=== Breaking changes
+
+* 32bit Windows is no longer supported
+* macOS 10.13 and macOS 10.14 are no longer supported
+
+[discrete]
+=== Known Issues
+
+Linux repositories are omitted from this release

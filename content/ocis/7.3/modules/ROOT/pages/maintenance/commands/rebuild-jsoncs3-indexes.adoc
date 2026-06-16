@@ -1,0 +1,21 @@
+= Rebuild jsoncs3 Indexes
+
+WARNING: Use this command with absolute care. It is not intended to play around and should only be used on request and under supervision of ownCloud support.
+
+* Note, run this command only if there are shares present.
+* If you run this command and no shares are present, an error will be printed like the following: +
+`error: not found: list container: error: not found: jsoncs3-share-manager-metadata/storages` +
+This error has no impact and can be neglected.
+
+
+[source,bash]
+----
+NAME:
+   ocis migrate rebuild-jsoncs3-indexes - rebuild the share indexes from the shares json
+
+USAGE:
+   ocis migrate rebuild-jsoncs3-indexes command [command options] [arguments...]
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+----

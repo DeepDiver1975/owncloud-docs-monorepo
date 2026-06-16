@@ -1,0 +1,11 @@
+name: android
+title: Mobile App for Android
+version: '4.7'
+start_page: ROOT:index.adoc
+nav:
+- modules/ROOT/partials/nav.adoc
+
+asciidoc:
+  attributes:
+    latest-android-version: {page-component-version}   # do not change, this is the value of the version key
+    previous-android-version: {page-component-version} # do not change, this is the value of the version key

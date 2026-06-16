@@ -1,0 +1,30 @@
+= ownCloud Server Releases
+:toc: right
+:toclevels: 3
+:page-aliases: releases.adoc, next@docs::server_releases.adoc, next@docs_main::server_releases.adoc
+
+== Introduction
+
+include::partial$release-intro-text.adoc[]
+
+== ownCloud Server Releases
+
+include::partial$maintenance-release-schedule-link.adoc[]
+
+=== Latest Stable Release (version {latest-server-version})
+
+* xref:server:admin_manual:index.adoc[Administration Manual]
+//  ({docs-base-url}/pdf/server/{latest-server-version}_ownCloud_Admin_Manual.pdf[Download PDF])
+* xref:server:developer_manual:index.adoc[Developer Manual]
+//  ({docs-base-url}/pdf/server/{latest-server-version}_ownCloud_Developer_Manual.pdf[Download PDF])
+* xref:server:classic_ui:index.adoc[User Manual]
+//   ({docs-base-url}/pdf/webui/{latest-webui-version}_ownCloud_User_Manual.pdf[Download PDF])
+
+=== Previous Stable Release (version {previous-server-version})
+
+* xref:{previous-server-version}@server:admin_manual:index.adoc[Administration Manual]
+//  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Admin_Manual.pdf[Download PDF])
+* xref:{previous-server-version}@server:developer_manual:index.adoc[Developer Manual]
+//  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Developer_Manual.pdf[Download PDF])
+* xref:{previous-server-version}@server:classic_ui:index.adoc[User Manual]
+//   ({docs-base-url}/pdf/webui/{previous-server-version}_ownCloud_User_Manual.pdf[Download PDF])

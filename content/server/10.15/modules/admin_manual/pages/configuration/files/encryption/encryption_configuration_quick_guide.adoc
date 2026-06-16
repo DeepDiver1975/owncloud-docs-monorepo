@@ -1,0 +1,78 @@
+= Encryption Configuration Quick Guide
+:toc: right
+:toclevels: 2
+
+== Introduction
+
+This quick guide gives a brief summary of the commands needed without going into the details and backgrounds. See the xref:configuration/files/encryption/encryption_configuration.adoc[full encryption configuration guide] for more details. 
+
+== Master-Key-Based Encryption
+
+=== Overview
+
+- Master key is default when enabled on new instances.
+- If you have existing data, use the **occ encryption:encrypt-all** command. Depending on the amount of existing data and the location, this operation can take a long time.
+
+=== Activate Master Key-Based Encryption
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} maintenance:singleuser --on
+{occ-command-example-prefix} app:enable encryption
+{occ-command-example-prefix} encryption:enable
+{occ-command-example-prefix} encryption:encrypt-all --yes
+{occ-command-example-prefix} maintenance:singleuser --off
+----
+
+=== View the Encryption Status
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} encryption:status
+----
+
+=== Decrypt Encrypted Files
+
+Depending on the amount of existing data, this operation can take a long time.
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} maintenance:singleuser --on
+{occ-command-example-prefix} encryption:decrypt-all
+{occ-command-example-prefix} maintenance:singleuser --off
+----
+
+=== Deactivate Master-Key-Based Encryption
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} encryption:disable
+
+# ignore the "already disabled" message
+{occ-command-example-prefix} app:disable encryption
+----
+
+If the master key has been compromised or exposed, you can replace it. You will need the current master key for it.
+
+[source,bash,subs="attributes+"]
+----
+{occ-command-example-prefix} encryption:recreate-master-key
+----
+
+== Clean up Your Database
+
+Access your ownCloud database and remove the remaining entries that have not been automatically removed with this command:
+
+[source,sql]
+----
+DELETE FROM oc_appconfig WHERE appid='encryption';
+----
+
+== Clean up Your Storage
+
+The removal of remaining encryption keys is a manual process. You have to delete all encryption keys on the storage by running the following command. Modify the path to your data directory according to your installation. The `find` command limits the search to exactly one directory below the user level and for security reasons prompts before each deletion:
+
+[source,bash]
+----
+find /var/www/owncloud/data/ -mindepth 2 -maxdepth 2 -type d -name "files_encryption" -exec rm -R -i {} +
+----

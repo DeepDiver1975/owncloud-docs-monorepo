@@ -1,0 +1,11 @@
+name: desktop
+title: Desktop App
+version: '5.3'
+start_page: ROOT:index.adoc
+nav:
+- modules/ROOT/partials/nav.adoc
+
+asciidoc:
+  attributes:
+    latest-desktop-version: {page-component-version}   # do not change, this is the value of the version key
+    previous-desktop-version: {page-component-version} # do not change, this is the value of the version key
