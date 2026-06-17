@@ -1,0 +1,81 @@
+name: Sync Upstream Docs
+
+# Pull documentation changes from the legacy owncloud/docs-* repos into this
+# monorepo and open one pull request per source repo. See sync/manifest.yml for
+# the branch->folder mapping and sync/sync-repo.sh for the mirror logic.
+
+on:
+  schedule:
+    # Daily at 03:00 UTC -- offset from the build workflow to avoid contention.
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  # Never run two syncs at once; let the running one finish.
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  # Read the repo list from the manifest and expose it as a JSON matrix so each
+  # source repo runs in its own job and gets its own branch + PR.
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      repos: ${{ steps.list.outputs.repos }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@master
+
+      - name: Build repo matrix
+        id: list
+        run: |
+          repos="$(yq -o=json -I=0 '[.repos[].name]' sync/manifest.yml)"
+          echo "repos=$repos" >> "$GITHUB_OUTPUT"
+          echo "matrix: $repos"
+
+  sync:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        repo: ${{ fromJSON(needs.prepare.outputs.repos) }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@master
+
+      - name: Mirror upstream content
+        env:
+          REPO: ${{ matrix.repo }}
+        run: bash sync/sync-repo.sh "$REPO"
+
+      - name: Open / update pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: sync/${{ matrix.repo }}
+          # Conventional Commits -- matches the repo's semantic-commit rule.
+          commit-message: "chore(sync): update ${{ matrix.repo }} from upstream"
+          title: "chore(sync): update ${{ matrix.repo }} from upstream"
+          body: |
+            Automated mirror of upstream **${{ matrix.repo }}** documentation into the monorepo.
+
+            Source: https://github.com/owncloud/${{ matrix.repo }}
+            Branch->folder mapping: see [`sync/manifest.yml`](../blob/main/sync/manifest.yml).
+
+            Only `modules/` content is mirrored; monorepo-managed files
+            (e.g. `antora.yml`) are preserved. Review the diff to confirm the
+            upstream changes are intended, then merge.
+
+            _Opened by the `Sync Upstream Docs` workflow._
+          labels: upstream-sync
+          delete-branch: false
