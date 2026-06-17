@@ -1,0 +1,63 @@
+# Upstream sync manifest
+# =====================================================================
+# Active documentation contributions still land in the legacy
+# `owncloud/docs-*` repos. This manifest is the single source of truth for
+# mapping each upstream repo+branch onto a folder in this monorepo, and is
+# consumed by sync/sync-repo.sh and .github/workflows/sync-upstream.yml.
+#
+# Sync is MIRROR / REPLACE: for every mapping, the directories listed in
+# `sync_paths` are deleted from `dest` and re-copied from the upstream branch.
+# Upstream always wins; stale files are removed. Everything else in `dest`
+# (notably the monorepo-managed antora.yml) is left untouched.
+#
+# Adding a new maintained version = add one mapping entry here. Creating the
+# matching dest folder's antora.yml is a one-time manual step (out of scope).
+#
+# NOTE: each repo's `master` branch maps to the in-development / prerelease
+# folder for that product. Verify these rows when versions roll over.
+
+# Directories inside each dest folder that are mirrored from upstream.
+# antora.yml is intentionally NOT listed -> never overwritten.
+sync_paths:
+  - modules
+
+repos:
+  - name: docs-main
+    url: https://github.com/owncloud/docs-main.git
+    mappings:
+      - { branch: master, dest: content/main }
+
+  - name: docs-server
+    url: https://github.com/owncloud/docs-server.git
+    mappings:
+      - { branch: '10.15', dest: content/server/10.15 }
+      - { branch: '10.16', dest: content/server/10.16 }
+      - { branch: master,  dest: content/server/11.0 }
+
+  - name: docs-ocis
+    url: https://github.com/owncloud/docs-ocis.git
+    mappings:
+      - { branch: '7.3',  dest: content/ocis/7.3 }
+      - { branch: master, dest: content/ocis/8.0 }
+
+  - name: docs-webui
+    url: https://github.com/owncloud/docs-webui.git
+    mappings:
+      - { branch: master, dest: content/webui }
+
+  - name: docs-client-desktop
+    url: https://github.com/owncloud/docs-client-desktop.git
+    mappings:
+      - { branch: '5.3',  dest: content/desktop/5.3 }
+      - { branch: '6.0',  dest: content/desktop/6.0 }
+      - { branch: master, dest: content/desktop/7.1 }
+
+  - name: docs-client-ios-app
+    url: https://github.com/owncloud/docs-client-ios-app.git
+    mappings:
+      - { branch: master, dest: content/ios/12.6 }
+
+  - name: docs-client-android
+    url: https://github.com/owncloud/docs-client-android.git
+    mappings:
+      - { branch: master, dest: content/android/4.7 }
