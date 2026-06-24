@@ -1,4 +1,4 @@
-= ownCloud Server Releases
+= ownCloud Classic Releases
 :toc: right
 :toclevels: 3
 :page-aliases: releases.adoc, next@docs::server_releases.adoc, next@docs_main::server_releases.adoc
@@ -7,7 +7,7 @@
 
 include::partial$release-intro-text.adoc[]
 
-== ownCloud Server Releases
+== ownCloud Classic Releases
 
 include::partial$maintenance-release-schedule-link.adoc[]
 
@@ -26,5 +26,5 @@ include::partial$maintenance-release-schedule-link.adoc[]
 //  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Admin_Manual.pdf[Download PDF])
 * xref:{previous-server-version}@server:developer_manual:index.adoc[Developer Manual]
 //  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Developer_Manual.pdf[Download PDF])
-* xref:{previous-server-version}@server:classic_ui:index.adoc[User Manual]
-//   ({docs-base-url}/pdf/webui/{previous-server-version}_ownCloud_User_Manual.pdf[Download PDF])
+* xref:{previous-webui-version}@server:classic_ui:index.adoc[User Manual]
+//   ({docs-base-url}/pdf/webui/{previous-webui-version}_ownCloud_User_Manual.pdf[Download PDF])
