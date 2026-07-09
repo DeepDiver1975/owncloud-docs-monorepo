@@ -81,4 +81,14 @@ for ((i = 0; i < mapping_count; i++)); do
   done
 done
 
+# Re-apply monorepo-local corrections to the just-mirrored content. These edits
+# live in synced modules/ (so the mirror above wipes them) but are wrong for the
+# monorepo build; the patch script re-applies them idempotently. See
+# sync/patches/README.md. Missing patch script = nothing to do (most repos).
+PATCH_SCRIPT="$SCRIPT_DIR/patches/$REPO_NAME.sh"
+if [[ -f "$PATCH_SCRIPT" ]]; then
+  echo "--> applying post-sync patches ($REPO_NAME)"
+  bash "$PATCH_SCRIPT" "$ROOT_DIR"
+fi
+
 echo "==> done: $REPO_NAME"
