@@ -1,8 +1,6 @@
 name: ocis
 title: Infinite Scale Documentation
 version: '8.0'
-prerelease: true
-display_version: '8.0 (dev)'
 start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/partials/nav.adoc
