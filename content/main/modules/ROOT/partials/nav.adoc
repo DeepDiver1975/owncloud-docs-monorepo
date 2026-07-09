@@ -23,7 +23,7 @@
 * xref:{latest-server-version}@server:ROOT:index.adoc[ownCloud Classic]
 
 .Apps and User Interfaces
-* xref:{latest-webui-version}@webui:ROOT:index.adoc[Web Infinite Scale]
+* xref:webui:ROOT:index.adoc[Web Infinite Scale]
 * xref:{latest-server-version}@server:classic_ui:index.adoc[Web ownCloud Classic]
 * xref:{latest-desktop-version}@desktop:ROOT:index.adoc[Desktop App]
 * xref:{latest-android-version}@android:ROOT:index.adoc[Mobile App for Android]

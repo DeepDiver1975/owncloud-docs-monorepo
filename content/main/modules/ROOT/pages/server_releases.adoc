@@ -26,5 +26,5 @@ include::partial$maintenance-release-schedule-link.adoc[]
 //  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Admin_Manual.pdf[Download PDF])
 * xref:{previous-server-version}@server:developer_manual:index.adoc[Developer Manual]
 //  ({docs-base-url}/pdf/server/{previous-server-version}_ownCloud_Developer_Manual.pdf[Download PDF])
-* xref:{previous-webui-version}@server:classic_ui:index.adoc[User Manual]
+* xref:{previous-server-version}@server:classic_ui:index.adoc[User Manual]
 //   ({docs-base-url}/pdf/webui/{previous-webui-version}_ownCloud_User_Manual.pdf[Download PDF])
