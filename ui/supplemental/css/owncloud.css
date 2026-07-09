@@ -59,3 +59,69 @@
   display: flex;
   align-items: center;
 }
+
+/* Branded footer (partials/footer.hbs), mirroring doc.owncloud.com.
+   Navy surface with three link columns + centered logo and copyright.
+   Selectors are qualified as `footer.footer` to match the stock UI's own
+   `footer.footer` specificity (0,1,1) and win on load order (owncloud.css
+   loads after site.css); a plain `.footer` (0,1,0) would lose the cascade. */
+footer.footer {
+  background-color: var(--oc-navy);
+  color: #8e8e8e;
+  padding: 0.5rem 1rem;
+  font-size: 0.83333rem;
+  line-height: 1.6;
+  border-top: 0;
+}
+
+footer.footer .container {
+  max-width: var(--container-max-width, 1152px);
+  margin: 0 auto;
+}
+
+footer.footer p {
+  margin: 0.5rem 0;
+}
+
+footer.footer a {
+  color: #aaa;
+}
+
+footer.footer .footer-logo {
+  text-align: center;
+  margin: 1rem 0 0.5rem;
+}
+
+footer.footer .footer-logo img {
+  height: 2rem;
+  width: auto;
+}
+
+.row-full {
+  width: 100%;
+  clear: both;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.row-full div.col-third {
+  flex: auto;
+  text-align: left;
+}
+
+.footer-nav h4 {
+  color: #fff;
+  font-weight: 400;
+  margin: 20px;
+}
+
+.footer-nav ul {
+  list-style: none;
+  margin: 0 20px;
+  padding: 0;
+}
+
+.footer-nav ul li a {
+  color: #aaa;
+}
