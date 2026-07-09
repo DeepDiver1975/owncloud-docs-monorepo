@@ -45,3 +45,8 @@
     <p>&copy; Copyright 2011-2026, The ownCloud developers.</p>
   </div>
 </footer>
+{{!-- The stock footer.hbs renders {{> footer-content}} then {{> footer-scripts}}.
+      This branded footer replaces the content, so it MUST still emit the scripts
+      or NO JavaScript loads at all (site.js, highlight.js, tabs.js, pagefind) —
+      leaving the left nav sidebar, TOC scrollspy, and code copy buttons inert. --}}
+{{> footer-scripts}}
