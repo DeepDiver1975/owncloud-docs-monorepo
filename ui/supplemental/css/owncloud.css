@@ -60,6 +60,23 @@
   align-items: center;
 }
 
+/* Site title in the top bar, next to the logo (matches doc.owncloud.com).
+   The stock default UI has no .navbar-title rule, so define it here. */
+.navbar-title {
+  color: #fff;
+  font-size: 0.88889rem;
+  line-height: 1.2;
+  padding-left: 0.75rem;
+  border-left: 1px solid hsla(0, 0%, 100%, 0.35);
+}
+
+/* Hide the title on narrow screens so it never crowds the logo/search. */
+@media screen and (max-width: 768.5px) {
+  .navbar-brand .navbar-logo .navbar-title {
+    display: none;
+  }
+}
+
 /* Branded footer (partials/footer.hbs), mirroring doc.owncloud.com.
    Navy surface with three link columns + centered logo and copyright.
    Selectors are qualified as `footer.footer` to match the stock UI's own
