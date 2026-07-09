@@ -3,6 +3,7 @@
     <div class="navbar-brand">
       <a class="navbar-item navbar-logo" href="{{{or site.url siteRootPath}}}">
         <img src="{{{uiRootPath}}}/img/logo.svg" alt="{{site.title}}" class="navbar-logo-img">
+        <span class="navbar-title">{{site.title}}</span>
       </a>
       <div class="navbar-item search hide-for-print">
         {{!-- Pagefind Component UI modal search. The trigger opens the modal
@@ -15,17 +16,12 @@
         <pagefind-modal-trigger></pagefind-modal-trigger>
         <pagefind-modal reset-on-close></pagefind-modal>
       </div>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      {{!-- No navbar-burger: it only existed to fold the external ownCloud.com /
+            Support links on narrow screens. Those links now live in the footer,
+            so there is nothing to collapse. (Matches doc.owncloud.com.) --}}
     </div>
     <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="https://owncloud.com">ownCloud.com</a>
-        <a class="navbar-item" href="https://owncloud.com/support/">Support</a>
-      </div>
+      <div class="navbar-end"></div>
     </div>
   </nav>
 </header>
