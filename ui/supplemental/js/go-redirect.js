@@ -25,9 +25,23 @@
  * stubs the docs already generate (the maintained source of truth), plus the
  * keys core requests that had no alias yet. Targets are relative to the
  * version root (e.g. /server/latest/), matching how the links are versioned.
+ *
+ * Version remap: core emits the CONCRETE server version in the path (e.g.
+ * /server/10.16/go.php), but the site publishes the current stable only under
+ * /server/latest/ (site.yml latest_version_segment_strategy: replace, because
+ * GitHub Pages cannot 302 a version segment to latest). So a version segment
+ * without its own published tree (10.16, older releases) is remapped to
+ * `latest`; segments that ARE published (e.g. 10.15, 11.0) are kept for
+ * per-version fidelity. PUBLISHED_VERSIONS is checked in CI against the built
+ * public/server/* directories so it cannot silently go stale.
  */
 ;(function (root) {
   'use strict'
+
+  // Server version path segments that have their own published doc tree.
+  // Anything else (concrete current-stable, unpublished older releases) is
+  // served under `latest`. Kept in sync with the build by the unit tests.
+  var PUBLISHED_VERSIONS = ['10.15', '11.0', 'latest']
 
   // key -> path relative to the version root (…/server/<version>/).
   var MAPPING = {
@@ -101,6 +115,12 @@
 
     var versionRoot = pathname.replace(/go\.php$/, '') // keeps trailing slash
 
+    // Remap the version segment ".../server/<version>/" to a published one.
+    // Core emits the concrete version, which usually has no published tree.
+    versionRoot = versionRoot.replace(/(\/server\/)([^/]+)(\/)$/, function (m, pre, version, post) {
+      return PUBLISHED_VERSIONS.indexOf(version) === -1 ? pre + 'latest' + post : m
+    })
+
     // Parse the `to` key. URLSearchParams handles '+', percent-decoding, and
     // values containing '='; it never throws on a malformed escape (unlike a
     // bare decodeURIComponent), so a garbage query degrades to the fallback
@@ -130,7 +150,12 @@
 
   // Export for the browser (auto-redirect) and for tests (Node/CommonJS).
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { resolveGoPhp: resolveGoPhp, MAPPING: MAPPING, fallbackFor: fallbackFor }
+    module.exports = {
+      resolveGoPhp: resolveGoPhp,
+      MAPPING: MAPPING,
+      fallbackFor: fallbackFor,
+      PUBLISHED_VERSIONS: PUBLISHED_VERSIONS
+    }
   } else if (root && root.location) {
     var to = resolveGoPhp(root.location.pathname, root.location.search)
     if (to) root.location.replace(to)

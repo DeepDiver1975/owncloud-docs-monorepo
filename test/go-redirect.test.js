@@ -5,7 +5,7 @@ const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const path = require('node:path')
 
-const { resolveGoPhp, MAPPING, fallbackFor } = require('../ui/supplemental/js/go-redirect.js')
+const { resolveGoPhp, MAPPING, fallbackFor, PUBLISHED_VERSIONS } = require('../ui/supplemental/js/go-redirect.js')
 
 const PREFIX = '/owncloud-docs-monorepo/server/latest/'
 
@@ -37,11 +37,25 @@ test('a user key redirects into the classic_ui module', () => {
   )
 })
 
-test('the version root is preserved for any version segment', () => {
+test('a published version segment is preserved for per-version fidelity', () => {
   const p = '/owncloud-docs-monorepo/server/10.15/'
   assert.equal(
     resolveGoPhp(p + 'go.php', '?to=admin-sharing'),
     p + 'admin_manual/configuration/files/file_sharing_configuration.html'
+  )
+})
+
+test('an unpublished version segment (concrete current stable) is remapped to latest', () => {
+  // Core emits the concrete version (e.g. 10.16), which has no published tree;
+  // it must be sent to /server/latest/ where the current stable is published.
+  assert.equal(
+    resolveGoPhp('/owncloud-docs-monorepo/server/10.16/go.php', '?to=admin-sharing'),
+    '/owncloud-docs-monorepo/server/latest/admin_manual/configuration/files/file_sharing_configuration.html'
+  )
+  // An old, long-unpublished release likewise falls back to latest.
+  assert.equal(
+    resolveGoPhp('/owncloud-docs-monorepo/server/10.9/go.php', '?to=user-webdav'),
+    '/owncloud-docs-monorepo/server/latest/classic_ui/files/access_webdav.html'
   )
 })
 
@@ -87,6 +101,25 @@ test('fallbackFor classifies by key prefix', () => {
   assert.equal(fallbackFor('developer-x'), 'developer_manual/index.html')
   assert.equal(fallbackFor('user-x'), 'classic_ui/index.html')
   assert.equal(fallbackFor('anything-else'), 'classic_ui/index.html')
+})
+
+// Guard against version drift: PUBLISHED_VERSIONS must list exactly the server
+// version segments the build actually emits under public/server/*.
+test('PUBLISHED_VERSIONS matches the built server version segments', (t) => {
+  const serverDir = path.join(__dirname, '..', 'public', 'server')
+  if (!fs.existsSync(serverDir)) {
+    t.skip('public/server not built (run `npm run antora` to enable)')
+    return
+  }
+  const built = fs.readdirSync(serverDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .sort()
+  assert.deepEqual(
+    [...PUBLISHED_VERSIONS].sort(),
+    built,
+    'PUBLISHED_VERSIONS in go-redirect.js is out of sync with public/server/* — update the list'
+  )
 })
 
 // Guard against page moves: every mapped target must exist in the built site.
