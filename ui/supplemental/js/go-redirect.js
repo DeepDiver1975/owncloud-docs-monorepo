@@ -92,12 +92,14 @@
     'user-webdav': 'classic_ui/files/access_webdav.html'
   }
 
-  // Landing page for an unknown key, by key prefix -- mirrors the fallback
-  // branch of the original go.php ("user_manual" is now "classic_ui").
-  function fallbackFor (key) {
-    if (key.indexOf('admin-') === 0) return 'admin_manual/index.html'
-    if (key.indexOf('developer-') === 0) return 'developer_manual/index.html'
-    return 'classic_ui/index.html'
+  // Landing page for an unknown/mistyped key. The original go.php split the
+  // fallback by key prefix (admin_manual / developer_manual / user_manual), but
+  // those manuals have since been reorganized and an unknown key has no better
+  // destination than the server docs entrypoint, so we send every unknown key
+  // to the version root (index.html) regardless of prefix. `key` is accepted
+  // for signature stability and future per-prefix routing if ever needed.
+  function fallbackFor (key) { // eslint-disable-line no-unused-vars
+    return 'index.html'
   }
 
   /**

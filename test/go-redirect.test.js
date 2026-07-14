@@ -66,16 +66,16 @@ test('a URL-encoded key (e.g. the well-known-URL key) resolves', () => {
   )
 })
 
-test('unknown keys fall back by prefix, mirroring the original go.php', () => {
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-does-not-exist'), PREFIX + 'admin_manual/index.html')
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=developer-nope'), PREFIX + 'developer_manual/index.html')
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=user-nope'), PREFIX + 'classic_ui/index.html')
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=totally-unknown'), PREFIX + 'classic_ui/index.html')
+test('unknown keys fall back to the server docs entrypoint', () => {
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-does-not-exist'), PREFIX + 'index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=developer-nope'), PREFIX + 'index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=user-nope'), PREFIX + 'index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=totally-unknown'), PREFIX + 'index.html')
 })
 
-test('a missing/empty key falls back to the user manual landing', () => {
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', ''), PREFIX + 'classic_ui/index.html')
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to='), PREFIX + 'classic_ui/index.html')
+test('a missing/empty key falls back to the server docs entrypoint', () => {
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', ''), PREFIX + 'index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to='), PREFIX + 'index.html')
 })
 
 test('extra query parameters around to= are ignored', () => {
@@ -86,21 +86,22 @@ test('extra query parameters around to= are ignored', () => {
 })
 
 test('a malformed percent-escape degrades to the fallback, never throws', () => {
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=%'), PREFIX + 'classic_ui/index.html')
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-%zz'), PREFIX + 'admin_manual/index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=%'), PREFIX + 'index.html')
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-%zz'), PREFIX + 'index.html')
 })
 
 test('a value containing = is preserved (not truncated at the first =)', () => {
   // No real key contains '=', so this just proves the parser keeps the whole
-  // value: "admin-x=y" is unknown -> admin fallback (not silently -> "admin-x").
-  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-x=y'), PREFIX + 'admin_manual/index.html')
+  // value: "admin-x=y" is unknown -> entrypoint fallback (not silently the
+  // truncated "admin-x", which is also unknown here but proves the point).
+  assert.equal(resolveGoPhp(PREFIX + 'go.php', '?to=admin-x=y'), PREFIX + 'index.html')
 })
 
-test('fallbackFor classifies by key prefix', () => {
-  assert.equal(fallbackFor('admin-x'), 'admin_manual/index.html')
-  assert.equal(fallbackFor('developer-x'), 'developer_manual/index.html')
-  assert.equal(fallbackFor('user-x'), 'classic_ui/index.html')
-  assert.equal(fallbackFor('anything-else'), 'classic_ui/index.html')
+test('fallbackFor returns the version-root entrypoint for any key', () => {
+  assert.equal(fallbackFor('admin-x'), 'index.html')
+  assert.equal(fallbackFor('developer-x'), 'index.html')
+  assert.equal(fallbackFor('user-x'), 'index.html')
+  assert.equal(fallbackFor('anything-else'), 'index.html')
 })
 
 // Guard against version drift: PUBLISHED_VERSIONS must list exactly the server
@@ -134,9 +135,7 @@ test('every mapped target exists in the built server/latest site', (t) => {
   for (const [key, target] of Object.entries(MAPPING)) {
     if (!fs.existsSync(path.join(base, target))) missing.push(`${key} -> ${target}`)
   }
-  // Fallback landings must exist too.
-  for (const landing of ['admin_manual/index.html', 'developer_manual/index.html', 'classic_ui/index.html']) {
-    if (!fs.existsSync(path.join(base, landing))) missing.push(`(fallback) ${landing}`)
-  }
+  // The unknown-key fallback landing must exist too.
+  if (!fs.existsSync(path.join(base, fallbackFor('')))) missing.push(`(fallback) ${fallbackFor('')}`)
   assert.deepEqual(missing, [], 'mapped go.php targets missing from the build:\n' + missing.join('\n'))
 })
