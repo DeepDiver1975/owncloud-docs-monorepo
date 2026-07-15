@@ -7,6 +7,7 @@
     "antora-local": "antora --stacktrace --url http://localhost:8080 site.yml",
     "pagefind": "pagefind --site public",
     "build": "npm run antora && npm run pagefind",
+    "test": "node --test test/*.test.js",
     "serve": "http-server public/ -d -i"
   },
   "dependencies": {
