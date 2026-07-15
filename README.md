@@ -42,11 +42,11 @@ content/<product>/<ver>/ each version is a folder with its own antora.yml
 | ocis | 8.0 (dev), 7.3 | master imported as 8.0; supersedes old 8.0 branch |
 | webui | — | single rolling component (versionless) |
 | desktop | 7.1 (dev), 6.0, 5.3 | |
-| ios | 12.6 | latest-only per spec (released branch as-is) |
-| android | 4.7 | latest-only per spec (released branch as-is) |
+| ios | 12.7 (dev), 12.6 | master→12.7 (prerelease); 12.6 branch is `latest` |
+| android | 4.8 (dev), 4.7 | master→4.8 (prerelease); 4.7 branch is `latest` |
 
 > ⚠️ **Dev version numbers are provisional.** The in-development folders
-> (`server/11.0`, `ocis/8.0`, `desktop/7.1`) are marked `prerelease: true` and
+> (`server/11.0`, `ios/12.7`, `android/4.8`, …) are marked `prerelease: true` and
 > carry a `(dev)` `display_version`. They were the upcoming numbers chosen at
 > import time — rename the folder + drop `prerelease` on actual release.
 
