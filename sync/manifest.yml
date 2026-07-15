@@ -55,9 +55,11 @@ repos:
   - name: docs-client-ios-app
     url: https://github.com/owncloud/docs-client-ios-app.git
     mappings:
-      - { branch: master, dest: content/ios/12.6 }
+      - { branch: '12.6', dest: content/ios/12.6 }
+      - { branch: master, dest: content/ios/12.7 }
 
   - name: docs-client-android
     url: https://github.com/owncloud/docs-client-android.git
     mappings:
-      - { branch: master, dest: content/android/4.7 }
+      - { branch: '4.7',  dest: content/android/4.7 }
+      - { branch: master, dest: content/android/4.8 }
