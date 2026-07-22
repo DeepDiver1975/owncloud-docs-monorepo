@@ -13,8 +13,12 @@
 # Adding a new maintained version = add one mapping entry here. Creating the
 # matching dest folder's antora.yml is a one-time manual step (out of scope).
 #
-# NOTE: each repo's `master` branch maps to the in-development / prerelease
-# folder for that product. Verify these rows when versions roll over.
+# NOTE: `master` is the in-development / `next` line for each product. Where a
+# product has cut a release branch, that branch feeds the matching numbered
+# folder and `master` feeds a separate `(dev)` folder. Some products
+# (ios/android) name their prerelease line as a numbered branch already, so
+# their `(dev)` folder is fed from that branch, not `master`. Verify these rows
+# when versions roll over.
 
 # Directories inside each dest folder that are mirrored from upstream.
 # antora.yml is intentionally NOT listed -> never overwritten.
@@ -38,7 +42,9 @@ repos:
     url: https://github.com/owncloud/docs-ocis.git
     mappings:
       - { branch: '7.3',  dest: content/ocis/7.3 }
-      - { branch: master, dest: content/ocis/8.0 }
+      - { branch: '8.0',  dest: content/ocis/8.0 }
+      - { branch: '8.1',  dest: content/ocis/8.1 }   # current prerelease line
+      - { branch: master, dest: content/ocis/8.2 }   # next / (dev)
 
   - name: docs-webui
     url: https://github.com/owncloud/docs-webui.git
@@ -50,16 +56,17 @@ repos:
     mappings:
       - { branch: '5.3',  dest: content/desktop/5.3 }
       - { branch: '6.0',  dest: content/desktop/6.0 }
-      - { branch: master, dest: content/desktop/7.1 }
+      - { branch: '7.1',  dest: content/desktop/7.1 }
+      - { branch: master, dest: content/desktop/7.2 }   # next / (dev)
 
   - name: docs-client-ios-app
     url: https://github.com/owncloud/docs-client-ios-app.git
     mappings:
       - { branch: '12.6', dest: content/ios/12.6 }
-      - { branch: master, dest: content/ios/12.7 }
+      - { branch: '12.7', dest: content/ios/12.7 }   # prerelease line (dev)
 
   - name: docs-client-android
     url: https://github.com/owncloud/docs-client-android.git
     mappings:
       - { branch: '4.7',  dest: content/android/4.7 }
-      - { branch: master, dest: content/android/4.8 }
+      - { branch: '4.8',  dest: content/android/4.8 }   # prerelease line (dev)

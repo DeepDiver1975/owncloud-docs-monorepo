@@ -1,0 +1,26 @@
+= Cleanup Orphaned Shares
+:toc: right
+:page-aliases: ROOT:maintenance/b-r/cleanup-orphaned-shares.adoc
+
+Use this CLI command to clean up shared space or directory orphans when a shared space or directory is deleted. This cannot be done automatically at the moment.
+
+include::partial$/maintenance/ocis-shares-cli.adoc[]
+
+== Command Details
+
+.Usage:
+
+[source,bash]
+----
+ocis shares -h cleanup
+NAME:
+   ocis shares cleanup - clean up stale entries in the share manager.
+
+USAGE:
+   ocis shares cleanup [command options]
+
+OPTIONS:
+   --service-account-id value      Name of the service account to use for the cleanup [$OCIS_SERVICE_ACCOUNT_ID]
+   --service-account-secret value  Secret for the service account [$OCIS_SERVICE_ACCOUNT_SECRET]
+   --help, -h                      show help
+----
