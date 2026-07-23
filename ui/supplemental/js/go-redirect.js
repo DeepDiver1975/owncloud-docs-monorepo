@@ -74,7 +74,7 @@
     'admin-setup-well-known-URL': 'admin_manual/troubleshooting/general_troubleshooting.html',
     'admin-sharing': 'admin_manual/configuration/files/file_sharing_configuration.html',
     'admin-sharing-federated': 'admin_manual/configuration/files/federated_cloud_sharing_configuration.html',
-    'admin-source_install': 'admin_manual/installation/source_installation.html',
+    'admin-source_install': 'admin_manual/installation/manual_installation/manual_installation.html',
     'admin-transactional-locking': 'admin_manual/configuration/files/files_locking_transactional.html',
     'admin-untrusted-domains': 'admin_manual/maintenance/migrating.html',
     'enable-http-strict-transport-security': 'admin_manual/configuration/server/harden_server.html',
