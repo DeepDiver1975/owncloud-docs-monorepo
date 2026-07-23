@@ -27,21 +27,24 @@
  * version root (e.g. /server/latest/), matching how the links are versioned.
  *
  * Version remap: core emits the CONCRETE server version in the path (e.g.
- * /server/10.16/go.php), but the site publishes the current stable only under
- * /server/latest/ (site.yml latest_version_segment_strategy: replace, because
- * GitHub Pages cannot 302 a version segment to latest). So a version segment
- * without its own published tree (10.16, older releases) is remapped to
- * `latest`; segments that ARE published (e.g. 10.15, 11.0) are kept for
- * per-version fidelity. PUBLISHED_VERSIONS is checked in CI against the built
- * public/server/* directories so it cannot silently go stale.
+ * /server/10.16/go.php). The site now publishes every real version explicitly,
+ * so a known version segment is kept as-is for per-version fidelity. Only a
+ * segment with no published tree -- an old, long-unpublished release from a
+ * still-deployed server -- is remapped to `latest` (a static redirect tree
+ * built by the latest-alias extension) as a safety net. PUBLISHED_VERSIONS is
+ * checked in CI against the built public/server/* directories so it cannot
+ * silently go stale.
  */
 ;(function (root) {
   'use strict'
 
-  // Server version path segments that have their own published doc tree.
-  // Anything else (concrete current-stable, unpublished older releases) is
-  // served under `latest`. Kept in sync with the build by the unit tests.
-  var PUBLISHED_VERSIONS = ['10.15', '11.0', 'latest']
+  // Server version path segments that have their own published doc tree. Every
+  // real version is now published explicitly, so these pass through untouched;
+  // only unknown/old segments with no tree fall back to `latest`. `latest`
+  // itself is included because it is a valid served segment (a redirect tree
+  // built by the latest-alias extension). Kept in sync with the build by the
+  // unit tests.
+  var PUBLISHED_VERSIONS = ['10.15', '10.16', '11.0', 'latest']
 
   // key -> path relative to the version root (…/server/<version>/).
   var MAPPING = {
