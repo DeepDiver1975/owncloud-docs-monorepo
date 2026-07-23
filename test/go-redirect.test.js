@@ -38,21 +38,18 @@ test('a user key redirects into the classic_ui module', () => {
 })
 
 test('a published version segment is preserved for per-version fidelity', () => {
-  const p = '/owncloud-docs-monorepo/server/10.15/'
-  assert.equal(
-    resolveGoPhp(p + 'go.php', '?to=admin-sharing'),
-    p + 'admin_manual/configuration/files/file_sharing_configuration.html'
-  )
+  for (const v of ['10.15', '10.16', '11.0']) {
+    const p = `/owncloud-docs-monorepo/server/${v}/`
+    assert.equal(
+      resolveGoPhp(p + 'go.php', '?to=admin-sharing'),
+      p + 'admin_manual/configuration/files/file_sharing_configuration.html'
+    )
+  }
 })
 
-test('an unpublished version segment (concrete current stable) is remapped to latest', () => {
-  // Core emits the concrete version (e.g. 10.16), which has no published tree;
-  // it must be sent to /server/latest/ where the current stable is published.
-  assert.equal(
-    resolveGoPhp('/owncloud-docs-monorepo/server/10.16/go.php', '?to=admin-sharing'),
-    '/owncloud-docs-monorepo/server/latest/admin_manual/configuration/files/file_sharing_configuration.html'
-  )
-  // An old, long-unpublished release likewise falls back to latest.
+test('an unpublished (old) version segment falls back to latest', () => {
+  // A long-deployed old server still emits e.g. /server/10.9/go.php; that
+  // version has no published tree, so it must land on /server/latest/.
   assert.equal(
     resolveGoPhp('/owncloud-docs-monorepo/server/10.9/go.php', '?to=user-webdav'),
     '/owncloud-docs-monorepo/server/latest/classic_ui/files/access_webdav.html'

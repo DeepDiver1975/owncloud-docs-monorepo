@@ -27,10 +27,13 @@ content:
 urls:
   # https://docs.antora.org/antora/latest/playbook/urls-redirect-facility/
   redirect_facility: static
-  # for multi-version components, the prerelease key decides whether the latest
-  # segment is shown in the URL or only redirected when entered.
-  latest_version_segment: latest
-  latest_version_segment_strategy: replace   # GH Pages do not support 302 redirects
+  # Every version is published at its real, explicit URL (e.g. /server/10.16/).
+  # We deliberately do NOT set latest_version_segment: Antora's built-in latest
+  # handling either hides the real version (`replace`) or is ignored on a static
+  # host (`redirect:from` is a no-op under redirect_facility: static). Instead,
+  # antora-extensions/latest-alias.js publishes a `latest` segment as a tree of
+  # static meta-refresh redirect stubs pointing at each component's latest
+  # non-prerelease version -- explicit real URLs AND a working /…/latest/.
 
 runtime:
   # local content only -- nothing to fetch
@@ -62,12 +65,15 @@ asciidoc:
 antora:
   extensions:
     - ./antora-extensions/comp-version.js
+    - ./antora-extensions/latest-alias.js
     - require: ./antora-extensions/load-global-site-attributes.js
       attributefile: ./global-attributes.yml
       enabled: true
     - require: ./antora-extensions/sitemap-cleanup.js
-      validsegments: ['latest']
-      preferredsegment: latest
+      # Keep only each component's latest non-prerelease version in the sitemap
+      # (the /…/latest/ redirect target). Real version URLs are published but
+      # de-duplicated out of the sitemap; canonical still points at these pages.
+      mode: latest-per-component
       printsitemapfound: true
       printcontent: false
       enabled: true
