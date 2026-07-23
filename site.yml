@@ -70,8 +70,10 @@ antora:
       attributefile: ./global-attributes.yml
       enabled: true
     - require: ./antora-extensions/sitemap-cleanup.js
-      validsegments: ['latest']
-      preferredsegment: latest
+      # Keep only each component's latest non-prerelease version in the sitemap
+      # (the /…/latest/ redirect target). Real version URLs are published but
+      # de-duplicated out of the sitemap; canonical still points at these pages.
+      mode: latest-per-component
       printsitemapfound: true
       printcontent: false
       enabled: true

@@ -19,6 +19,19 @@ const smf = 'sitemap.xml'
 const sitemap_keyword = 'sitemap-'
 
 module.exports.register = function ({ config }) {
+    // Map of component name -> latest NON-prerelease version string. Captured at
+    // contentClassified (when the catalog is available) for use at sitePublished.
+    // component.latest is Antora's newest released (non-prerelease) version.
+    const latestByComponent = {}
+    if (config.mode === 'latest-per-component') {
+      this.once('contentClassified', ({ contentCatalog }) => {
+        contentCatalog.getComponents().forEach((component) => {
+          const latest = component.latest
+          if (latest && latest.version) latestByComponent[component.name] = latest.version
+        })
+      })
+    }
+
     this.on("sitePublished", async ({ playbook, publications }) => {
 
       // get relevant Antora data
@@ -33,7 +46,7 @@ module.exports.register = function ({ config }) {
       if(config.validsegments) {
         config.validsegments.forEach(element => validSegments.push(element))
         //validSegments.forEach(element => logger.warn(element))
-      } else {
+      } else if (config.mode !== 'latest-per-component') {
         console.log()
         logger.warn('Config: No valid segment(s) found to keep for sitemaps. Exiting \n')
         this.stop()
@@ -118,8 +131,22 @@ module.exports.register = function ({ config }) {
 
       console.log()
       for (const element of parsable_sitemaps) {
+        let fileValidSegments = validSegments
+        let filePreferredSegments = preferredSegments
+        if (config.mode === 'latest-per-component') {
+          // Derive the component from the sitemap filename (sitemap-server.xml
+          // -> server), then keep only that component's latest release version.
+          const comp = element.replace(outputDir + '/', '').replace(sitemap_keyword, '').replace('.xml', '')
+          const keep = latestByComponent[comp]
+          if (!keep) {
+            logger.warn('No latest version known for component "' + comp + '", skipping its sitemap')
+            continue
+          }
+          fileValidSegments = [keep]
+          filePreferredSegments = [keep]
+        }
         await parse_sitemap_file(parsable_sitemaps.length, outputDir, content,
-                siteUrl, validSegments, preferredSegments, printSitemapFound, printContent, logger, element)
+                siteUrl, fileValidSegments, filePreferredSegments, printSitemapFound, printContent, logger, element)
       }
     })
 }
