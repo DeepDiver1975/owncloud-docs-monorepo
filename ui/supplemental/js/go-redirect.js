@@ -42,8 +42,11 @@
   // real version is now published explicitly, so these pass through untouched;
   // only unknown/old segments with no tree fall back to `latest`. `latest`
   // itself is included because it is a valid served segment (a redirect tree
-  // built by the latest-alias extension). Kept in sync with the build by the
-  // unit tests.
+  // built by the latest-alias extension). This is the ONE version list that
+  // must be maintained by hand on each server release — the latest-alias
+  // extension and the sitemap keep-set both derive `latest` automatically from
+  // component.latest. The unit tests fail the build if this list drifts from
+  // the published server segments.
   var PUBLISHED_VERSIONS = ['10.15', '10.16', '11.0', 'latest']
 
   // key -> path relative to the version root (…/server/<version>/).
@@ -121,7 +124,8 @@
     var versionRoot = pathname.replace(/go\.php$/, '') // keeps trailing slash
 
     // Remap the version segment ".../server/<version>/" to a published one.
-    // Core emits the concrete version, which usually has no published tree.
+    // Published versions pass through unchanged; only a version not in
+    // PUBLISHED_VERSIONS (an old, unpublished release) is remapped to `latest`.
     versionRoot = versionRoot.replace(/(\/server\/)([^/]+)(\/)$/, function (m, pre, version, post) {
       return PUBLISHED_VERSIONS.indexOf(version) === -1 ? pre + 'latest' + post : m
     })
