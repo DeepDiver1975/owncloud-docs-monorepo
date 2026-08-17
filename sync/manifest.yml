@@ -36,6 +36,7 @@ repos:
     mappings:
       - { branch: '10.15', dest: content/server/10.15 }
       - { branch: '10.16', dest: content/server/10.16 }
+      # no 11.0 release branch upstream yet -- master still is the 11.0 line
       - { branch: master,  dest: content/server/11.0 }
 
   - name: docs-ocis
@@ -43,8 +44,9 @@ repos:
     mappings:
       - { branch: '7.3',  dest: content/ocis/7.3 }
       - { branch: '8.0',  dest: content/ocis/8.0 }
-      - { branch: '8.1',  dest: content/ocis/8.1 }   # current prerelease line
-      - { branch: master, dest: content/ocis/8.2 }   # next / (dev)
+      - { branch: '8.1',  dest: content/ocis/8.1 }
+      - { branch: '8.2',  dest: content/ocis/8.2 }   # latest release (2026-08-10)
+      - { branch: master, dest: content/ocis/8.3 }   # next / (dev)
 
   - name: docs-webui
     url: https://github.com/owncloud/docs-webui.git
@@ -63,7 +65,7 @@ repos:
     url: https://github.com/owncloud/docs-client-ios-app.git
     mappings:
       - { branch: '12.6', dest: content/ios/12.6 }
-      - { branch: '12.7', dest: content/ios/12.7 }   # prerelease line (dev)
+      - { branch: '12.7', dest: content/ios/12.7 }   # latest release (2026-05-19)
 
   - name: docs-client-android
     url: https://github.com/owncloud/docs-client-android.git

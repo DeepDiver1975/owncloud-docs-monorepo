@@ -1,8 +1,6 @@
 name: ios-app
 title: Mobile App for iOS
 version: '12.7'
-prerelease: true
-display_version: '12.7 (dev)'
 start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/partials/nav.adoc

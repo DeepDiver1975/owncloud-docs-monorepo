@@ -38,17 +38,23 @@ content/<product>/<ver>/ each version is a folder with its own antora.yml
 | Product | Versions (folder) | Notes |
 |---------|-------------------|-------|
 | main | — | ROOT landing component (versionless) |
-| server | 11.0 (dev), 10.16, 10.15 | |
-| ocis | 8.0 (dev), 7.3 | master imported as 8.0; supersedes old 8.0 branch |
+| server | 11.0, 10.16, 10.15 | no 11.0 branch upstream yet; master is the 11.0 line and is `latest` |
+| ocis | 8.3 (dev), 8.2, 8.1, 8.0, 7.3 | master→8.3 (prerelease); 8.2 branch is `latest` |
 | webui | — | single rolling component (versionless) |
-| desktop | 7.1 (dev), 6.0, 5.3 | |
-| ios | 12.7 (dev), 12.6 | master→12.7 (prerelease); 12.6 branch is `latest` |
-| android | 4.8 (dev), 4.7 | master→4.8 (prerelease); 4.7 branch is `latest` |
+| desktop | 7.2 (dev), 7.1, 6.0, 5.3 | master→7.2 (prerelease); 7.1 branch is `latest` |
+| ios | 12.7, 12.6 | 12.7 branch is `latest` (released 2026-05-19) |
+| android | 4.8 (dev), 4.7 | 4.8 branch imported as prerelease; 4.7 branch is `latest` |
 
 > ⚠️ **Dev version numbers are provisional.** The in-development folders
-> (`server/11.0`, `ios/12.7`, `android/4.8`, …) are marked `prerelease: true` and
+> (`ocis/8.3`, `desktop/7.2`, `android/4.8`, …) are marked `prerelease: true` and
 > carry a `(dev)` `display_version`. They were the upcoming numbers chosen at
 > import time — rename the folder + drop `prerelease` on actual release.
+>
+> On release rollover, three things move together: drop `prerelease` +
+> `display_version` from the released folder's `antora.yml`, repoint
+> `sync/manifest.yml` (`master` → the *next* dev folder, release branch → the
+> released folder), and bump the `latest-*`/`previous-*` attributes in
+> `global-attributes.yml`.
 
 ## Build locally
 

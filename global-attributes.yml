@@ -27,10 +27,10 @@
     latest-docs-version: 'next'
     previous-docs-version: 'next'
 #   server
-    latest-server-version: '10.16'
-    latest-server-download-version: '10.16.2'
-    previous-server-version: '10.15'
-    current-server-version: '10.16'
+    latest-server-version: '11.0'
+    latest-server-download-version: '11.0.0'
+    previous-server-version: '10.16'
+    current-server-version: '11.0'
     oc-changelog-url: 'https://owncloud.com/changelog/server/'
     oc-install-package-url: 'https://download.owncloud.com/server/stable/?sort=time&order=asc'
     oc-examples-server-url: 'https://owncloud.install.com/owncloud'
@@ -49,21 +49,21 @@
     std-port-redis: '6379'
 #   ocis
     # branch versions, also used to assemble branch names in ocis
-    latest-ocis-version: '8.0' #
-    previous-ocis-version: '7.3'
+    latest-ocis-version: '8.2' #
+    previous-ocis-version: '8.1'
     # Versions mainly for printing like in docs-main release info and in docs-ocis to define the latest production version.
     # Versions in the ocis docs need to be defined in the branch specific docs-ocis/antora.yaml file.
     # To do so, change the values in the branch of docs-ocis/antora.yml like service_xxx and compose_xxx.
-    ocis-actual-version: '8.0.0'
-    ocis-former-version: '7.3.2'
-    ocis-compiled: '2026-02-09 00:00:00 +0000 UTC'
+    ocis-actual-version: '8.2.0'
+    ocis-former-version: '8.1.0'
+    ocis-compiled: '2026-08-10 00:00:00 +0000 UTC'
     ocis-downloadpage-url: 'https://download.owncloud.com/ocis/ocis'
 #   webui (versionless component in the monorepo; no @version qualifier)
 #   desktop
-    latest-desktop-version: '6.0'
-    previous-desktop-version: '5.3'
+    latest-desktop-version: '7.1'
+    previous-desktop-version: '6.0'
 #   ios-app (latest-only import)
-    latest-ios-version: '12.6'
+    latest-ios-version: '12.7'
     previous-ios-version: '12.6'
 #   android (latest-only import)
     latest-android-version: '4.7'

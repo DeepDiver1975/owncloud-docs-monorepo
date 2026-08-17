@@ -1,8 +1,6 @@
 name: server
 title: ownCloud Server
 version: '11.0'
-prerelease: true
-display_version: '11.0 (dev)'
 start_page: ROOT:index.adoc
 nav:
 - modules/ROOT/partials/nav.adoc

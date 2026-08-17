@@ -19,13 +19,20 @@
  */
 module.exports.register = function () {
   const LATEST = 'latest'
-  this.once('contentClassified', ({ contentCatalog }) => {
+
+  // Run `fn(component, latest)` for every component that needs a `latest` alias:
+  // versionless components (no latest) and any whose latest is already the
+  // `latest` segment are skipped -- there is nothing to alias to.
+  const eachAliasableComponent = (contentCatalog, fn) => {
     contentCatalog.getComponents().forEach((component) => {
       const latest = component.latest
-      // Skip versionless components (no latest) and any whose latest is already
-      // the `latest` segment (nothing to alias to).
       if (!latest || !latest.version || latest.version === LATEST) return
+      fn(component, latest)
+    })
+  }
 
+  this.once('contentClassified', ({ contentCatalog }) => {
+    eachAliasableComponent(contentCatalog, (component, latest) => {
       // (2) Component-root redirect: /<component>/ -> latest version start page.
       // A version-less alias (version: '') publishes to /<component>/index.html,
       // exactly as Antora's own site-root alias publishes to /index.html. Find
@@ -74,6 +81,41 @@ module.exports.register = function () {
             },
             rel: page,
           })
+        })
+    })
+  })
+
+  // (3) Mirror the latest version's own move-redirects into the `latest` tree.
+  // Antora registers the redirect stubs declared via `page-aliases` while it
+  // converts documents, so they do not exist yet at contentClassified and pass
+  // (1) by unnoticed -- they are in the `alias` family, not `page`. Without this
+  // pass, an old page path that survives in the latest version only as a
+  // redirect (e.g. a page renamed in server 11.0) resolves under the real
+  // version but 404s under /<component>/latest/. The legacy go.php short links
+  // (ui/supplemental/js/go-redirect.js) are keyed on those older page paths and
+  // fall back to /server/latest/ for any unpublished version, so they depend on
+  // the redirects being mirrored here.
+  this.once('documentsConverted', ({ contentCatalog }) => {
+    eachAliasableComponent(contentCatalog, (component, latest) => {
+      contentCatalog
+        .findBy({ component: component.name, version: latest.version, family: 'alias' })
+        .forEach((alias) => {
+          // Chain the mirror straight to the redirect's ultimate target instead
+          // of to the redirect itself: one hop from /latest/ to real content,
+          // and `rel` must be a publishable page for the redirect producer.
+          const target = alias.rel
+          if (!target || !target.pub || !target.pub.url || !target.out) return
+          const src = {
+            component: component.name,
+            version: LATEST,
+            module: alias.src.module,
+            family: 'alias',
+            relative: alias.src.relative,
+          }
+          // (1) already claimed this path if the latest version publishes a real
+          // page there; re-adding it would replace a live page with a redirect.
+          if (contentCatalog.getById(src)) return
+          contentCatalog.addFile({ src, rel: target })
         })
     })
   })
