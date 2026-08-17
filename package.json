@@ -14,7 +14,7 @@
     "antora": "^3.1.15",
     "asciidoctor": "^4.0.8",
     "asciidoctor-kroki": "^1.0.1",
-    "js-yaml": "^5.2.3"
+    "js-yaml": "^5.3.0"
   },
   "devDependencies": {
     "@sntke/antora-mermaid-extension": "^0.0.13",
