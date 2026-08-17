@@ -33,6 +33,102 @@ content/<product>/<ver>/ each version is a folder with its own antora.yml
 .github/workflows/ci.yml build → pagefind → deploy to GitHub Pages
 ```
 
+## Versioning model
+
+### One folder per version
+
+Each product version is a folder `content/<product>/<version>/` carrying its own
+`antora.yml`, whose `version:` key repeats the folder name
+(`content/ocis/8.2/antora.yml` → `version: '8.2'`). `site.yml` aggregates them by
+glob (`content/ocis/*`, `content/server/*`, …), so **the published version set is
+exactly the folder set on disk** — adding or removing a version needs no playbook
+edit.
+
+Two components are versionless and have no version folder: `content/main` (the
+`ROOT` landing component, `version: ~`) and `content/webui` (a single rolling
+component).
+
+### Only explicit version numbers as folder names
+
+Folder names are pure version numbers — `8.2`, `10.16`, `12.7`. There is
+deliberately **no `master`, `next`, `dev`, or `latest` folder**, and none should
+be added:
+
+- **A moving path segment is a broken promise.** `…/ocis/next/` points at a
+  different release every few months, so links, bookmarks, and indexed search
+  results silently retarget to content the reader was never sent to.
+  `…/ocis/8.3/` means one release forever.
+- **Release rollover moves no URLs.** The in-development line already lives at
+  its real number, marked `prerelease: true` with a `display_version: '8.3 (dev)'`
+  (see `content/ocis/8.3/antora.yml`). Shipping it means dropping those two keys —
+  no path changes, no redirects. With a `next` folder, every page of the release
+  would change its URL on ship day.
+- **The version is legible everywhere it matters** — folder, path, PR diff, and
+  URL. A reviewer reads `content/ocis/8.2/…` in a diff and knows the target
+  version without consulting a branch→version mapping.
+- **`latest` is generated, never a source folder.**
+  `antora-extensions/latest-alias.js` publishes `/<product>/latest/` as a tree of
+  redirect stubs pointing at the newest non-prerelease version; `site.yml`
+  deliberately does not set `latest_version_segment`.
+
+See the dev-version note under [Versions imported](#versions-imported) for what
+moves together on release rollover.
+
+### Backporting
+
+There are no branches, so there is nothing to cherry-pick. Backporting means
+**making the same edit in every version folder that should carry it**:
+
+```
+content/ocis/8.3/modules/.../page.adoc   original edit
+content/ocis/8.2/modules/.../page.adoc   same edit
+content/ocis/8.1/modules/.../page.adoc   same edit
+```
+
+One PR then carries the change for every affected version: the reviewer sees the
+whole backport at once, and no version is deferred to a follow-up that never
+happens. The cost is N copies of the hunk instead of one commit replayed N times;
+in exchange there is no conflict resolution, which matters because these docs
+genuinely diverge per version (paths, attribute values, screenshots). Text that
+is truly version-independent belongs in a shared partial or a
+`global-attributes.yml` attribute rather than in N copies.
+
+> ⚠️ **While the upstream sync is active, do not hand-edit `modules/`.** Each
+> version folder's `modules/` directory is mirror-replaced from the upstream
+> `owncloud/docs-*` branch mapped in `sync/manifest.yml` (`sync/sync-repo.sh`
+> deletes and re-copies it; upstream wins). A local edit there is wiped by the
+> next sync run. Content changes must land upstream on the matching branch — so
+> backports are made per branch there — or, for monorepo-only corrections, in
+> `sync/patches/<repo>.sh`, which is re-applied idempotently after every mirror.
+> Everything outside `sync_paths` (notably `antora.yml`) is monorepo-owned and
+> safe to edit here.
+
+### Dropping a version
+
+Delete the folder:
+
+```sh
+rm -r content/server/10.15
+```
+
+That is the whole content change — `site.yml` needs no edit, because it globs.
+Four bits of bookkeeping remain:
+
+1. Remove the matching `mappings:` entry from `sync/manifest.yml`. Otherwise the
+   next sync run aborts with `ERROR: dest folder does not exist`.
+2. Update the hand-maintained `latest-*` / `previous-*` / `current-*` attributes
+   in `global-attributes.yml` if the removed version appeared in them. The
+   `latest` alias itself moves automatically (`latest-alias.js` derives it from
+   the newest non-prerelease version).
+3. **Server only:** drop the segment from `PUBLISHED_VERSIONS` in
+   `ui/supplemental/js/go-redirect.js`; `test/go-redirect.test.js` fails the build
+   if that list drifts from the published `public/server/*` trees. Legacy
+   `go.php?to=` links for the removed version then fall back to `latest`, which is
+   the intended safety net.
+4. Accept that the version's URLs now 404 — nothing redirects a retired version
+   tree. Drop a version only when its inbound links are acceptable casualties, or
+   add redirects deliberately.
+
 ## Versions imported
 
 | Product | Versions (folder) | Notes |
