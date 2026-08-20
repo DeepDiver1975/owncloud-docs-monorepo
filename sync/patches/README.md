@@ -1,4 +1,17 @@
-# Post-sync patches
+# Post-sync patches — RETIRED
+
+> ⚠️ **Retired along with the upstream sync.** `.github/workflows/sync-upstream.yml`
+> is deleted and `sync/sync-repo.sh` refuses to run, so nothing invokes these
+> patch scripts any more.
+>
+> Both patches were applied by the last sync run and are **already materialised**
+> in the tracked content — the corrected form is what `content/webui/` and
+> `content/main/` hold today. Because `modules/` is now hand-authored here, the
+> fixes are permanent and need no re-application. Should the same broken xref
+> reappear, fix it directly in `content/` instead of adding a patch script.
+>
+> The scripts and the notes below are kept as a record of *which* divergences
+> from upstream were deliberate and why.
 
 `sync/sync-repo.sh` mirrors upstream `modules/` verbatim (`rm -rf` + `cp -a`), so any
 local correction to a synced file is wiped on the next sync. Some corrections can't

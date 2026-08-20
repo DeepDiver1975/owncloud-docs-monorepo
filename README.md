@@ -15,7 +15,7 @@ Live (GitHub Pages): https://deepdiver1975.github.io/owncloud-docs-monorepo/
 | Branch model | `master` + N version branches per repo | `master` only |
 | Search | Elasticsearch + custom index extension + CI secrets | **Pagefind** (static, build-time) |
 | UI | custom Gulp/Browserify/jQuery `docs-ui` + `ui-bundle.zip` | **stock Antora default UI** + `ui/supplemental/` |
-| Content sources | 7 remote GitHub repos × branches | local folders |
+| Content sources | 7 remote GitHub repos × branches | local folders, authored here (upstream mirror retired) |
 | Global attributes | fetched from GitHub at build | local `global-attributes.yml` |
 
 Antora + AsciiDoc are kept (native multi-version/multi-component support).
@@ -30,6 +30,7 @@ asciidoc-extensions/     tabs, remote-include
 global-attributes.yml    site-wide AsciiDoc attributes (local)
 ui/supplemental/         branding + Pagefind modal search on the stock UI
 content/<product>/<ver>/ each version is a folder with its own antora.yml
+sync/                    retired upstream-mirror tooling, kept as provenance
 .github/workflows/ci.yml build → pagefind → deploy to GitHub Pages
 ```
 
@@ -93,15 +94,15 @@ genuinely diverge per version (paths, attribute values, screenshots). Text that
 is truly version-independent belongs in a shared partial or a
 `global-attributes.yml` attribute rather than in N copies.
 
-> ⚠️ **While the upstream sync is active, do not hand-edit `modules/`.** Each
-> version folder's `modules/` directory is mirror-replaced from the upstream
-> `owncloud/docs-*` branch mapped in `sync/manifest.yml` (`sync/sync-repo.sh`
-> deletes and re-copies it; upstream wins). A local edit there is wiped by the
-> next sync run. Content changes must land upstream on the matching branch — so
-> backports are made per branch there — or, for monorepo-only corrections, in
-> `sync/patches/<repo>.sh`, which is re-applied idempotently after every mirror.
-> Everything outside `sync_paths` (notably `antora.yml`) is monorepo-owned and
-> safe to edit here.
+> ℹ️ **`modules/` is authored here.** The upstream mirror is retired — the
+> legacy `owncloud/docs-*` repos no longer feed this repo, so every file under
+> `content/<product>/<version>/` including `modules/` is edited directly in this
+> repo and a PR against `main` is the only way content changes land. Nothing
+> overwrites your edits; the backport rule above is the whole mechanism.
+>
+> `sync/` is kept as a historical record of which upstream repo and branch each
+> folder was imported from. `sync/sync-repo.sh` mirror-*replaces* `modules/` and
+> would discard local edits, so it refuses to run — see `sync/manifest.yml`.
 
 ### Dropping a version
 
@@ -112,20 +113,18 @@ rm -r content/server/10.15
 ```
 
 That is the whole content change — `site.yml` needs no edit, because it globs.
-Four bits of bookkeeping remain:
+Three bits of bookkeeping remain:
 
-1. Remove the matching `mappings:` entry from `sync/manifest.yml`. Otherwise the
-   next sync run aborts with `ERROR: dest folder does not exist`.
-2. Update the hand-maintained `latest-*` / `previous-*` / `current-*` attributes
+1. Update the hand-maintained `latest-*` / `previous-*` / `current-*` attributes
    in `global-attributes.yml` if the removed version appeared in them. The
    `latest` alias itself moves automatically (`latest-alias.js` derives it from
    the newest non-prerelease version).
-3. **Server only:** drop the segment from `PUBLISHED_VERSIONS` in
+2. **Server only:** drop the segment from `PUBLISHED_VERSIONS` in
    `ui/supplemental/js/go-redirect.js`; `test/go-redirect.test.js` fails the build
    if that list drifts from the published `public/server/*` trees. Legacy
    `go.php?to=` links for the removed version then fall back to `latest`, which is
    the intended safety net.
-4. Accept that the version's URLs now 404 — nothing redirects a retired version
+3. Accept that the version's URLs now 404 — nothing redirects a retired version
    tree. Drop a version only when its inbound links are acceptable casualties, or
    add redirects deliberately.
 
@@ -146,11 +145,14 @@ Four bits of bookkeeping remain:
 > carry a `(dev)` `display_version`. They were the upcoming numbers chosen at
 > import time — rename the folder + drop `prerelease` on actual release.
 >
-> On release rollover, three things move together: drop `prerelease` +
-> `display_version` from the released folder's `antora.yml`, repoint
-> `sync/manifest.yml` (`master` → the *next* dev folder, release branch → the
-> released folder), and bump the `latest-*`/`previous-*` attributes in
-> `global-attributes.yml`.
+> On release rollover, two things move together: drop `prerelease` +
+> `display_version` from the released folder's `antora.yml`, and bump the
+> `latest-*`/`previous-*` attributes in `global-attributes.yml`. Open the next dev
+> line by copying the released folder to its new number and re-adding the two keys.
+>
+> The branch references in the Notes column above are **historical**: they record
+> which upstream `owncloud/docs-*` branch each folder was last imported from
+> before the mirror was retired. They are no longer live mappings.
 
 ## Build locally
 

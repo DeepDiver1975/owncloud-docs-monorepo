@@ -1,5 +1,19 @@
-# Upstream sync manifest
+# Upstream sync manifest -- RETIRED, HISTORICAL RECORD ONLY
 # =====================================================================
+# The upstream sync is retired: `.github/workflows/sync-upstream.yml` has been
+# deleted and nothing consumes this file automatically any more. Documentation
+# is now authored in this repo -- `content/<product>/<version>/modules/` is
+# hand-edited here, not mirrored.
+#
+# This file is kept as provenance: it records which upstream repo and branch
+# each version folder was last imported from, which is what you need when
+# comparing a folder against its legacy origin. Do NOT run sync/sync-repo.sh
+# against it -- the mirror is destructive (`rm -rf` + `cp -a`) and would wipe
+# every edit made in this repo since the cutover.
+#
+# ---------------------------------------------------------------------
+# Historical description of the mechanism (no longer active):
+#
 # Active documentation contributions still land in the legacy
 # `owncloud/docs-*` repos. This manifest is the single source of truth for
 # mapping each upstream repo+branch onto a folder in this monorepo, and is

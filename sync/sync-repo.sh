@@ -2,6 +2,20 @@
 #
 # sync-repo.sh -- mirror one upstream docs repo's content into this monorepo.
 #
+# ############ RETIRED -- DO NOT RUN ############
+#
+# The upstream sync is retired. `.github/workflows/sync-upstream.yml` has been
+# deleted and documentation is now authored directly in this repo. This script
+# is kept only as a historical record of how the import worked.
+#
+# Running it would be DESTRUCTIVE: the mirror is `rm -rf` + `cp -a` per
+# `sync_paths` entry, so it would silently discard every edit made to
+# `content/<product>/<version>/modules/` in this repo since the cutover and
+# replace it with the upstream branch state. Refuses to run for that reason;
+# remove the guard below only if you genuinely intend a fresh re-import.
+#
+# ##############################################
+#
 # Usage:  sync/sync-repo.sh <repo-name>
 #         (repo-name must match a `repos[].name` in sync/manifest.yml)
 #
@@ -15,6 +29,24 @@
 # paths are resolved against the repo root containing this script's parent.
 #
 set -euo pipefail
+
+# Retirement guard -- see the header. The mirror is destructive; refuse by
+# default so a stray invocation cannot wipe content authored in this repo.
+if [[ "${SYNC_UPSTREAM_I_KNOW_THIS_IS_RETIRED:-}" != "1" ]]; then
+  cat >&2 <<'EOF'
+REFUSING TO RUN: the upstream sync is retired.
+
+Documentation is now authored in this repo. This script mirror-replaces
+content/<product>/<version>/modules/ from the upstream owncloud/docs-* branches
+(rm -rf + cp -a), which would discard local edits.
+
+sync/manifest.yml is kept only as a record of where each folder was imported
+from. If you really want a fresh re-import, re-run with:
+
+  SYNC_UPSTREAM_I_KNOW_THIS_IS_RETIRED=1 sync/sync-repo.sh <repo-name>
+EOF
+  exit 1
+fi
 
 REPO_NAME="${1:-}"
 if [[ -z "$REPO_NAME" ]]; then
