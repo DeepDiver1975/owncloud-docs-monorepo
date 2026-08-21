@@ -16,7 +16,7 @@ Live (GitHub Pages): https://doc.owncloud.com
 |------|--------|------|
 | Repos | 9 | 1 (this repo) |
 | Versions | git branches + backporting | **folders** under `content/<product>/<version>/` |
-| Branch model | `master` + N version branches per repo | `master` only |
+| Branch model | `master` + N version branches per repo | `main` only |
 | Search | Elasticsearch + custom index extension + CI secrets | **Pagefind** (static, build-time) |
 | UI | custom Gulp/Browserify/jQuery `docs-ui` + `ui-bundle.zip` | **stock Antora default UI** + `ui/supplemental/` |
 | Content sources | 7 remote GitHub repos × branches | local folders, authored here (upstream mirror retired) |
@@ -194,15 +194,13 @@ and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
   ```
   git commit -s -S -m "your commit message"
   ```
-- **GitHub Actions Policy**: Workflows may only use actions that are (a) owned by `owncloud`, (b) created by GitHub (`actions/*`), or (c) verified in the GitHub Marketplace.
+- **GitHub Actions Policy**: Workflows may only use actions that are (a) owned by `owncloud`, (b) created by GitHub (`actions/*`), (c) verified in the GitHub Marketplace, or (d) verified by the ownCloud Maintainers. Pin every action to its full commit SHA.
 
 ## Security
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
 Report vulnerabilities at **<https://security.owncloud.com>** -- see [SECURITY.md](SECURITY.md).
-
-Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud-bug-bounty-program)
 
 ## License
 

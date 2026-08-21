@@ -35,8 +35,8 @@ This is the consolidated documentation **monorepo**. It supersedes the previous
 npm run antora          # Antora site build only
 npm run build           # Antora build + Pagefind search index
 
-# Test
-npm test                # node --test test/*.test.js
+# Test -- build first: 4 of the redirect/alias tests skip themselves without public/
+npm run antora && npm test
 
 # Preview
 npm run antora-local && npm run serve   # http://localhost:8080
