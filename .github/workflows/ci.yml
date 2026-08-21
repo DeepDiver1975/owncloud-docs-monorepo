@@ -11,14 +11,17 @@ permissions:
   pages: write
   id-token: write
 
-# One concurrent deploy; cancel superseded runs on master.
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Scoped per ref, so a PR build only ever supersedes an older build of the
+    # SAME pull request (github.ref is refs/pull/<n>/merge). A single constant
+    # group here would make every queued run cancel the previously pending one
+    # across unrelated PRs, and `build` is a required status check — a cancelled
+    # run is not a success, so that would block merges until a manual re-run.
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -52,6 +55,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+    # One concurrent Pages deploy, never cancelled mid-publish. This job only
+    # runs on main, so the constant group serialises deploys without touching
+    # PR builds.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
