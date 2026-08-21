@@ -1,0 +1,27 @@
+name: Lint PR title
+
+on:
+  pull_request:
+    # `reopened` is required: without it, closing and reopening a PR leaves the
+    # check absent rather than carrying it over. `synchronize` is deliberately
+    # omitted -- a push cannot change the title, so it can only re-run a lint
+    # whose outcome is already known.
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: read
+
+# Scoped per ref, as in ci.yml. Two quick title edits would otherwise race, and
+# a superseded failing run finishing last would leave a red check on a title
+# that is already valid.
+concurrency:
+  group: lint-pr-title-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
