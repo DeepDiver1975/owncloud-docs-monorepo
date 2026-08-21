@@ -1,0 +1,11 @@
+# Antora UI descriptor. The UI loader picks this up from the merged UI file map
+# (bundle files overlaid with ui.supplemental_files) and publishes everything
+# listed under static_files at the SITE ROOT, ignoring `ui.output_dir` from
+# site.yml. Without it, ui/supplemental/robots.txt would be classified as a
+# regular UI asset and published as assets/robots.txt, where crawlers never look.
+# The stock antora-ui-default bundle ships no ui.yml, so this adds the descriptor
+# rather than overriding one -- if the bundle ever gains one, its static_files
+# entries must be merged in here, because this file replaces it wholesale.
+# see: https://docs.antora.org/antora-ui-default/static-files/
+static_files:
+- robots.txt

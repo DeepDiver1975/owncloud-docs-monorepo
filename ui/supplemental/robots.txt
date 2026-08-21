@@ -1,0 +1,7 @@
+# Published at the site root via the static_files list in ui.yml.
+# Crawl everything, and point crawlers at the sitemap that
+# antora-extensions/sitemap-cleanup.js writes to the site root.
+User-agent: *
+Disallow:
+
+Sitemap: https://doc.owncloud.com/sitemap.xml
