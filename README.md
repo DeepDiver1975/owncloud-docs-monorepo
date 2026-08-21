@@ -1,4 +1,4 @@
-# ownCloud Docs — Monorepo (experimental)
+# ownCloud Documentation
 
 <!-- OSPO-managed README | Generated: 2026-08-21 | v2 -->
 
