@@ -10,9 +10,11 @@
               overlay (also via Ctrl/Cmd+K). bundle-path MUST be absolute (the
               components dynamic-import() pagefind.js relative to
               pagefind-component-ui.js's URL, so "./pagefind/" would double and
-              404 on shallow pages). On a GitHub Pages PROJECT site the index is
-              served under the repo subpath, so the absolute path includes it. --}}
-        <pagefind-config bundle-path="/owncloud-docs-monorepo/pagefind/"></pagefind-config>
+              404 on shallow pages). The site is served at the root of the custom
+              domain doc.owncloud.com, so the index is at /pagefind/ -- which is
+              also where it sits under `npm run serve`. A repo-subpath prefix
+              here would 404 on both. --}}
+        <pagefind-config bundle-path="/pagefind/"></pagefind-config>
         <pagefind-modal-trigger></pagefind-modal-trigger>
         <pagefind-modal reset-on-close></pagefind-modal>
       </div>
