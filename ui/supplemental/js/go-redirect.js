@@ -113,7 +113,7 @@
    * redirect a legacy `go.php?to=<key>` request to, or null when this is not a
    * go.php request (so callers leave the page untouched).
    *
-   * @param {string} pathname e.g. "/owncloud-docs-monorepo/server/latest/go.php"
+   * @param {string} pathname e.g. "/server/latest/go.php"
    * @param {string} search   e.g. "?to=admin-sharing"
    * @returns {string|null} the redirect target, relative to the site, or null
    */

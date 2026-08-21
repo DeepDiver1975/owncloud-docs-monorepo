@@ -1,9 +1,12 @@
 site:
   title: Documentation for ownCloud (A Kiteworks Company)
-  # Deploy target is a GitHub Pages PROJECT site served under a subpath.
-  # This URL drives canonical links (used by the Pagefind dedup layout) and
-  # absolute asset resolution -- it must match the real publish location.
-  url: https://deepdiver1975.github.io/owncloud-docs-monorepo
+  # Deploy target is GitHub Pages on the custom domain doc.owncloud.com, served
+  # at the domain ROOT (no repo subpath). This URL drives canonical links (used
+  # by the Pagefind dedup layout in ui/supplemental/layouts/default.hbs), the
+  # sitemap written by antora-extensions/sitemap-cleanup.js, and the navbar logo
+  # link -- it must match the real publish location. Local preview overrides it
+  # via `npm run antora-local` (--url http://localhost:8080).
+  url: https://doc.owncloud.com
   # the site's landing page resides in the main content component
   # but it MUST be named ROOT to get a component/version-less landing page.
   # see: https://docs.antora.org/antora/latest/page/start-page/
