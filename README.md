@@ -202,6 +202,8 @@ and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
 
 Report vulnerabilities at **<https://security.owncloud.com>** -- see [SECURITY.md](SECURITY.md).
 
+Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud-bug-bounty-program)
+
 ## License
 
 This project is licensed under the [AGPL-3.0](LICENSE).
