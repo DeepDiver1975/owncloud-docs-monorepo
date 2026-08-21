@@ -2,7 +2,7 @@
   "private": true,
   "description": "The ownCloud documentation (consolidated monorepo)",
   "homepage": "https://github.com/owncloud/docs.owncloud.com#readme",
-  "license": "AGPL-3.0",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "antora": "antora --stacktrace site.yml",
     "antora-local": "antora --stacktrace --url http://localhost:8080 site.yml",
