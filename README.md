@@ -149,10 +149,14 @@ Three bits of bookkeeping remain:
 > carry a `(dev)` `display_version`. They were the upcoming numbers chosen at
 > import time — rename the folder + drop `prerelease` on actual release.
 >
-> On release rollover, two things move together: drop `prerelease` +
-> `display_version` from the released folder's `antora.yml`, and bump the
-> `latest-*`/`previous-*` attributes in `global-attributes.yml`. Open the next dev
-> line by copying the released folder to its new number and re-adding the two keys.
+> On release rollover, three things move together: drop `prerelease` +
+> `display_version` from the released folder's `antora.yml`, bump the
+> `latest-*`/`previous-*` attributes in `global-attributes.yml`, and bump the
+> version segments of the affected links in `ui/supplemental/llms.txt` (those URLs
+> are pinned deliberately, because `/latest/` is a `noindex` redirect stub;
+> `test/static-files.test.js` fails the build while they are stale). Open the next
+> dev line by copying the released folder to its new number and re-adding the two
+> keys.
 >
 > The branch references in the Notes column above are **historical**: they record
 > which upstream `owncloud/docs-*` branch each folder was last imported from

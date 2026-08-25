@@ -7,5 +7,10 @@
 # rather than overriding one -- if the bundle ever gains one, its static_files
 # entries must be merged in here, because this file replaces it wholesale.
 # see: https://docs.antora.org/antora-ui-default/static-files/
+#
+# llms.txt (https://llmstxt.org/) pins the version of every page it links to, so
+# its links need updating on a release rollover -- test/static-files.test.js fails
+# the build while they are stale.
 static_files:
 - robots.txt
+- llms.txt
