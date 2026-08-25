@@ -30,7 +30,10 @@ function latestByComponent () {
     if (!fs.statSync(productDir).isDirectory()) continue
     for (const entry of fs.readdirSync(productDir)) {
       const descriptor = path.join(productDir, entry, 'antora.yml')
-      if (!fs.existsSync(descriptor)) continue // versionless component
+      // Versionless components (main, webui) keep their antora.yml one level up,
+      // in content/<product>/, so this loop never sees a descriptor for them --
+      // which is exactly what should happen: they have no version to compare.
+      if (!fs.existsSync(descriptor)) continue
       const yaml = fs.readFileSync(descriptor, 'utf8')
       if (/^prerelease:\s*true\s*$/m.test(yaml)) continue
       const name = (yaml.match(/^name:\s*'?([^'\s]+)/m) || [])[1]
@@ -46,4 +49,4 @@ function latestByComponent () {
   return latest
 }
 
-module.exports = { latestByComponent, compareVersions }
+module.exports = { latestByComponent }

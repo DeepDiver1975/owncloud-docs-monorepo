@@ -6,7 +6,8 @@
 // asset and lands under `assets/` instead -- which is how robots.txt got lost
 // when the docs site moved from the docs-ui bundle into this monorepo. These
 // tests assert against the generated public/ tree and skip when the site has not
-// been built yet (run `npm run antora`).
+// been built yet (run `npm run antora`). The two source-only guards -- llms.txt
+// line-ending handling and the global-attributes.yml cross-check -- run either way.
 
 const test = require('node:test')
 const assert = require('node:assert/strict')
@@ -23,6 +24,18 @@ const PUBLIC = path.join(ROOT, 'public')
 // Pinned versions can go stale, so the guards below hold them against the
 // content tree and fail the build on the next release rollover.
 const LATEST_BY_COMPONENT = latestByComponent()
+
+// Each multi-version component's `latest-*-version` attribute in
+// global-attributes.yml. The attribute names do not all follow the component name
+// (`ios-app` -> `latest-ios-version`), so the mapping is explicit; the test below
+// fails if a component ever lacks an entry.
+const LATEST_ATTRIBUTE_BY_COMPONENT = {
+  android: 'latest-android-version',
+  desktop: 'latest-desktop-version',
+  'ios-app': 'latest-ios-version',
+  ocis: 'latest-ocis-version',
+  server: 'latest-server-version',
+}
 
 // site.url from site.yml -- the two-space indent scopes the match to the `site:`
 // block, so the content source's `- url: .` cannot match. Deriving it here keeps
@@ -41,9 +54,11 @@ function builtOrSkip (t, rel) {
 
 // Every `- [text](url): description` entry of an llms.txt list, in file order.
 // Malformed list items are reported rather than skipped, so a typo cannot hide a
-// link from the checks below.
+// link from the checks below. Split on CRLF as well as LF: the repo carries no
+// `.gitattributes`, so a checkout with `core.autocrlf=true` hands Antora a CRLF
+// file, and Antora copies static files through byte-for-byte.
 function llmsLinks (llms) {
-  const items = llms.split('\n').filter((line) => line.startsWith('- '))
+  const items = llms.split(/\r?\n/).filter((line) => line.startsWith('- '))
   const malformed = []
   const links = []
   for (const item of items) {
@@ -77,11 +92,19 @@ test('llms.txt is published at the site root in the llmstxt.org format', (t) => 
   if (llms == null) return
   // The convention is strict about the head of the file: a single H1 naming the
   // site, then a blockquote summarising it. See https://llmstxt.org/
-  const h1s = llms.split('\n').filter((line) => line.startsWith('# '))
+  const h1s = llms.split(/\r?\n/).filter((line) => line.startsWith('# '))
   assert.equal(h1s.length, 1, 'llms.txt must have exactly one `# ` H1')
   assert.match(llms, /^# \S/, 'llms.txt must open with its H1')
   assert.match(llms, /^> \S/m, 'llms.txt has no `> ` blockquote summary')
   assert.ok(llmsLinks(llms).length > 0, 'llms.txt lists no links')
+})
+
+test('llms.txt parsing is line-ending agnostic', () => {
+  // Guards the checks below against a CRLF checkout: with an LF-only split every
+  // list item keeps a trailing \r, no item matches, and all four llms.txt tests
+  // fail as "malformed" instead of reporting what is actually wrong.
+  const crlf = '# Title\r\n\r\n> Summary\r\n\r\n## Section\r\n\r\n- [Page](https://example.com/a.html): Description.\r\n'
+  assert.deepEqual(llmsLinks(crlf), [{ text: 'Page', url: 'https://example.com/a.html' }])
 })
 
 test('every llms.txt link points at a page this build publishes', (t) => {
@@ -131,6 +154,46 @@ test('every version pinned in llms.txt is the current release', (t) => {
     stale,
     [],
     'llms.txt pins a version that is no longer current -- update ui/supplemental/llms.txt (see README, release rollover)'
+  )
+})
+
+test('llms.txt links every product the content tree publishes', (t) => {
+  const llms = builtOrSkip(t, 'llms.txt')
+  if (llms == null) return
+  // Without this, a truncated file or a dropped section still passes every check
+  // above -- and a newly imported product would never be noticed as missing.
+  const linked = new Set()
+  for (const { url } of llmsLinks(llms)) {
+    if (url.startsWith(`${SITE_URL}/`)) linked.add(url.slice(SITE_URL.length + 1).split('/')[0])
+  }
+  const unlinked = Object.keys(LATEST_BY_COMPONENT).filter((component) => !linked.has(component))
+  assert.deepEqual(
+    unlinked,
+    [],
+    'llms.txt links no page of these components -- add them to ui/supplemental/llms.txt'
+  )
+})
+
+test('global-attributes.yml agrees with the content tree on the current release', () => {
+  // The second place a "current release" is recorded: the `latest-*-version`
+  // attributes the site nav builds its product links from
+  // (content/main/modules/ROOT/partials/nav.adoc). Holding them against the same
+  // content tree the llms.txt guards use keeps a rollover from bumping one source
+  // and leaving llms.txt and the human-facing nav pointing at different versions.
+  const yaml = fs.readFileSync(path.join(ROOT, 'global-attributes.yml'), 'utf8')
+  assert.deepEqual(
+    Object.keys(LATEST_ATTRIBUTE_BY_COMPONENT).sort(),
+    Object.keys(LATEST_BY_COMPONENT).sort(),
+    'a multi-version component has no `latest-*-version` mapping -- add it to LATEST_ATTRIBUTE_BY_COMPONENT'
+  )
+  const fromAttributes = {}
+  for (const [component, attribute] of Object.entries(LATEST_ATTRIBUTE_BY_COMPONENT)) {
+    fromAttributes[component] = (yaml.match(new RegExp(`^\\s*${attribute}:\\s*'?([^'\\s]+)`, 'm')) || [])[1]
+  }
+  assert.deepEqual(
+    fromAttributes,
+    LATEST_BY_COMPONENT,
+    'global-attributes.yml is stale against the content tree -- bump the `latest-*-version` attributes (see README, release rollover)'
   )
 })
 

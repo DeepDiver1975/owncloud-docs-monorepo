@@ -24,7 +24,7 @@
 ## Web User Interfaces
 
 - [Web User Interfaces Guide](https://doc.owncloud.com/webui/index.html): Overview of the ownCloud web user interfaces.
-- [Web Infinite Scale](https://doc.owncloud.com/webui/owncloud_web/index.html): ownCloud Web, the user interface optimized for Infinite Scale.
+- [ownCloud Web](https://doc.owncloud.com/webui/owncloud_web/index.html): The ownCloud web user interface optimized for Infinite Scale.
 - [Web ownCloud Classic](https://doc.owncloud.com/server/11.0/classic_ui/index.html): The classic web user interface of an ownCloud Classic server.
 
 ## Desktop and Mobile Apps
@@ -46,5 +46,5 @@
 
 ## Optional
 
-- [Sitemap](https://doc.owncloud.com/sitemap.xml): Every page of the current release of every product.
+- [Sitemap](https://doc.owncloud.com/sitemap.xml): Sitemap index linking one per-product sitemap of every page of the current release.
 - [How to Contribute](https://doc.owncloud.com/how_to_contribute.html): Contributing to the ownCloud documentation.
