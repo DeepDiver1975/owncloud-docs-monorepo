@@ -1,0 +1,50 @@
+# ownCloud Documentation
+
+> Documentation for the ownCloud product family: ownCloud Infinite Scale, ownCloud
+> Classic, the ownCloud web user interfaces, and the desktop and mobile sync
+> clients. Every link below points at the current release of its product; earlier
+> releases live under the same paths with a different version segment.
+
+## Overview
+
+- [ownCloud Documentation Overview](https://doc.owncloud.com/index.html): Entry page linking the documentation of every ownCloud product.
+
+## Infinite Scale
+
+- [Infinite Scale](https://doc.owncloud.com/ocis/8.2/index.html): Infinite Scale is a data platform providing tools to integrate, organize, share and govern data and metadata.
+- [Infinite Scale Admin Documentation](https://doc.owncloud.com/ocis/8.2/admin/index.html): General topics, installation and administrative tasks for Infinite Scale.
+- [Infinite Scale Developer Documentation](https://doc.owncloud.com/ocis/8.2/developer/index.html): Developer related topics for Infinite Scale.
+
+## ownCloud Classic
+
+- [ownCloud Classic](https://doc.owncloud.com/server/11.0/index.html): Introduction to ownCloud Classic, the PHP based ownCloud server.
+- [ownCloud Classic Admin Manual](https://doc.owncloud.com/server/11.0/admin_manual/index.html): Installing, configuring, operating and maintaining an ownCloud Classic server.
+- [ownCloud Classic Developer Manual](https://doc.owncloud.com/server/11.0/developer_manual/index.html): Writing apps for and integrating with ownCloud Classic.
+
+## Web User Interfaces
+
+- [Web User Interfaces Guide](https://doc.owncloud.com/webui/index.html): Overview of the ownCloud web user interfaces.
+- [ownCloud Web](https://doc.owncloud.com/webui/owncloud_web/index.html): The ownCloud web user interface optimized for Infinite Scale.
+- [Web ownCloud Classic](https://doc.owncloud.com/server/11.0/classic_ui/index.html): The classic web user interface of an ownCloud Classic server.
+
+## Desktop and Mobile Apps
+
+- [Desktop App](https://doc.owncloud.com/desktop/7.1/index.html): Synchronize your files from connected servers to your local computer.
+- [Mobile App for Android](https://doc.owncloud.com/android/4.7/index.html): Install, configure, use and troubleshoot the ownCloud app for Android.
+- [Mobile App for iOS](https://doc.owncloud.com/ios-app/12.7/index.html): Install, configure, use and troubleshoot the ownCloud app for iOS.
+
+## Releases and Release Notes
+
+- [Infinite Scale Releases](https://doc.owncloud.com/ocis_releases.html): Released Infinite Scale versions and their support status.
+- [Infinite Scale Release Notes](https://doc.owncloud.com/ocis_release_notes.html): What changed in each Infinite Scale release.
+- [ownCloud Classic Releases](https://doc.owncloud.com/server_releases.html): Released ownCloud Classic versions and their support status.
+- [ownCloud Classic Release Notes](https://doc.owncloud.com/server_release_notes.html): What changed in each ownCloud Classic release.
+- [App Releases](https://doc.owncloud.com/client_releases.html): Released desktop and mobile app versions.
+- [Desktop App Release Notes](https://doc.owncloud.com/desktop_release_notes.html): What changed in each desktop app release.
+- [iOS App Release Notes](https://doc.owncloud.com/ios_release_notes.html): What changed in each iOS app release.
+- [Android App Release Notes](https://doc.owncloud.com/android_release_notes.html): What changed in each Android app release.
+
+## Optional
+
+- [Sitemap](https://doc.owncloud.com/sitemap.xml): Sitemap index linking one per-product sitemap of every page of the current release.
+- [How to Contribute](https://doc.owncloud.com/how_to_contribute.html): Contributing to the ownCloud documentation.
