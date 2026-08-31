@@ -29,7 +29,7 @@ Antora + AsciiDoc are kept (native multi-version/multi-component support).
 ```
 site.yml                 Antora playbook (local content only)
 package.json             antora + asciidoctor + pagefind toolchain
-antora-extensions/       comp-version, sitemap-cleanup, global-attributes loader
+antora-extensions/       comp-version, latest/next-alias, sitemap-cleanup, global-attributes loader
 asciidoc-extensions/     tabs, remote-include
 global-attributes.yml    site-wide AsciiDoc attributes (local)
 ui/supplemental/         branding + Pagefind modal search on the stock UI
@@ -71,10 +71,16 @@ be added:
 - **The version is legible everywhere it matters** — folder, path, PR diff, and
   URL. A reviewer reads `content/ocis/8.2/…` in a diff and knows the target
   version without consulting a branch→version mapping.
-- **`latest` is generated, never a source folder.**
+- **`latest` and `next` are generated, never source folders.**
   `antora-extensions/latest-alias.js` publishes `/<product>/latest/` as a tree of
   redirect stubs pointing at the newest non-prerelease version; `site.yml`
   deliberately does not set `latest_version_segment`.
+  `antora-extensions/next-alias.js` does the same for `/<product>/next/`, the
+  version segment the legacy site used for each product's `master` build — those
+  URLs are still linked and indexed, so they redirect to the closest live page
+  instead of 404ing. Its target is the component's prerelease version, falling
+  back to the latest release (and, per page, to the latest release for anything
+  the dev line dropped). Both trees are `noindex` and stay out of the sitemap.
 
 See the dev-version note under [Versions imported](#versions-imported) for what
 moves together on release rollover.
@@ -121,11 +127,14 @@ Three bits of bookkeeping remain:
 
 1. Update the hand-maintained `latest-*` / `previous-*` / `current-*` attributes
    in `global-attributes.yml` if the removed version appeared in them. The
-   `latest` alias itself moves automatically (`latest-alias.js` derives it from
-   the newest non-prerelease version).
+   `latest` and `next` aliases themselves move automatically (`latest-alias.js`
+   derives its target from the newest non-prerelease version, `next-alias.js` from
+   the `prerelease` flag).
 2. **Server only:** drop the segment from `PUBLISHED_VERSIONS` in
    `ui/supplemental/js/go-redirect.js`; `test/go-redirect.test.js` fails the build
-   if that list drifts from the published `public/server/*` trees. Legacy
+   if that list drifts from the published `public/server/*` trees. Only real
+   version numbers are maintained there — `latest` and `next` are permanent
+   entries, because they are generated redirect trees rather than versions. Legacy
    `go.php?to=` links for the removed version then fall back to `latest`, which is
    the intended safety net.
 3. Accept that the version's URLs now 404 — nothing redirects a retired version
@@ -155,6 +164,9 @@ Three bits of bookkeeping remain:
 > version segments of the affected links in `ui/supplemental/llms.txt` (those URLs
 > are pinned deliberately, because `/latest/` is a `noindex` redirect stub).
 > `test/static-files.test.js` fails the build while any of the three disagree.
+>
+> Dropping `prerelease` also moves `/<product>/next/` on to the newly opened dev
+> line by itself — `next-alias.js` reads the flag, so there is nothing to bump.
 >
 > Then open the next dev line by copying the released folder to its new number and
 > re-adding the two keys. **Server only:** that copy publishes a new

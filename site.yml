@@ -37,6 +37,9 @@ urls:
   # antora-extensions/latest-alias.js publishes a `latest` segment as a tree of
   # static meta-refresh redirect stubs pointing at each component's latest
   # non-prerelease version -- explicit real URLs AND a working /…/latest/.
+  # antora-extensions/next-alias.js publishes a `next` segment the same way, for
+  # the legacy `…/next/…` URLs (the old per-product `master` builds); it points at
+  # each component's prerelease version, falling back to the latest release.
 
 runtime:
   # local content only -- nothing to fetch
@@ -69,6 +72,7 @@ antora:
   extensions:
     - ./antora-extensions/comp-version.js
     - ./antora-extensions/latest-alias.js
+    - ./antora-extensions/next-alias.js
     - require: ./antora-extensions/load-global-site-attributes.js
       attributefile: ./global-attributes.yml
       enabled: true
