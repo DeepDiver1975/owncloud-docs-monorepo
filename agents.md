@@ -16,7 +16,7 @@ This is the consolidated documentation **monorepo**. It supersedes the previous
 
 - `site.yml` -- Antora playbook; all content sources are local
 - `content/<product>/<version>/` -- documentation content; products are `main`, `server`, `webui`, `ocis`, `desktop`, `android`, `ios`
-- `antora-extensions/` -- custom Antora extensions (`comp-version`, `latest-alias`, `sitemap-cleanup`, `load-global-site-attributes`)
+- `antora-extensions/` -- custom Antora extensions (`comp-version`, `latest-alias`, `next-alias`, `sitemap-cleanup`, `load-global-site-attributes`)
 - `asciidoc-extensions/` -- custom AsciiDoc extensions (`tabs`, `remote-include-processor`)
 - `ui/supplemental/` -- supplemental files layered onto the stock Antora default UI
 - `global-attributes.yml` -- site-wide AsciiDoc attributes

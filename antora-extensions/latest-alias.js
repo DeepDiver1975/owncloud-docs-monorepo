@@ -16,7 +16,11 @@
  * hides the real version), so we add the alias files ourselves. Under
  * redirect_facility: static each alias renders as a <meta http-equiv="refresh">
  * stub, so both work on GitHub Pages.
+ *
+ * The mirroring itself lives in lib/alias-tree.js, shared with next-alias.js.
  */
+const { mirrorPages, mirrorMoveRedirects } = require('./lib/alias-tree')
+
 module.exports.register = function () {
   const LATEST = 'latest'
 
@@ -63,60 +67,18 @@ module.exports.register = function () {
       }
 
       // (1) latest/** redirect tree mirroring every published page.
-      contentCatalog
-        .findBy({ component: component.name, version: latest.version, family: 'page' })
-        .forEach((page) => {
-          // Only real published pages are valid redirect targets. AsciiDoc
-          // partials (_*.adoc include fragments) are in the page family but have
-          // no pub/out; aliasing them makes @antora/redirect-producer throw
-          // "Cannot read properties of undefined (reading 'url')". Guard on both.
-          if (!page.pub || !page.pub.url || !page.out) return
-          contentCatalog.addFile({
-            src: {
-              component: component.name,
-              version: LATEST,
-              module: page.src.module,
-              family: 'alias',
-              relative: page.src.relative,
-            },
-            rel: page,
-          })
-        })
+      mirrorPages(contentCatalog, component, latest.version, LATEST)
     })
   })
 
-  // (3) Mirror the latest version's own move-redirects into the `latest` tree.
-  // Antora registers the redirect stubs declared via `page-aliases` while it
-  // converts documents, so they do not exist yet at contentClassified and pass
-  // (1) by unnoticed -- they are in the `alias` family, not `page`. Without this
-  // pass, an old page path that survives in the latest version only as a
-  // redirect (e.g. a page renamed in server 11.0) resolves under the real
-  // version but 404s under /<component>/latest/. The legacy go.php short links
-  // (ui/supplemental/js/go-redirect.js) are keyed on those older page paths and
-  // fall back to /server/latest/ for any unpublished version, so they depend on
-  // the redirects being mirrored here.
+  // (3) Mirror the latest version's own move-redirects into the `latest` tree, so
+  // an old page path that survives in the latest version only as a `page-aliases`
+  // redirect keeps resolving under /<component>/latest/ too. Those stubs do not
+  // exist yet at contentClassified, hence the second hook -- see
+  // mirrorMoveRedirects() in lib/alias-tree.js.
   this.once('documentsConverted', ({ contentCatalog }) => {
     eachAliasableComponent(contentCatalog, (component, latest) => {
-      contentCatalog
-        .findBy({ component: component.name, version: latest.version, family: 'alias' })
-        .forEach((alias) => {
-          // Chain the mirror straight to the redirect's ultimate target instead
-          // of to the redirect itself: one hop from /latest/ to real content,
-          // and `rel` must be a publishable page for the redirect producer.
-          const target = alias.rel
-          if (!target || !target.pub || !target.pub.url || !target.out) return
-          const src = {
-            component: component.name,
-            version: LATEST,
-            module: alias.src.module,
-            family: 'alias',
-            relative: alias.src.relative,
-          }
-          // (1) already claimed this path if the latest version publishes a real
-          // page there; re-adding it would replace a live page with a redirect.
-          if (contentCatalog.getById(src)) return
-          contentCatalog.addFile({ src, rel: target })
-        })
+      mirrorMoveRedirects(contentCatalog, component, latest.version, LATEST)
     })
   })
 }
