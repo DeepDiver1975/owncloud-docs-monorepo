@@ -98,6 +98,23 @@ See the xref:ocis:admin:migration/upgrading-ocis.adoc[Migration and Upgrade, win
 
 There are no breaking changes in Infinite Scale 8.1
 
+== Infinite Scale 8.0.8 (Production)
+
+Please find the most important changes described here or refer to the changelog for a complete list of changes:
+
+* Infinite Scale: {ocis-releases-url}/v8.0.8[Changes in 8.0.8, window=_blank]
+
+[discrete]
+=== Issues Fixed
+
+This release has security and bugfixes.
+
+* Bugfix: Fix share metadata corruption during concurrent share operations: https://github.com/owncloud/ocis/pull/12621[#12621]
+* Bugfix: Cache LDAP instance mapper lookups: https://github.com/owncloud/ocis/pull/12823[#12823]
+* Security: Bump golang.org/x/image to v0.45.0: https://github.com/owncloud/ocis/pull/12808[#12808]
+* Security: Bump Go to 1.25.13: https://github.com/owncloud/ocis/pull/12832[#12832]
+* Enhancement: Add TLS support for NATS store and registry connections: https://github.com/owncloud/ocis/pull/12765[#12765]
+
 == Infinite Scale 8.0.7 (Production)
 
 Please find the most important changes described here or refer to the changelog for a complete list of changes:
