@@ -3,3 +3,26 @@ public/
 .cache/
 _import/
 docs/superpowers/
+
+# macOS and IDEs
+.DS_Store
+.vscode/
+.idea/
+
+# required for ocis_helpers
+#
+# the output directory must not be tracked and is only relevant when the codes runs.
+# usually it will be removed, but during development, the relevant code snipplet may be temporary commented
+# if another directory is used, it must be changed here in and in main.go 
+content/ocis/*/output/
+
+# the services folder contains the generated files relevant for the docs.
+# most of files will be recreated if not exists or overwritten.
+# except the envvars folder where some generated files need to be persistent an tracked for that version
+content/ocis/*/services/*
+!content/ocis/*/services/persistent_files/
+content/ocis/*/services/persistent_files/__*
+
+# the .env file is only relevant when the code runs and is usually deleted when the job completes
+ocis_helpers/.env
+
