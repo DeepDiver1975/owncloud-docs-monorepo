@@ -107,9 +107,21 @@ func doEnvVarDeltas(isDryrun bool) {
 
 	fileOld, fileNew := getSources(cfg.VersionOld, cfg.VersionNew)
 
-	addedWith, addedElsewhere := getAdded(fileNew, excludePattern, cfg.ToVersion)
-	removedWith               := getRemoved(fileOld, fileNew)
-	deprecatedWith            := getDeprecated(fileNew)
+	addedWith, addedElsewhere, addedGlobalBefore := getAdded(fileOld, fileNew, excludePattern, cfg.ToVersion)
+	removedWith                                  := getRemoved(fileOld, fileNew)
+	deprecatedWith                               := getDeprecated(fileNew)
+
+	// global envvars that are flagged as added but are already published with the base version.
+	// they are dropped from the added table, printing them is for information only
+	if len(addedGlobalBefore) > 0 && Env.isVerbose == true {
+		fmt.Printf("The following global envvars are flagged as added with %s but are already present in %s, " +
+			"they are excluded from the added table:\n\n", cfg.ToVersion, cfg.VersionOld)
+
+		for _, key := range addedGlobalBefore {
+			fmt.Printf("%s\n", key)
+		}
+		fmt.Printf("\n")
+	}
 
 	// additional, unexpected introduction versions have been found.
 	// although we just could exclude them automatically,
@@ -275,16 +287,27 @@ func (l *EnvVarList) add(key string, value EnvVar) {
 }
 
 // getAdded collects the envvars introduced with the target version.
-// envvars carrying an unexpected introduction version are returned separately
-func getAdded(fileNew *EnvVarList, excludePattern []string, toVersion string) (*EnvVarList, []AddedElsewhere) {
+// envvars carrying an unexpected introduction version are returned separately,
+// so are global envvars that are already present in the base version
+func getAdded(fileOld *EnvVarList, fileNew *EnvVarList, excludePattern []string, toVersion string) (*EnvVarList, []AddedElsewhere, []string) {
 
-	addedWith      := newEnvVarList(0)
-	addedElsewhere := []AddedElsewhere{}
+	addedWith         := newEnvVarList(0)
+	addedElsewhere    := []AddedElsewhere{}
+	addedGlobalBefore := []string{}
 
 	for _, key := range fileNew.keys {
 		value := fileNew.values[key]
 		if isExcluded(value.IntroductionVersion, excludePattern) {
 			continue
+		}
+		// a global envvar starting with OCIS_ is shared by multiple services and carries the
+		// introduction version of the service that adopted it last. it can therefore be flagged
+		// as added though it is already published with the base version, which makes it a no-add
+		if strings.HasPrefix(key, "OCIS_") {
+			if _, ok := fileOld.values[key]; ok {
+				addedGlobalBefore = append(addedGlobalBefore, key)
+				continue
+			}
 		}
 		// the requirement says that we only want to catch the target version
 		if value.IntroductionVersion == toVersion {
@@ -295,7 +318,7 @@ func getAdded(fileNew *EnvVarList, excludePattern []string, toVersion string) (*
 		}
 	}
 
-	return addedWith, addedElsewhere
+	return addedWith, addedElsewhere, addedGlobalBefore
 }
 
 // isExcluded reports if an introduction version is covered by the exclude patterns.
