@@ -13,13 +13,13 @@ import (
 // the struct that provides all envvars defined in .env
 // note that the values of these variables are defined in 'main.go'
 type ESt struct {
-    isVerbose    bool
-    isRemove     bool
-    services_dir string
-    output_dir   string
-    ocis_dir     string
-    folder_mode  os.FileMode
-    file_mode    os.FileMode
+    isVerbose        bool
+    isRemove         bool
+    services_dir     string
+    output_dir       string
+    ocis_dir         string
+    folder_mode      os.FileMode
+    file_mode        os.FileMode
 }
 
 // the variable that provides the struct
@@ -42,9 +42,7 @@ const persistent_files    = "persistent_files/"
 const extened_files       = "extended/"
 const adoc_files          = "adoc/"
 const yaml_files          = "yaml/"
-
-// there is another folder: "env_var_deltas/"
-// the folder and its content is managed by a Python program (changed_envvars.py)
+const delta_files         = "env_var_deltas/"
 
 const yamlServiceSource   = "env_vars.yaml"
 const yamlExtendedSource  = "extended_vars.yaml"

@@ -21,7 +21,6 @@ content/ocis/*/output/
 # except the envvars folder where some generated files need to be persistent an tracked for that version
 content/ocis/*/services/*
 !content/ocis/*/services/persistent_files/
-content/ocis/*/services/persistent_files/__*
 
 # the .env file is only relevant when the code runs and is usually deleted when the job completes
 ocis_helpers/.env

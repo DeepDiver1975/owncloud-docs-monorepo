@@ -1,0 +1,46 @@
+# config file for the 'deltas' task of the ocis_helpers go program
+# relevant for each ocis version
+
+# CHANGE according your needs (version comparison):
+# 'versionOld' is the base version to compare from
+# 'versionNew' is the target version to compare to and MUST match the version given
+# these are the version folder names
+# branches are written the following: 'x.y' such as '8.1'
+versionOld: "8.0"
+versionNew: "8.1"
+
+# CHANGE according your needs (for printing, toVersion also to identify all other findings that should be excluded)
+fromVersion: "8.0.0"
+toVersion:   "8.1.0"
+
+# CHANGE according your needs (for file names to be created)
+# this will create files such as 8.0.0-8.1.0-added, 8.0.0-8.1.0-removed etc.
+# this must match which versions you compare.
+nameComponent: "8.0.0-8.1.0"
+
+# ADD elements of version that have already been published so they get EXCLUDED from gathering.
+# from version 7 onwards we dont use patch versions anymore - they must be set to 0.
+# fix any patch version in the ocis repo first and rredo the services task of the helper process.
+# the last excluded entry should be the version you take as comparison base which is 'fromVersion'.
+defaultExcludePattern:
+  - "pre5.0"
+  - "5.0"
+  - "6.0"
+  - "6.0.0"
+  - "6.0.1"
+  - "6.1.0"
+  - "6.7"
+  - "7.0"
+  - "7.0.0"
+  - "7.1.0"
+  - "7.2.0"
+  - "7.3.0"
+  - "8.0.0"
+
+# IMPORTANT: there may be additional unexpected versions that may appear from backporting in ocis which
+# must be excluded too. if found, they are printed to the console for furter investigation.
+# it is therefore highly recommended to use the dryrun flag first.
+extraExcludePattern:
+#  - ""
+  - "8.2.0"
+  - "8.3.0"
