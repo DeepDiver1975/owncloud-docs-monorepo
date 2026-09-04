@@ -1,0 +1,262 @@
+// # Added Variables between oCIS 8.2.0 and oCIS 8.3.0
+// commenting the headline to make it better includable
+
+// table created per 2026.09.04
+// the table should be recreated/updated on source () changes
+
+[width="100%",cols="~,~,~,~",options="header"]
+|===
+| Service | Variable | Description | Default
+
+| xref:{s-path}/activitylog.adoc[Activitylog]
+| ACTIVITYLOG_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| ACTIVITYLOG_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| ACTIVITYLOG_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/collaboration.adoc[Collaboration]
+| COLLABORATION_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| COLLABORATION_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| COLLABORATION_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/eventhistory.adoc[Eventhistory]
+| EVENTHISTORY_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| EVENTHISTORY_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| EVENTHISTORY_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/gateway.adoc[Gateway]
+| GATEWAY_PROVIDER_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| GATEWAY_PROVIDER_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| GATEWAY_PROVIDER_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/graph.adoc[Graph]
+| GRAPH_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| GRAPH_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| GRAPH_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| 
+| GRAPH_MAX_IMAGE_FILE_SIZE
+| The maximum file size of an image which can be set as a space image. Must be less than or equal to 'THUMBNAILS_MAX_INPUT_IMAGE_FILE_SIZE' of the thumbnails service, otherwise images between the two values are accepted but cannot be rendered. Usable common abbreviations: [KB, KiB, MB, MiB, GB, GiB, TB, TiB, PB, PiB, EB, EiB], example: 2GB. Set to 0 to not limit the file size.
+| 50MB
+
+| xref:{s-path}/invitations.adoc[Invitations]
+| INVITATIONS_KEYCLOAK_EXECUTE_ACTIONS
+| A comma-separated list of Keycloak required actions sent to invited guests via the execute-actions email. Values are passed to Keycloak as-is. Defaults to 'UPDATE_PASSWORD,VERIFY_EMAIL'. See the Environment Variable Types description for more details.
+| [UPDATE_PASSWORD VERIFY_EMAIL]
+
+| xref:{s-path}/notifications.adoc[Notifications]
+| NOTIFICATIONS_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| NOTIFICATIONS_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| NOTIFICATIONS_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/ocs.adoc[OCS]
+| OCS_PRESIGNEDURL_SIGNING_KEYS_STORE_ENABLE_TLS
+| Activate TLS for the connection to the signing key store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| OCS_PRESIGNEDURL_SIGNING_KEYS_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the signing key store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| OCS_PRESIGNEDURL_SIGNING_KEYS_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the signing key store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/postprocessing.adoc[Postprocessing]
+| POSTPROCESSING_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| POSTPROCESSING_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| POSTPROCESSING_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/proxy.adoc[Proxy]
+| PROXY_OIDC_USERINFO_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| PROXY_OIDC_USERINFO_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| PROXY_OIDC_USERINFO_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| 
+| PROXY_PRESIGNEDURL_SIGNING_KEYS_STORE_ENABLE_TLS
+| Activate TLS for the connection to the signing key store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| PROXY_PRESIGNEDURL_SIGNING_KEYS_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the signing key store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| PROXY_PRESIGNEDURL_SIGNING_KEYS_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the signing key store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/settings.adoc[Settings]
+| SETTINGS_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| SETTINGS_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| SETTINGS_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/storage_publiclink.adoc[Storage Publiclink]
+| STORAGE_PUBLICLINK_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_PUBLICLINK_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_PUBLICLINK_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/storage_system.adoc[Storage System]
+| STORAGE_SYSTEM_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_SYSTEM_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_SYSTEM_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/storage_users.adoc[Storage Users]
+| STORAGE_USERS_FILEMETADATA_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_USERS_FILEMETADATA_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_USERS_FILEMETADATA_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| 
+| STORAGE_USERS_ID_CACHE_ENABLE_TLS
+| Activate TLS for the connection to the cache store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_USERS_ID_CACHE_TLS_INSECURE
+| Disable TLS certificate verification for the cache store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| STORAGE_USERS_ID_CACHE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the cache store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/userlog.adoc[Userlog]
+| USERLOG_STORE_ENABLE_TLS
+| Activate TLS for the connection to the store. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| USERLOG_STORE_TLS_INSECURE
+| Disable TLS certificate verification for the store connection. Only applies when store type 'nats-js-kv' is configured.
+| false
+
+| 
+| USERLOG_STORE_TLS_ROOT_CA_CERTIFICATE
+| Path to the PEM-encoded root CA certificate for the store TLS connection. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+|===
+

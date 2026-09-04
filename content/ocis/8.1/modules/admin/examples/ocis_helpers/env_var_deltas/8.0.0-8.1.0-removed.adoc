@@ -1,0 +1,42 @@
+// # Removed Variables between oCIS 8.0.0 and oCIS 8.1.0
+// commenting the headline to make it better includable
+
+// table created per 2026.09.03
+// the table should be recreated/updated on source () changes
+
+[width="100%",cols="~,~,~,~",options="header"]
+|===
+| Service | Variable | Description | Default
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_AUTH_PASSWORD
+| The password to use for authentication. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_AUTH_USERNAME
+| The username to use for authentication. Only applies when store type 'nats-js-kv' is configured.
+| 
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_DISABLE_PERSISTENCE
+| Disables persistence of the create home cache. Only applies when store type 'nats-js-kv' is configured. Defaults to false.
+| false
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_STORE
+| The type of the cache store. Supported values are: 'memory', 'redis-sentinel', 'nats-js-kv', 'noop'. See the text description for details.
+| memory
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_STORE_NODES
+| A list of nodes to access the configured store. This has no effect when 'memory' store is configured. Note that the behaviour how nodes are used is dependent on the library of the configured store. See the Environment Variable Types description for more details.
+| [127.0.0.1:9233]
+
+| xref:{s-path}/xxx.adoc[xxx]
+| GATEWAY_CREATE_HOME_CACHE_TTL
+| Default time to live for user info in the cache. Only applied when access tokens has no expiration. See the Environment Variable Types description for more details.
+| 5m0s
+
+|===
+

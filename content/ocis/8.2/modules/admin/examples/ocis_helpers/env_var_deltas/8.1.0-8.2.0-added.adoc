@@ -1,0 +1,157 @@
+// # Added Variables between oCIS 8.1.0 and oCIS 8.2.0
+// commenting the headline to make it better includable
+
+// table created per 2026.09.03
+// the table should be recreated/updated on source () changes
+
+[width="100%",cols="~,~,~,~",options="header"]
+|===
+| Service | Variable | Description | Default
+
+| xref:deployment/services/env-vars-special-scope.adoc[Special Scope Envvars]
+| OCIS_ENABLE_PUBLIC_SHARING
+| Enables public link sharing. When disabled, creating new public links is rejected. Direct sharing with users and groups is not affected.
+| true
+
+| 
+| OCIS_ENABLE_USER_SHARING
+| Enables direct sharing with users and groups. When disabled, creating new user or group shares is rejected and searching for users to share with is disabled. Public link sharing is not affected.
+| true
+
+| xref:{s-path}/auth_basic.adoc[Auth Basic]
+| AUTH_BASIC_LDAP_POOL_CHECKOUT_TIMEOUT
+| Maximum time to wait for a pooled LDAP connection to become available once the pool is exhausted. Defaults to 30s when unset or <= 0. See the Environment Variable Types description for more details.
+| 30s
+
+| 
+| AUTH_BASIC_LDAP_POOL_ENABLED
+| Instead of a single long-lived reconnecting connection, enable a bounded pool of LDAP connections. This means that concurrent requests will no longer be serialised on one connection.
+| false
+
+| 
+| AUTH_BASIC_LDAP_POOL_SIZE
+| Maximum number of concurrently open LDAP connections when 'OCIS_LDAP_POOL_ENABLED' is 'true'. Defaults to 5 when unset or <= 0.
+| 5
+
+| 
+| AUTH_BASIC_LDAP_RETRY_BASE_DELAY
+| Base delay for exponential backoff between LDAP retries (e.g. '100ms'). Set to 0 to disable backoff.
+| 0s
+
+| 
+| AUTH_BASIC_LDAP_RETRY_MAX_COUNT
+| Maximum number of retries for failed LDAP operations. Applies to both read and write operations (with different retryable error sets). Default 1.
+| 1
+
+| 
+| AUTH_BASIC_LDAP_RETRY_MAX_DELAY
+| Maximum delay cap for exponential backoff between LDAP retries (e.g. '5s'). 0 (default) uses the library default cap of 60s.
+| 0s
+
+| xref:{s-path}/graph.adoc[Graph]
+| GRAPH_LDAP_POOL_CHECKOUT_TIMEOUT
+| Maximum time to wait for a pooled LDAP connection to become available once the pool is exhausted. Defaults to 30s when unset or <= 0. See the Environment Variable Types description for more details.
+| 30s
+
+| 
+| GRAPH_LDAP_POOL_ENABLED
+| Instead of a single long-lived reconnecting connection, enable a bounded pool of LDAP connections. This means that concurrent requests will no longer be serialised on one connection.
+| false
+
+| 
+| GRAPH_LDAP_POOL_SIZE
+| Maximum number of concurrently open LDAP connections when 'OCIS_LDAP_POOL_ENABLED' is 'true'. Defaults to 5 when unset or <= 0.
+| 5
+
+| 
+| GRAPH_LDAP_RETRY_BASE_DELAY
+| Base delay for exponential backoff between LDAP retries (e.g. '100ms'). Set to 0 to disable backoff.
+| 0s
+
+| x
+| GRAPH_LDAP_RETRY_MAX_COUNT
+| Maximum number of retries for failed LDAP operations. Reads retry on transient and network errors; writes retry only when the connection failed before the request was sent (e.g. a reused idle connection found closed), so the request provably never reached the server and cannot be double-applied. Default 1.
+| 1
+
+| 
+| GRAPH_LDAP_RETRY_MAX_DELAY
+| Maximum delay cap for exponential backoff between LDAP retries (e.g. '5s'). 0 (default) uses the library default cap of 60s.
+| 0s
+
+| x
+| GRAPH_LDAP_UPDATE_LAST_SIGNIN_DATE
+| Update the 'oCLastSignInTimestamp' LDAP attribute of a user when the user signs in. The attribute is only persisted when 'OCIS_LDAP_SERVER_WRITE_ENABLED' is also enabled. Set this to 'false' to avoid an LDAP write on every sign-in, e.g. when the last sign-in timestamp is not needed or the LDAP write load should be reduced.
+| true
+
+| 
+| GRAPH_RECEIVED_SHARES_STAT_TIMEOUT
+| The maximum duration to wait for the storage to respond while resolving a single received share's resource when listing 'sharedWithMe'. Bounding each resource lookup individually prevents one slow or unreachable resource from consuming the request deadline shared by all the other shares. A share whose resource cannot be statted within this time is still listed as a degraded item instead of being dropped. Defaults to '10s'. See the Environment Variable Types description for more details.
+| 10s
+
+| xref:{s-path}/groups.adoc[Groups]
+| GROUPS_LDAP_POOL_CHECKOUT_TIMEOUT
+| Maximum time to wait for a pooled LDAP connection to become available once the pool is exhausted. Defaults to 30s when unset or <= 0. See the Environment Variable Types description for more details.
+| 30s
+
+| 
+| GROUPS_LDAP_POOL_ENABLED
+| Instead of a single long-lived reconnecting connection, enable a bounded pool of LDAP connections. This means that concurrent requests will no longer be serialised on one connection.
+| false
+
+| 
+| GROUPS_LDAP_POOL_SIZE
+| Maximum number of concurrently open LDAP connections when 'OCIS_LDAP_POOL_ENABLED' is 'true'. Defaults to 5 when unset or <= 0.
+| 5
+
+| 
+| GROUPS_LDAP_RETRY_BASE_DELAY
+| Base delay for exponential backoff between LDAP retries (e.g. '100ms'). Set to 0 to disable backoff.
+| 0s
+
+| 
+| GROUPS_LDAP_RETRY_MAX_COUNT
+| Maximum number of retries for failed LDAP operations. Applies to both read and write operations (with different retryable error sets). Default 1.
+| 1
+
+| 
+| GROUPS_LDAP_RETRY_MAX_DELAY
+| Maximum delay cap for exponential backoff between LDAP retries (e.g. '5s'). 0 (default) uses the library default cap of 60s.
+| 0s
+
+| xref:{s-path}/proxy.adoc[Proxy]
+| PROXY_OIDC_ACCESS_TOKEN_VERIFY_AUD
+| A list of accepted audiences for OIDC access tokens, usually the OIDC client IDs used to access ownCloud (for example the web and desktop client IDs). When set, a JWT access token is only accepted if one of these values is present in its 'aud' claim or matches its 'azp' claim. This prevents tokens issued for other applications of a shared IDP from being accepted. When set via the environment variable, use a comma-separated list. Has no effect when 'PROXY_OIDC_ACCESS_TOKEN_VERIFY_METHOD' is set to 'none'. Leave empty to disable the check (default).
+| []
+
+| xref:{s-path}/users.adoc[Users]
+| USERS_LDAP_POOL_CHECKOUT_TIMEOUT
+| Maximum time to wait for a pooled LDAP connection to become available once the pool is exhausted. Defaults to 30s when unset or <= 0. See the Environment Variable Types description for more details.
+| 30s
+
+| 
+| USERS_LDAP_POOL_ENABLED
+| Instead of a single long-lived reconnecting connection, enable a bounded pool of LDAP connections. This means that concurrent requests will no longer be serialised on one connection.
+| false
+
+| 
+| USERS_LDAP_POOL_SIZE
+| Maximum number of concurrently open LDAP connections when 'OCIS_LDAP_POOL_ENABLED' is 'true'. Defaults to 5 when unset or <= 0.
+| 5
+
+| 
+| USERS_LDAP_RETRY_BASE_DELAY
+| Base delay for exponential backoff between LDAP retries (e.g. '100ms'). Set to 0 to disable backoff.
+| 0s
+
+| 
+| USERS_LDAP_RETRY_MAX_COUNT
+| Maximum number of retries for failed LDAP operations. Applies to both read and write operations (with different retryable error sets). Default 1.
+| 1
+
+| 
+| USERS_LDAP_RETRY_MAX_DELAY
+| Maximum delay cap for exponential backoff between LDAP retries (e.g. '5s'). 0 (default) uses the library default cap of 60s.
+| 0s
+
+|===
+
