@@ -39,6 +39,35 @@ print_version_examples() {
 	EOL
 }
 
+# ask for confirmation that the ocis repo is on the branch relevant for the search.
+# the searches below query the code of the ocis clone which is only valid for the branch checked out.
+# note that this script has no version information, the check can therefore only be a question.
+# the current branch is printed to make answering easier, it is not evaluated
+ask_for_branch_switch() {
+
+	local branch
+	local answer
+
+	branch=$(git -C "${SEARCH_PATH}" rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+	if [ -n "${branch}" ]; then
+		echo
+		echo "The ocis repo at ${SEARCH_PATH} is currently on branch: ${GREEN}${branch}${NORM}"
+	fi
+
+	echo
+	read -p "Have you switched in the ocis repo to the relevant branch? [y/n]: " -n 1 -r answer
+	echo
+
+	if [ "${answer}" != "y" ] && [ "${answer}" != "Y" ]; then
+		echo
+		echo ${RED}"Aborting, switch to the relevant branch first."${NORM}
+		echo
+		exit
+	fi
+	echo
+}
+
 # ask what the script should search for
 echo "Select one of the following keys to search for:"
 echo
@@ -50,10 +79,12 @@ read -s -n 1 n
 case $n in
   1) USEREGEX="${IV_REGEX}"
      NAME="${IV_NAME}"
+     ask_for_branch_switch
      echo "Running..."
      ;;
   2) USEREGEX="${RV_REGEX}"
      NAME="${RV_NAME}"
+     ask_for_branch_switch
      echo "Running..."
      ;;
   3) echo

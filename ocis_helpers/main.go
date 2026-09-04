@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"flag"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -22,9 +23,17 @@ const file_mode       = "0664"
 const services_folder = "services"
 const output_folder   = "output"
 
+// the antora module the 'copy' task writes into
+const module_folder   = "modules/admin"
+
+// the target of the 'copy' task inside the module folder above.
+// note that 'examples' is an antora family folder, the subfolder below is free to choose
+const examples_folder = "examples/ocis_helpers"
+
 // do not change the contents here
 var services_dir      = "/" + services_folder + "/"
 var output_dir        = "/" + output_folder + "/"
+var examples_dir      = "/" + module_folder + "/" + examples_folder + "/"
 
 // the ocis version given on the command line, it matches the directory of content/ocis/<version>
 var ocis_version     string
@@ -87,42 +96,42 @@ func main() {
 
 	services_dir = version_dir + services_dir
 	output_dir   = version_dir + output_dir
+	examples_dir = version_dir + examples_dir
 
-//os.Exit(0)
+	createEnvFile(isVerbose, isRemove)
 
 	// do tasks based on task entered
 	switch positionalArgs[1] {
 		case "service":
 			haveYouSwitched()
-			prepareDirectories(isVerbose, isRemove)
+			prepareDirectories()
 			RenderServices()
 		case "rogue":
 			haveYouSwitched()
-			prepareDirectories(isVerbose, isRemove)
+			prepareDirectories()
 			GetRogueEnvs()
 		case "extended":
-			prepareDirectories(isVerbose, isRemove)
 			RenderRogueEnvs()
 		case "deltas":
-			prepareDirectories(isVerbose, isRemove)
 			RenderEnvVarDeltas(isDryrun)
-		case "all":
-			prepareDirectories(isVerbose, isRemove)
-			RenderServices()
-			GetRogueEnvs()
-			RenderRogueEnvs()
-		case "cleanup":
-			prepareDirectories(isVerbose, isRemove)
+		case "copy":
+			CopyToExamples()
+		case "cleanup_s":
 			cleanupServiceDir()
+		case "cleanup_h":
+			cleanupHelperDir()
 		default:
 			fmt.Fprintf(os.Stderr, "Unknown task: %s\n\n", positionalArgs[1])
 			printUsage()
 			os.Exit(1)
 	}
+
+	removeEnvFile()
 }
 
+// create the .env file
 // isVerbose and isRemove are provided by flags defined above
-func prepareDirectories(isVerbose bool, isRemove bool) {
+func createEnvFile(isVerbose bool, isRemove bool) {
 
 	// pre-create basic directories, subdirectories will be added on the fly
 	var err error
@@ -156,6 +165,12 @@ func prepareDirectories(isVerbose bool, isRemove bool) {
 
 	// read the written and provide the variables as in other go files for consistent usage
 	ReadEnv()
+}
+
+// create the output and services directory if not exists
+func prepareDirectories() {
+
+	var err error
 
 	// create output folder if not exists
 	err = os.MkdirAll(output_dir, Env.folder_mode)
@@ -168,6 +183,75 @@ func prepareDirectories(isVerbose bool, isRemove bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+
+// CopyToExamples copies all subfolders of the services folder to the examples folder of the
+// ocis version processed. the services folder is not tracked, the examples folder is, which
+// makes the generated files usable by the docs build.
+// note that 'persistent_files' is excluded, it holds sources and no generated content
+func CopyToExamples() {
+
+	fmt.Printf(Green+"Copy the subfolders of %s to %s\n\n"+Reset, services_dir, examples_dir)
+
+	entries, err := os.ReadDir(services_dir)
+	if err != nil {
+		log.Fatalf("Failed reading %s: %+v", services_dir, err)
+	}
+
+	for _, entry := range entries {
+		// only subfolders are copied, files on the top level are none of our business
+		if !entry.IsDir() {
+			continue
+		}
+
+		// the persistent folder is the source of the generated content and must not be copied
+		if entry.Name() == strings.TrimSuffix(persistent_files, "/") {
+			continue
+		}
+
+		source := filepath.Join(services_dir, entry.Name())
+		target := filepath.Join(examples_dir, entry.Name())
+
+		// remove a former copy first, else files that are no longer generated would stay
+		err = os.RemoveAll(target)
+		if err != nil {
+			log.Fatalf("Failed removing the former copy %s: %+v", target, err)
+		}
+
+		fmt.Printf("  %-18s %3d files copied\n", entry.Name()+"/", copyDir(source, target))
+	}
+
+	fmt.Printf("\nSuccess, see files copied to: %s\n", examples_dir)
+
+	RemoveOutputDir()
+}
+
+// copyDir copies a folder recursively and returns the number of files copied
+func copyDir(source string, target string) int {
+
+	count := 0
+
+	err := filepath.WalkDir(source, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// the path walked is relative to the source and gets appended to the target
+		destination := filepath.Join(target, strings.TrimPrefix(path, source))
+
+		if entry.IsDir() {
+			return os.MkdirAll(destination, Env.folder_mode)
+		}
+
+		count++
+		return CopyFile(path, destination)
+	})
+	if err != nil {
+		log.Fatalf("Failed copying %s to %s: %+v", source, target, err)
+	}
+
+	return count
 }
 
 
@@ -207,6 +291,28 @@ func cleanupServiceDir() {
     }
 }
 
+// cleanupHelperDir removes the folder the 'copy' task writes to, including the folder itself.
+// note that only the subfolder defined by 'examples_folder' is removed and not the whole
+// examples folder of the module which contains content of other origin
+func cleanupHelperDir() {
+
+	var err error
+
+	fmt.Printf(Magenta + "Remove the folder %s \n" + Reset, examples_dir)
+
+	// using os.Stat catches all other errors than "does not exist"
+	_, err = os.Stat(examples_dir)
+	if err != nil {
+		fmt.Printf("Nothing to do, the folder does not exist\n")
+		return
+	}
+
+	err = os.RemoveAll(examples_dir)
+	if err != nil {
+		log.Fatalf("Error removing the folder: %+v", err)
+	}
+}
+
 // remove the content of a folder if exists
 func removeGlob(path string) (err error) {
 
@@ -243,19 +349,24 @@ func RemoveOutputDir() {
 			}
 		}
 
-		// then remove the .env file which is on the same lavel of main.go
-		_, err = os.Stat(".env")
-		if err == nil {
-			err = os.Remove(".env")
-			if err != nil {
-				fmt.Println(err)
-			}
-		}
 	} else {
 		fmt.Println(Magenta + "No cleanup (output directory is kept) \n" + Reset)
 	}
 }
 
+// remove the .env file if exists which is on the same lavel of main.go 
+func removeEnvFile() {
+
+	var err error
+
+	_, err = os.Stat(".env")
+	if err == nil {
+		err = os.Remove(".env")
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
 
 func CopyFile(src, dst string) error {
 
@@ -301,13 +412,15 @@ func printUsage() {
 	fmt.Printf("Optional command line flags:\n")
 	flag.PrintDefaults()
 	fmt.Printf("\nThe version is mandatory and must match the directory of content/ocis/<version>\n")
+
 	fmt.Printf("\nAvailable tasks:\n")
 	fmt.Printf("  service:   generate service envvar tables\n")
-	fmt.Printf("  rogue:     update/create the extended_vars.yaml file\n")
+	fmt.Printf("  rogue:     create/update the extended_vars.yaml file\n")
 	fmt.Printf("  extended:  generate extended_configvars table\n")
 	fmt.Printf("  deltas:    generate the added, deprecated and removed envvar tables\n")
-	fmt.Printf("  all:       run service, rogue and extended at once (not recommended but possible)\n")
-	fmt.Printf("  cleanup:   cleanup folders in %s except persistent\n\n", services_dir)
+	fmt.Printf("  copy:      copy the subfolders of %s to %s except 'persistent_files'\n", services_dir, examples_dir)
+	fmt.Printf("  cleanup_s: cleanup folders in %s except 'persistent_files'. run service, extended, deltas to recreate\n", services_dir)
+	fmt.Printf("  cleanup_h: remove the folder %s. folder contents is build relevant for antora\n\n", examples_dir)
 }
 
 func haveYouSwitched() {
